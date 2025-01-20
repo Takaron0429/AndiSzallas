@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adatok Megtekintése</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            table tr {
+                margin-bottom: 10px;
+            }
+            table th {
+                background-color: #007bff;
+                color: #fff;
+                text-align: center;
+                font-weight: bold;
+            }
+            table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                text-align: left;
+                font-weight: bold;
+                color: #333;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Adatbázis Nézet</h1>
+
+        <!-- Vendégek Táblázat -->
+        <h2>Vendégek</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                    <th>E-mail</th>
+                    <th>Telefonszám</th>
+                    <th>Cím</th>
+                    <th>Létrehozva</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="ID">1</td>
+                    <td data-label="Név">John Doe</td>
+                    <td data-label="E-mail">john.doe@example.com</td>
+                    <td data-label="Telefonszám">123456789</td>
+                    <td data-label="Cím">123 Main St</td>
+                    <td data-label="Létrehozva">2025-01-18</td>
+                </tr>
+                <!-- További sorok itt -->
+            </tbody>
+        </table>
+
+        <!-- Foglalások Táblázat -->
+        <h2>Foglalások</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vendég ID</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Teljes Ár</th>
+                    <th>Állapot</th>
+                    <th>Fizetés Állapota</th>
+                    <th>Speciális Kérések</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="ID">1</td>
+                    <td data-label="Vendég ID">1</td>
+                    <td data-label="Check-in">2025-07-01</td>
+                    <td data-label="Check-out">2025-07-07</td>
+                    <td data-label="Teljes Ár">720.00</td>
+                    <td data-label="Állapot">Megerősítve</td>
+                    <td data-label="Fizetés Állapota">Fizetve</td>
+                    <td data-label="Speciális Kérések">Nincs</td>
+                </tr>
+                <!-- További sorok itt -->
+            </tbody>
+        </table>
+
+        <!-- Akciók Táblázat -->
+        <h2>Akciók</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cím</th>
+                    <th>Leírás</th>
+                    <th>Kedvezmény (%)</th>
+                    <th>Kezdő Dátum</th>
+                    <th>Befejező Dátum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="ID">1</td>
+                    <td data-label="Cím">Summer Sale</td>
+                    <td data-label="Leírás">20% kedvezmény 5+ éjszakára</td>
+                    <td data-label="Kedvezmény (%)">20.00</td>
+                    <td data-label="Kezdő Dátum">2025-06-01</td>
+                    <td data-label="Befejező Dátum">2025-08-31</td>
+                </tr>
+                <!-- További sorok itt -->
+            </tbody>
+        </table>
+
+        <!-- Érkezési Csomagok Táblázat -->
+        <h2>Érkezési Csomagok</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                    <th>Leírás</th>
+                    <th>Ár</th>
+                    <th>Elérhető</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="ID">1</td>
+                    <td data-label="Név">Romantic Package</td>
+                    <td data-label="Leírás">Bor, csokoládé és virágok</td>
+                    <td data-label="Ár">50.00</td>
+                    <td data-label="Elérhető">Igen</td>
+                </tr>
+                <!-- További sorok itt -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
