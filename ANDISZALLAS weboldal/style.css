@@ -1,4 +1,52 @@
-body
-{
+body {
     font-family: "Raleway";
+}
+.strongerp
+{
+    font-size: 20px;
+}
+
+.custom-navbar {
+    background-color: rgba(61, 122, 188, 0.8);
+}
+
+.carousel-image {
+    height: 500px;
+    object-fit: cover;
+}
+
+.custom-carousel .carousel-image {
+    object-fit: cover;
+    height: 75vh;
+}
+
+.custom-carousel .carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.custom-carousel h5 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.custom-carousel p {
+    font-size: 1.2rem;
+}
+
+.progress {
+    height: 15px;
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+.progress-bar {
+    background-color: #3d7abc;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+    border-radius: 10px;
 }
