@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('vendeg_id');
             $table->date('erkezes');
             $table->date('tavozas');
+            $table->integer('felnott');
+            $table->integer('gyerek');
             $table->decimal('osszeg');
             $table->string('foglalas_allapot')->default('függőben');
             $table->string('fizetes_allapot')->default('függőben');

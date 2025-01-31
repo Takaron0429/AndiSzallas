@@ -12,8 +12,11 @@ return new class extends Migration
         Schema::create('helyi_programajanlok', function (Blueprint $table) {
             $table->id('program_id');
             $table->string('cim');
+            $table->string('kep');
             $table->text('leiras')->nullable();
             $table->string('helyszin');
+            $table->string("kezdet");
+            $table->string("vege");
             $table->string('link')->nullable();
             $table->timestamps();
         });
