@@ -96,3 +96,200 @@ h3 {
     border-color: #ff8c00;
     box-shadow: 0 0 8px rgba(255, 140, 0, 0.6);
 }
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+.custom-navbar {
+    background: rgb(226, 123, 4); 
+    padding: 15px 0;
+    transition: all 0.4s ease-in-out;
+    color: white;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f5f2ef;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+    color: #e9e8e8;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    color: white;
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+
+.collapse {
+    opacity: 1; 
+    transition: opacity 0.5s ease-in-out;
+}
+
+.collapse:not(.show) {
+    opacity: 1;
+}
+
+.collapse.show {
+    opacity: 1 !important;
+}
+
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-item {
+        padding: 10px 0;
+    }
+
+    .nav-link {
+        font-size: 1.3rem;
+    }
+}
+.card-header {
+    background-color: #ff8c00;
+    color: white;
+}
+
+.card-body {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background-color: #ff8c00;
+    color: white;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #ffe0b3;
+}
+
+.modal-header {
+    background-color: #ff8c00;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.footer {
+    background-color: #f1f1f1;
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+    bottom: 0;
+}
+
+.admin-card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.admin-avatar {
+    width: 100px;
+    height: 100px;
+    border: 4px solid #007bff;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+.badge {
+    font-size: 16px;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+
+@media (max-width: 768px) {
+    .row.gy-4 {
+        gap: 20px;
+    }
+}
+
+.dashboard-container{
+
+    padding-top: 50px;
+    margin-bottom: 50px;
+}
+
+.navbar{
+    margin-top: -40px;
+}
+
+@media (max-width: 992px) {
+    .card {
+        text-align: center;
+    }
+
+    .card {
+        margin-bottom: 15px;
+    }
+
+}
