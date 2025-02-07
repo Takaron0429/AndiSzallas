@@ -1,0 +1,36 @@
+body {
+    font-family: "Raleway";
+}
+.strongerp
+{
+    font-size: 20px;
+}
+footer
+{
+    background-color: #3d7abc;
+}
+iframe
+{
+    padding-top: 10px;
+}
+#contact
+{
+    color: aliceblue;
+}
+.linktag
+{
+    color: aliceblue;
+}
+
+i {
+    transition: transform 0.3s ease-in-out;
+    font-size: 24px;
+}
+
+i:hover {
+    transform: scale(1.3);
+}
+
+.custom-navbar {
+    background-color: rgba(61, 122, 188, 0.8);
+}
