@@ -13,4 +13,5 @@ class Admin extends Model
     {
         return $this->hasMany(ChatUzenet::class, 'admin_id');
     }
+  
 }

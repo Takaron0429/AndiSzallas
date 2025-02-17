@@ -13,42 +13,32 @@
 
 <body>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg fixed-top bg-orange  custom-navbar col-12">
-            <div class="container color:white">
-                <a class="navbar-brand" href="#">Admin#Felület</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ route('AdminFelulet.Admin') }}">Admin#Felület</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse fade" id="navbarNav">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Foglalások</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Új foglalás</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Modósitások</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-danger text-white px-3" href="#">Kijelentkezés</a>
+                            <a class="nav-link" href="{{ route('AdminFelulet.Modositasok') }}">Módosítások</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-
-
+    
+        <!-- Kategória Gombok -->
         <div class="container mt-4">
             <div class="row category-buttons text-center">
                 <div class="col"><button class="btn btn-primary" onclick="showSection('csomag')">Csomagok</button></div>
                 <div class="col"><button class="btn btn-success" onclick="showSection('akcio')">Akciók</button></div>
-                <div class="col"><button class="btn btn-warning" onclick="showSection('program')">Programok</button>
-                </div>
+                <div class="col"><button class="btn btn-warning" onclick="showSection('program')">Programok</button></div>
                 <div class="col"><button class="btn btn-danger" onclick="showSection('fizetes')">Fizetés</button></div>
             </div>
-
+    >
             <div id="csomag" class="table-container">
                 <h3>Csomagok</h3>
                 <table class="table table-striped">
@@ -57,35 +47,32 @@
                             <th>Név</th>
                             <th>Leírás</th>
                             <th>Ár</th>
+                            <th>Elérhető</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Luxus Csomag</td>
-                            <td>5 csillagos élmény</td>
-                            <td>500€</td>
-                        </tr>
-                        <tr>
-                            <td>Luxus Csomag</td>
-                            <td>5 csillagos élmény</td>
-                            <td>500€</td>
-                        </tr>
-                         <tr>
-                            <td>Luxus Csomag</td>
-                            <td>5 csillagos élmény</td>
-                            <td>500€</td>
-                        </tr>
+                        @foreach ($ErkezesiCsomag as $csomag)
+                            <tr>
+                                <td>{{ $csomag->nev }}</td>
+                                <td>{{ $csomag->leiras }}</td>
+                                <td>{{ $csomag->ar }} Ft</td>
+                                <td>{{ $csomag->elerheto }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
-                <form class="form-container">
-                    <input type="text" class="form-control mb-2" placeholder="Csomag neve">
-                    <textarea class="form-control mb-2" placeholder="Leírás"></textarea>
-                    <input type="number" class="form-control mb-2" placeholder="Ár">
-                    <button class="btn btn-primary">Hozzáadás</button>
+                <form class="form-container" action="{{ route('admin.storeCsomag') }}" method="POST">
+                    @csrf
+                    <input type="text" class="form-control mb-2" name="nev" placeholder="Csomag neve" required>
+                    <textarea class="form-control mb-2" name="leiras" placeholder="Leírás" required></textarea>
+                    <input type="number" class="form-control mb-2" name="ar" placeholder="Ár" required>
+                    <input type="number" class="form-control mb-2" name="elerheto" placeholder="Elérhető mennyiség" required>
+                    <button type="submit" class="btn btn-primary">Hozzáadás</button>
                 </form>
             </div>
-
-            <div id="akcio" class="table-container">
+    
+            
+            <div id="akcio" class="table-container" style="display: none;">
                 <h3>Akciók</h3>
                 <table class="table table-striped">
                     <thead>
@@ -93,26 +80,68 @@
                             <th>Név</th>
                             <th>Kedvezmény</th>
                             <th>Leírás</th>
+                            <th>Kezdete</th>
+                            <th>Vége</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Hétvégi Akció</td>
-                            <td>20%</td>
-                            <td>Minden foglalásra</td>
-                        </tr>
+                        @foreach ($Akcio as $akcio)
+                            <tr>
+                                <td>{{ $akcio->nev }}</td>
+                                <td>{{ $akcio->kedvezmeny }}%</td>
+                                <td>{{ $akcio->leiras }}</td>
+                                <td>{{ $akcio->kezdete }}</td>
+                                <td>{{ $akcio->vege }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
-                <form class="form-container">
-                    <input type="text" class="form-control mb-2" placeholder="Akció neve">
-                    <input type="text" class="form-control mb-2" placeholder="Kedvezmény">
-                    <textarea class="form-control mb-2" placeholder="Leírás"></textarea>
-                    <button class="btn btn-success">Hozzáadás</button>
+                <form class="form-container" action="{{ route('admin.storeAkcio') }}" method="POST">
+                    @csrf
+                    <input type="text" class="form-control mb-2" name="nev" placeholder="Akció neve" required>
+                    <input type="number" class="form-control mb-2" name="kedvezmeny" placeholder="Kedvezmény %" required>
+                    <textarea class="form-control mb-2" name="leiras" placeholder="Leírás"></textarea>
+                    <input type="date" class="form-control mb-2" name="kezdete" required>
+                    <input type="date" class="form-control mb-2" name="vege" required>
+                    <button type="submit" class="btn btn-success">Hozzáadás</button>
+                </form>
+            </div>
+    
+            <!-- Programok -->
+            <div id="program" class="table-container" style="display: none;">
+                <h3>Programok</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Cím</th>
+                            <th>Helyszín</th>
+                            <th>Kezdés</th>
+                            <th>Befejezés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($HelyiProgramajanlo as $program)
+                            <tr>
+                                <td>{{ $program->cim }}</td>
+                                <td>{{ $program->helyszin }}</td>
+                                <td>{{ $program->kezdet }}</td>
+                                <td>{{ $program->vege }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <form class="form-container" action="{{ route('admin.storeProgram') }}" method="POST">
+                    @csrf
+                    <input type="text" class="form-control mb-2" name="cim" placeholder="Program címe" required>
+                    <input type="text" class="form-control mb-2" name="helyszin" placeholder="Helyszín" required>
+                    <input type="datetime-local" class="form-control mb-2" name="kezdet" required>
+                    <input type="datetime-local" class="form-control mb-2" name="vege" required>
+                    <button type="submit" class="btn btn-warning">Hozzáadás</button>
                 </form>
             </div>
         </div>
-
     </div>
+    
     <script>
         function showSection(sectionId) {
             document.querySelectorAll('.table-container').forEach(el => el.style.display = 'none');

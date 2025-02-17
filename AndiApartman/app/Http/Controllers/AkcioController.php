@@ -2,63 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Akcio;
 use Illuminate\Http\Request;
 
 class AkcioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
-        //
+     
+        $validated = $request->validate([
+            'nev' => 'required|string|max:255',
+            'kedvezmeny' => 'required|numeric|min:0|max:100',
+            'leiras' => 'nullable|string',
+            'kezdete' => 'required|date',
+            'vege' => 'required|date',
+        ]);
+
+     
+        $akcio = new Akcio();
+        $akcio->nev = $request->nev;
+        $akcio->kedvezmeny = $request->kedvezmeny;
+        $akcio->leiras = $request->leiras;
+        $akcio->kezdete = $request->kezdete;
+        $akcio->vege = $request->vege;
+        $akcio->save();
+
+        return redirect()->route('admin.modositasok')->with('success', 'Akció sikeresen hozzáadva!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function update(Request $request, $id)
     {
-        //
+      
+        $validated = $request->validate([
+            'nev' => 'required|string|max:255',
+            'kedvezmeny' => 'required|numeric|min:0|max:100',
+            'leiras' => 'nullable|string',
+            'kezdete' => 'required|date',
+            'vege' => 'required|date',
+        ]);
+
+    
+        $akcio = Akcio::find($id);
+        if (!$akcio) {
+            return redirect()->route('admin.modositasok')->with('error', 'Akció nem található!');
+        }
+
+        $akcio->update($validated);
+
+        return redirect()->route('admin.modositasok')->with('success', 'Akció frissítve!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $akcio = Akcio::find($id);
+        if (!$akcio) {
+            return redirect()->route('admin.modositasok')->with('error', 'Akció nem található!');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $akcio->delete();
+        return redirect()->route('admin.modositasok')->with('success', 'Akció törölve!');
     }
 }

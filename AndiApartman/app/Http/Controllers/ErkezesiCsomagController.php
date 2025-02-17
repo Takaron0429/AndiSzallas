@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ErkezesiCsomag;
 use Illuminate\Http\Request;
 
 class ErkezesiCsomagController extends Controller
@@ -27,38 +28,54 @@ class ErkezesiCsomagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+     
+        $validated = $request->validate([
+            'nev' => 'required|string|max:255',
+            'ar' => 'required|numeric|min:0',
+            'leiras' => 'nullable|string',
+            'elerheto' =>'required|numeric|min:0|ma:10'
+        ]);
+
+
+        $csomag = new ErkezesiCsomag();
+        $csomag->nev = $request->nev;
+        $csomag->ar = $request->ar;
+        $csomag->leiras = $request->leiras;
+        $csomag->elerheto = $request->elerheto;
+        $csomag->save();
+
+        return redirect()->route('admin.modositasok')->with('success', 'Csomag sikeresen hozzáadva!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+   
+    public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'nev' => 'required|string|max:255',
+            'ar' => 'required|numeric|min:0',
+            'leiras' => 'nullable|string',
+            'elerheto' => 'required|numeric|min:0|max:0'
+        ]);
+
+        $csomag = ErkezesiCsomag::find($id);
+        if (!$csomag) {
+            return redirect()->route('admin.modositasok')->with('error', 'Csomag nem található!');
+        }
+
+        $csomag->update($validated);
+
+        return redirect()->route('admin.modositasok')->with('success', 'Csomag frissítve!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Törlés
+    public function destroy($id)
     {
-        //
-    }
+        $csomag = ErkezesiCsomag::find($id);
+        if (!$csomag) {
+            return redirect()->route('admin.modositasok')->with('error', 'Csomag nem található!');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $csomag->delete();
+        return redirect()->route('admin.modositasok')->with('success', 'Csomag törölve!');
     }
 }

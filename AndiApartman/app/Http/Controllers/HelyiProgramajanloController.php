@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HelyiProgramajanlo;
 use Illuminate\Http\Request;
 
 class HelyiProgramajanloController extends Controller
@@ -27,38 +28,72 @@ class HelyiProgramajanloController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validálás
+        $validated = $request->validate([
+            'cim' => 'required|string|max:255',
+            'helyszin' => 'required|string|max:255',
+            'kezdet' => 'required|date',
+            'vege' => 'required|date',
+            'leiras' => 'nullable|string',
+            'link' => 'nullable|string',
+            'kep' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+        ]);
+
+        $kepPath = $request->file('kep')->store('programok', 'public');
+        $program = new HelyiProgramajanlo();
+        $program->cim = $request->cim;
+        $program->helyszin = $request->helyszin;
+        $program->kezdet = $request->kezdet;
+        $program->vege = $request->vege;
+        $program->leiras = $request->leiras;
+        $program->link = $request->link;
+        $program->kep = $kepPath;
+        $program->save();
+
+        return redirect()->route('admin.modositasok')->with('success', 'Program sikeresen hozzáadva!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Update Program
+    public function update(Request $request, $id)
     {
-        //
+        // Validálás
+        $validated = $request->validate([
+            'cim' => 'required|string|max:255',
+            'helyszin' => 'required|string|max:255',
+            'kezdet' => 'required|date',
+            'vege' => 'required|date',
+            'leiras' => 'nullable|string',
+            'link' => 'nullable|string',
+            'kep' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+        ]);
+
+        $program = HelyiProgramajanlo::find($id);
+        if (!$program) {
+            return redirect()->route('admin.modositasok')->with('error', 'Program nem található!');
+        }
+
+        if ($request->hasFile('kep')) {
+            \Storage::delete('public/' . $program->kep);
+            $kepPath = $request->file('kep')->store('programok', 'public');
+            $program->kep = $kepPath;
+        }
+
+        // Program frissítése
+        $program->update($validated);
+
+        return redirect()->route('admin.modositasok')->with('success', 'Program frissítve!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $program = HelyiProgramajanlo::find($id);
+        if (!$program) {
+            return redirect()->route('admin.modositasok')->with('error', 'Program nem található!');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        \Storage::delete('public/' . $program->kep);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $program->delete();
+        return redirect()->route('admin.modositasok')->with('success', 'Program törölve!');
     }
 }
