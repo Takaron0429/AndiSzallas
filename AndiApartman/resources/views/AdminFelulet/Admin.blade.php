@@ -23,7 +23,7 @@
 
 
  
-    <div class="container-fluid">
+    <div class="container">
         <div class="main-content" id="mainContent">
             <div class="container mt-5">
                 <div class="row justify-content-center">

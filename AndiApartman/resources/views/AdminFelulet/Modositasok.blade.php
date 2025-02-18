@@ -16,14 +16,14 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('AdminFelulet.Admin') }}">Admin#Felület</a>
+                <a class="navbar-brand" href="">Admin#Felület</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('AdminFelulet.Modositasok') }}">Módosítások</a>
+                            <a class="nav-link" href="">Módosítások</a>
                         </li>
                     </ul>
                 </div>
@@ -64,7 +64,7 @@
                 <form class="form-container" action="{{ route('admin.storeCsomag') }}" method="POST">
                     @csrf
                     <input type="text" class="form-control mb-2" name="nev" placeholder="Csomag neve" required>
-                    <textarea class="form-control mb-2" name="leiras" placeholder="Leírás" required></textarea>
+                    <input  class="form-control mb-2" name="leiras" placeholder="Leírás" required>
                     <input type="number" class="form-control mb-2" name="ar" placeholder="Ár" required>
                     <input type="number" class="form-control mb-2" name="elerheto" placeholder="Elérhető mennyiség" required>
                     <button type="submit" class="btn btn-primary">Hozzáadás</button>

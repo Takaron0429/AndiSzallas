@@ -12,9 +12,8 @@ class HelyiProgramajanloController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.modositasok'); 
     }
-
     /**
      * Show the form for creating a new resource.
      */

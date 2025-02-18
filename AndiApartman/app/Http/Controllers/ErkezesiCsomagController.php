@@ -12,7 +12,7 @@ class ErkezesiCsomagController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.modositasok'); 
     }
 
     /**
@@ -44,7 +44,7 @@ class ErkezesiCsomagController extends Controller
         $csomag->elerheto = $request->elerheto;
         $csomag->save();
 
-        return redirect()->route('admin.modositasok')->with('success', 'Csomag sikeresen hozzáadva!');
+       return redirect()->route('admin.modositasok')->with('success', 'Csomag sikeresen hozzáadva!');
     }
 
    

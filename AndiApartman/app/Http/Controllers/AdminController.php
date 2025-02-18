@@ -10,10 +10,10 @@ use Session;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
+    public function index()
+    {
+        return view('admin.modositasok');
+    }
     public function showLoginForm()
     {
         return view('AdminFelulet.Login');
@@ -22,6 +22,7 @@ class AdminController extends Controller
     {
         return view('AdminFelulet.modositasok');
     }
+
     // Bejelentkezési logika
     public function login(Request $request)
     {
@@ -57,7 +58,7 @@ class AdminController extends Controller
 
         return view('AdminFelulet.Admin', ['admin' => Session::get('admin')]);
     }
-
+    
     // Logout funkció
     public function logout()
     {
