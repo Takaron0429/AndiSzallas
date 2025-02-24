@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('AdminLogin.css') }}">
     <link rel="stylesheet" href="{{ asset('AdminMod.css') }}">
+    
     <title>Modósitás</title>
 </head>
 
@@ -29,16 +30,17 @@
                 </div>
             </div>
         </nav>
-    
+
         <!-- Kategória Gombok -->
-        <div class="container mt-4">
+        <div class="container  ">
             <div class="row category-buttons text-center">
                 <div class="col"><button class="btn btn-primary" onclick="showSection('csomag')">Csomagok</button></div>
                 <div class="col"><button class="btn btn-success" onclick="showSection('akcio')">Akciók</button></div>
-                <div class="col"><button class="btn btn-warning" onclick="showSection('program')">Programok</button></div>
+                <div class="col"><button class="btn btn-warning" onclick="showSection('program')">Programok</button>
+                </div>
                 <div class="col"><button class="btn btn-danger" onclick="showSection('fizetes')">Fizetés</button></div>
             </div>
-    >
+            >
             <div id="csomag" class="table-container">
                 <h3>Csomagok</h3>
                 <table class="table table-striped">
@@ -50,7 +52,7 @@
                             <th>Elérhető</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="w-100">
                         @foreach ($ErkezesiCsomag as $csomag)
                             <tr>
                                 <td>{{ $csomag->nev }}</td>
@@ -61,17 +63,18 @@
                         @endforeach
                     </tbody>
                 </table>
-                <form class="form-container" action="{{ route('admin.storeCsomag') }}" method="POST">
+                <form class="form-container" action="{{ route('Erkezesi.store') }}" method="POST">
                     @csrf
                     <input type="text" class="form-control mb-2" name="nev" placeholder="Csomag neve" required>
-                    <input  class="form-control mb-2" name="leiras" placeholder="Leírás" required>
+                    <input type="text" class="form-control mb-2" name="leiras" placeholder="Leírás" required>
                     <input type="number" class="form-control mb-2" name="ar" placeholder="Ár" required>
-                    <input type="number" class="form-control mb-2" name="elerheto" placeholder="Elérhető mennyiség" required>
+                    <input type="number" class="form-control mb-2" name="elerheto" placeholder="Elérhető mennyiség"
+                        required>
                     <button type="submit" class="btn btn-primary">Hozzáadás</button>
                 </form>
             </div>
-    
-            
+
+
             <div id="akcio" class="table-container" style="display: none;">
                 <h3>Akciók</h3>
                 <table class="table table-striped">
@@ -87,8 +90,9 @@
                     <tbody>
                         @foreach ($Akcio as $akcio)
                             <tr>
-                                <td>{{ $akcio->nev }}</td>
-                                <td>{{ $akcio->kedvezmeny }}%</td>
+                                <td>{{ $akcio->akcio_id }}</td>
+                                <td>{{ $akcio->cim }}</td>
+                                <td>{{ $akcio->kedvezmeny_szazalek }}%</td>
                                 <td>{{ $akcio->leiras }}</td>
                                 <td>{{ $akcio->kezdete }}</td>
                                 <td>{{ $akcio->vege }}</td>
@@ -96,17 +100,21 @@
                         @endforeach
                     </tbody>
                 </table>
-                <form class="form-container" action="{{ route('admin.storeAkcio') }}" method="POST">
+                <form class="form-container" action="{{ route('Akcio.store') }}" method="POST">
                     @csrf
-                    <input type="text" class="form-control mb-2" name="nev" placeholder="Akció neve" required>
-                    <input type="number" class="form-control mb-2" name="kedvezmeny" placeholder="Kedvezmény %" required>
-                    <textarea class="form-control mb-2" name="leiras" placeholder="Leírás"></textarea>
+                    <button type="submit" class="btn btn-success w-25">Hozzáadás</button>
+                    <input type="text" class="form-control mb-2" name="cim" placeholder="Akció neve" required>
+                    <input type="number" class="form-control mb-2" name="kedvezmeny_szazalek" placeholder="Kedvezmény %"
+                        required>
+                    <textarea type="text" class="form-control mb-2" name="leiras" placeholder="Leírás"></textarea>
                     <input type="date" class="form-control mb-2" name="kezdete" required>
                     <input type="date" class="form-control mb-2" name="vege" required>
-                    <button type="submit" class="btn btn-success">Hozzáadás</button>
+                    <br>
+
+                    <br>
                 </form>
             </div>
-    
+            <br>
             <!-- Programok -->
             <div id="program" class="table-container" style="display: none;">
                 <h3>Programok</h3>
@@ -117,6 +125,8 @@
                             <th>Helyszín</th>
                             <th>Kezdés</th>
                             <th>Befejezés</th>
+                            <th>Link</th>
+                            <th>Fotó</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,22 +136,30 @@
                                 <td>{{ $program->helyszin }}</td>
                                 <td>{{ $program->kezdet }}</td>
                                 <td>{{ $program->vege }}</td>
+                                <td><a href="{{ $program->link }}" target="_blank">Megtekintés</a></td>
+                                <td>
+                                    <img src="{{ asset('storage/programok/' . $program->kep) }}" alt="Program képe"
+                                        width="100">
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <form class="form-container" action="{{ route('admin.storeProgram') }}" method="POST">
+                <form class="form-container" action="{{ route('Helyi.store') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     <input type="text" class="form-control mb-2" name="cim" placeholder="Program címe" required>
                     <input type="text" class="form-control mb-2" name="helyszin" placeholder="Helyszín" required>
                     <input type="datetime-local" class="form-control mb-2" name="kezdet" required>
                     <input type="datetime-local" class="form-control mb-2" name="vege" required>
+                    <input type="url" class="form-control mb-2" name="link" placeholder="További információ link">
+                    <input type="file" class="form-control mb-2" name="kep" required>
                     <button type="submit" class="btn btn-warning">Hozzáadás</button>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <script>
         function showSection(sectionId) {
             document.querySelectorAll('.table-container').forEach(el => el.style.display = 'none');

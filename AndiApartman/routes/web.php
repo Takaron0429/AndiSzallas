@@ -17,10 +17,15 @@ Route::post('/AdminFelulet/Login', [AdminController::class, 'login']);
 Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 //Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('AdminFelulet.Admin');
 Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout'); 
-//Route::get('/AdminFelulet/Modositasok', [AdminController::class, 'modositasok'])->name('admin.modositasok');
-Route::get('/AdminFelulet/Modositasok', [ModositasokController::class, 'index'])->name('modositasok.index');
-Route::get('/admin', [AdminController::class, 'showModositasok'])->name('AdminFelulet.Modositasok');
-Route::post('/admin/csomag/store', [ErkezesiCsomagController::class, 'storeCsomag'])->name('admin.storeCsomag');
-Route::post('/admin/akcio/store', [AkcioController::class, 'storeAkcio'])->name('admin.storeAkcio');
-Route::post('/admin/program/store', [HelyiProgramajanloController::class, 'storeProgram'])->name('admin.storeProgram');
+Route::get('/AdminFelulet/Modositasok', [AdminController::class, 'modositasok'])->name('admin.modositasok');
+Route::get('AdminFelulet/Modositasok', [ModositasokController::class, 'index'])->name('AdminFelulet.Modositasok');
+
+//Route::get('AdminFelulet/Modositasok', [AdminController::class, 'showModositasok'])->name('AdminFelulet.Modositasok');
+
+Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name('Erkezesi.store');
+
+Route::post('/admin/akcio/store', [AkcioController::class, 'store'])->name('Akcio.store');
+Route::get('/admin/akciok', [AkcioController::class, 'store'])->name('akcio.index');
+
+Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
 

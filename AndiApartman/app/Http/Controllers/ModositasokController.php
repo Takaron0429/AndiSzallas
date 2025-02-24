@@ -23,7 +23,7 @@ class ModositasokController extends Controller
 
     public function showModositasok()
     {
-        // Lekérjük az adatokat a modellekből
+       
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
         $programok = HelyiProgramajanlo::all();

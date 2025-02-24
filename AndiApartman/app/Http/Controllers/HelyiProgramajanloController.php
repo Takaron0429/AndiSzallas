@@ -49,7 +49,7 @@ class HelyiProgramajanloController extends Controller
         $program->kep = $kepPath;
         $program->save();
 
-        return redirect()->route('admin.modositasok')->with('success', 'Program sikeresen hozzáadva!');
+        return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Program sikeresen hozzáadva!');
     }
 
     // Update Program

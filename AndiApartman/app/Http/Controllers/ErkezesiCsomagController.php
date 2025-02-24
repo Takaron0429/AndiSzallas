@@ -33,7 +33,7 @@ class ErkezesiCsomagController extends Controller
             'nev' => 'required|string|max:255',
             'ar' => 'required|numeric|min:0',
             'leiras' => 'nullable|string',
-            'elerheto' =>'required|numeric|min:0|ma:10'
+            'elerheto' =>'required|numeric|min:0|max:10'
         ]);
 
 
@@ -44,7 +44,7 @@ class ErkezesiCsomagController extends Controller
         $csomag->elerheto = $request->elerheto;
         $csomag->save();
 
-       return redirect()->route('admin.modositasok')->with('success', 'Csomag sikeresen hozzáadva!');
+       return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Csomag sikeresen hozzáadva!');
     }
 
    
