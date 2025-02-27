@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AkcioController;
 use App\Http\Controllers\ErkezesiCsomagController;
+use App\Http\Controllers\FoglalasController;
 use App\Http\Controllers\HelyiProgramajanloController;
 use App\Http\Controllers\ModositasokController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name(
 
 Route::post('/admin/akcio/store', [AkcioController::class, 'store'])->name('Akcio.store');
 Route::get('/admin/akciok', [AkcioController::class, 'store'])->name('akcio.index');
-
 Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
+
+Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');
 

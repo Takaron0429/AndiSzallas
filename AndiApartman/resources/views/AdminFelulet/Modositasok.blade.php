@@ -14,7 +14,7 @@
 
 <body>
     <div class="container-fluid">
-        <!-- Navbar -->
+       
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="">Admin#Felület</a>
@@ -31,7 +31,7 @@
             </div>
         </nav>
 
-        <!-- Kategória Gombok -->
+       
         <div class="container  ">
             <div class="row category-buttons text-center">
                 <div class="col"><button class="btn btn-primary" onclick="showSection('csomag')">Csomagok</button></div>
@@ -138,8 +138,7 @@
                                 <td>{{ $program->vege }}</td>
                                 <td><a href="{{ $program->link }}" target="_blank">Megtekintés</a></td>
                                 <td>
-                                    <img src="{{ asset('storage/programok/' . $program->kep) }}" alt="Program képe"
-                                        width="100">
+                                  {{$program->kep}}
                                 </td>
                             </tr>
                         @endforeach

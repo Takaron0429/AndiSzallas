@@ -11,7 +11,7 @@ class FoglalasController extends Controller
      */
     public function index()
     {
-        //
+        return view('AdminFelulet.Foglalasok');
     }
 
     /**
