@@ -45,6 +45,5 @@ Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store']
 Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');
 
 
-//Route::resource('foglalas', FoglalasController::class); 
 =======
 >>>>>>> 3732ea42285c3787f636efad5b23afca9b79f772
