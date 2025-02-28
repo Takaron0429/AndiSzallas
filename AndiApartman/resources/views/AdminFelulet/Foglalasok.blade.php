@@ -143,7 +143,6 @@
 
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">#Foglalások</a>
@@ -153,7 +152,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto text-center">
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <a class="nav-link active" href="#">Dashboard</a>
                     </li>
                     <li class="nav-item">
@@ -172,17 +171,15 @@
             </div>
         </div>
     </nav>
-
+    
     <header>
         <div class="container text-center">
             <h1>Foglalási Előzmények</h1>
-            <p class="lead">Nézd meg a korábbi foglalásokat és szűrj könnyedén a táblázatban megjelenő adatok alapján.
-            </p>
+            <p class="lead">Nézd meg a korábbi foglalásokat és szűrj könnyedén a táblázatban megjelenő adatok alapján.</p>
         </div>
     </header>
-
+    
     <div class="container mt-4">
-
         <div class="row mb-4">
             <div class="col-12 text-center">
                 <h3>Szűrőszekció</h3>
@@ -191,186 +188,113 @@
                     időszakra vonatkozó adatokat, és csak a szükséges információkat jelenítse meg.</p>
             </div>
         </div>
-
-        <div class="container mt-4">
-            <!-- Szűrő szekció -->
+    
+        <!-- Szűrő szekció -->
+        <form method="GET" action="{{ route('foglalas.index') }}">
             <div class="filter-section row mb-4">
                 <div class="col-md-3">
                     <label for="yearFilter" class="form-label">Év</label>
-                    <select class="form-select" id="yearFilter">
+                    <select class="form-select" name="year" id="yearFilter">
                         <option value="">Minden év</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
+                        <option value="2021" {{ request('year') == '2021' ? 'selected' : '' }}>2021</option>
+                        <option value="2022" {{ request('year') == '2022' ? 'selected' : '' }}>2022</option>
+                        <option value="2023" {{ request('year') == '2023' ? 'selected' : '' }}>2023</option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label for="monthFilter" class="form-label">Hónap</label>
-                    <select class="form-select" id="monthFilter">
+                    <select class="form-select" name="month" id="monthFilter">
                         <option value="">Minden hónap</option>
-                        <option value="1">Január</option>
-                        <option value="2">Február</option>
-                        <option value="3">Március</option>
-                        <option value="4">Április</option>
-                        <option value="5">Május</option>
-                        <option value="6">Június</option>
-                        <option value="7">Július</option>
-                        <option value="8">Augusztus</option>
-                        <option value="9">Szeptember</option>
-                        <option value="10">Október</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
+                        @foreach(range(1, 12) as $month)
+                            <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                                {{ \Carbon\Carbon::create()->month($month)->format('F') }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label for="adultFilter" class="form-label">Felnőttek száma</label>
-                    <select class="form-select" id="adultFilter">
+                    <select class="form-select" name="adults" id="adultFilter">
                         <option value="">Bármennyi</option>
-                        <option value="1">1 felnőtt</option>
-                        <option value="2">2 felnőtt</option>
-                        <option value="3">3 felnőtt</option>
-                        <option value="4">4 felnőtt</option>
+                        @for($i = 1; $i <= 4; $i++)
+                            <option value="{{ $i }}" {{ request('adults') == $i ? 'selected' : '' }}>{{ $i }} felnőtt</option>
+                        @endfor
                     </select>
                 </div>
                 <div class="col-md-3">
                     <label for="daysFilter" class="form-label">Napok száma</label>
-                    <select class="form-select" id="daysFilter">
+                    <select class="form-select" name="days" id="daysFilter">
                         <option value="">2-14 nap</option>
-                        <option value="2">2 nap</option>
-                        <option value="3">3 nap</option>
-                        <option value="4">4 nap</option>
-                        <option value="5">5 nap</option>
-                        <option value="6">6 nap</option>
-                        <option value="7">7 nap</option>
-                        <option value="8">8 nap</option>
-                        <option value="9">9 nap</option>
-                        <option value="10">10 nap</option>
-                        <option value="11">11 nap</option>
-                        <option value="12">12 nap</option>
-                        <option value="13">13 nap</option>
-                        <option value="14">14 nap</option>
+                        @for($i = 2; $i <= 14; $i++)
+                            <option value="{{ $i }}" {{ request('days') == $i ? 'selected' : '' }}>{{ $i }} nap</option>
+                        @endfor
                     </select>
                 </div>
             </div>
-            <div class="accordion" id="accordionExample">
-                <!-- Foglalás 1 -->
+            <button type="submit" class="btn btn-primary">Szűrés alkalmazása</button>
+        </form>
+    
+        <div class="accordion" id="accordionExample">
+            
+            @foreach ($foglalasok as $foglalas)
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
+                    <h2 class="accordion-header" id="heading{{ $foglalas->id }}">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            1 - Foglalás ID: 1001
+                            data-bs-target="#collapse{{ $foglalas->id }}" aria-expanded="true" aria-controls="collapse{{ $foglalas->id }}">
+                            Foglalás ID: {{ $foglalas->id }}
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                    <div id="collapse{{ $foglalas->id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $foglalas->id }}"
                         data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <table class="table">
                                 <tr>
                                     <th scope="col">Foglalás ID</th>
-                                    <td>1001</td>
+                                    <td>{{ $foglalas->id }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Vendég ID</th>
-                                    <td>12345</td>
+                                    <td>{{ $foglalas->vendeg_id }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Érkezés</th>
-                                    <td>2025-02-15</td>
+                                    <td>{{ $foglalas->erkezes }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Távozás</th>
-                                    <td>2025-02-20</td>
+                                    <td>{{ $foglalas->tavozas }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Felnőttek</th>
-                                    <td>2</td>
+                                    <td>{{ $foglalas->felnott }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Gyerekek</th>
-                                    <td>1</td>
+                                    <td>{{ $foglalas->gyerek }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Fizetett összeg</th>
-                                    <td>12000 Ft</td>
+                                    <td>{{ $foglalas->osszeg }} Ft</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Foglalás állapot</th>
-                                    <td>Folyamatban</td>
+                                    <td>{{ $foglalas->foglalas_allapot }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Fizetés állapot</th>
-                                    <td>Fizetve</td>
+                                    <td>{{ $foglalas->fizetes_allapot }}</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
-
-                <!-- Foglalás 2 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            2 - Foglalás ID: 1002
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                        data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <table class="table">
-                                <tr>
-                                    <th scope="col">Foglalás ID</th>
-                                    <td>1002</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Vendég ID</th>
-                                    <td>54321</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Érkezés</th>
-                                    <td>2025-03-01</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Távozás</th>
-                                    <td>2025-03-05</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Felnőttek</th>
-                                    <td>2</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Gyerekek</th>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Fizetett összeg</th>
-                                    <td>15000 Ft</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Foglalás állapot</th>
-                                    <td>Teljesítve</td>
-                                </tr>
-                                <tr>
-                                    <th scope="col">Fizetés állapot</th>
-                                    <td>Fizetve</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- További foglalások betöltésére szolgáló gomb -->
-                <div class="text-center">
-                    <button id="loadMoreBtn" class="btn btn-warning mt-4">További foglalások betöltése...</button>
-                </div>
-            </div>
+            @endforeach
         </div>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva.</p>
-        </footer>
-
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva.</p>
+    </footer>
 
         <script>
 

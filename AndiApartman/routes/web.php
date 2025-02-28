@@ -41,9 +41,5 @@ Route::get('/admin/akciok', [AkcioController::class, 'store'])->name('akcio.inde
 
 Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
 
-<<<<<<< HEAD
 Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');
 
-
-=======
->>>>>>> 3732ea42285c3787f636efad5b23afca9b79f772

@@ -145,7 +145,7 @@
             </div>
         </div>
         <a href="{{ route('admin.login') }}" class="btn btn-danger w-100">Kijelentkezés</a>
-        <!-- Footer -->
+       
         <div class="footer">
             <p class="text-left">&copy; 2025 Admin Felület | Minden jog fenntartva</p>
         </div>

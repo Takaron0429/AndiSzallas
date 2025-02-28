@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-   
+   //run
     public function up(): void
     {
         Schema::create('helyi_programajanlok', function (Blueprint $table) {
