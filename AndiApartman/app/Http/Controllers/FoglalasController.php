@@ -15,7 +15,17 @@ class FoglalasController extends Controller
             'felnott' => 'required|integer|min:0',
             'gyerek' => 'required|integer|min:0',
         ]);
-    
+
+        // Számítsd ki az éjszakák számát
+        $checkinDate = new \DateTime($request->checkin);
+        $checkoutDate = new \DateTime($request->checkout);
+        $daysDifference = $checkoutDate->diff($checkinDate)->days;
+
+        // Számítsd ki az összeget
+        $felnottAr = 1; // 1 felnőtt ára
+        $gyerekAr = 2; // 1 gyerek ára
+        $osszeg = ($request->felnott * $felnottAr + $request->gyerek * $gyerekAr) * $daysDifference;
+
         // Hozz létre egy új foglalást
         $foglalas = new Foglalas();
         $foglalas->vendeg_id = auth()->id(); // Bejelentkezett felhasználó ID-je (opcionális)
@@ -23,12 +33,12 @@ class FoglalasController extends Controller
         $foglalas->tavozas = $request->checkout;
         $foglalas->felnott = $request->felnott;
         $foglalas->gyerek = $request->gyerek;
-        $foglalas->osszeg = 0; // Ide jöhet egy számítási logika
+        $foglalas->osszeg = $osszeg; // Az összeg mentése
         $foglalas->speciális_keresek = $request->speciális_keresek; // Nem kötelező
         $foglalas->csomag_id = $request->csomag_id; // Nem kötelező
         $foglalas->akcio_id = $request->akcio_id; // Nem kötelező
         $foglalas->save();
-    
+
         return redirect()->back()->with('success', 'Foglalás sikeresen rögzítve!');
     }
 }

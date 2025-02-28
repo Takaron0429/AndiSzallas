@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const checkin = document.getElementById("checkin");
     const checkout = document.getElementById("checkout");
     const felnott = document.getElementById("felnott");
+    const gyerek = document.getElementById("gyerek"); // Gyerekek száma
     const result = document.getElementById("days");
     const errorParagraph = document.querySelector(".errorParagraph"); // Az errorParagraph class-ú p tag
     const form = document.querySelector("form"); // Az űrlap elem
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const checkinDate = new Date(checkin.value);
         const checkoutDate = new Date(checkout.value);
         const felnottCount = parseInt(felnott.value, 10); // Felnőttek száma
+        const gyerekCount = parseInt(gyerek.value, 10); // Gyerekek száma
         const today = new Date(); // Jelenlegi dátum
         today.setHours(0, 0, 0, 0); // Az időpontot 00:00:00-ra állítjuk
 
@@ -54,15 +56,24 @@ document.addEventListener("DOMContentLoaded", function() {
             return false; // Az űrlap nem küldhető el
         }
 
-        // Ha minden rendben, töröljük a hibákat és engedélyezzük az űrlap elküldését
-        errorParagraph.textContent = "";
+        // Számítsd ki az összeget
+        const felnottAr = 1; // 1 felnőtt ára
+        const gyerekAr = 2; // 1 gyerek ára
+        const osszeg = (felnottCount * felnottAr + gyerekCount * gyerekAr) * daysDifference;
+
+        // Jelenítsd meg az összeget
+        errorParagraph.textContent = `Összeg: ${osszeg} Ft`;
+        errorParagraph.style.color = "green"; // Zöld szín az összeghez
+
+        // Ha minden rendben, engedélyezzük az űrlap elküldését
         return true;
     }
 
-    // Eseményfigyelők a dátumváltozásokra és a felnőttek számának változására
+    // Eseményfigyelők a dátumváltozásokra és a felnőttek/gyerekek számának változására
     checkin.addEventListener("change", validateForm);
     checkout.addEventListener("change", validateForm);
     felnott.addEventListener("change", validateForm);
+    gyerek.addEventListener("change", validateForm);
 
     // Az űrlap elküldésének megakadályozása, ha hiba van
     form.addEventListener("submit", function(event) {
