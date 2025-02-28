@@ -3,14 +3,25 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AkcioController;
 use App\Http\Controllers\ErkezesiCsomagController;
-use App\Http\Controllers\FoglalasController;
 use App\Http\Controllers\HelyiProgramajanloController;
 use App\Http\Controllers\ModositasokController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\FoglalasController;
+
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Foglalás oldal megjelenítése
+Route::get('/foglalas', function () {
+    return view('foglalas');
+})->name('foglalas');
+
+// Foglalás adatok fogadása
+Route::post('/foglalas', [FoglalasController::class, 'store'])->name('foglalas.store');
+
 
 
 Route::get('/AdminFelulet/Login', [AdminController::class, 'showLoginForm'])->name('admin.login');
@@ -27,7 +38,6 @@ Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name(
 
 Route::post('/admin/akcio/store', [AkcioController::class, 'store'])->name('Akcio.store');
 Route::get('/admin/akciok', [AkcioController::class, 'store'])->name('akcio.index');
-Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
 
-Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');
+Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
 
