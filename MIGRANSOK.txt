@@ -1,0 +1,331 @@
+ public function up(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
+    }
+
+   
+    public function down(): void
+    {
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('sessions');
+    }
+
+  public function up(): void
+    {
+        Schema::create('cache', function (Blueprint $table) {
+            $table->string('key')->primary();
+            $table->mediumText('value');
+            $table->integer('expiration');
+        });
+
+        Schema::create('cache_locks', function (Blueprint $table) {
+            $table->string('key')->primary();
+            $table->string('owner');
+            $table->integer('expiration');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('cache');
+        Schema::dropIfExists('cache_locks');
+    }
+ public function up(): void
+    {
+        Schema::create('jobs', function (Blueprint $table) {
+            $table->id();
+            $table->string('queue')->index();
+            $table->longText('payload');
+            $table->unsignedTinyInteger('attempts');
+            $table->unsignedInteger('reserved_at')->nullable();
+            $table->unsignedInteger('available_at');
+            $table->unsignedInteger('created_at');
+        });
+
+        Schema::create('job_batches', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->string('name');
+            $table->integer('total_jobs');
+            $table->integer('pending_jobs');
+            $table->integer('failed_jobs');
+            $table->longText('failed_job_ids');
+            $table->mediumText('options')->nullable();
+            $table->integer('cancelled_at')->nullable();
+            $table->integer('created_at');
+            $table->integer('finished_at')->nullable();
+        });
+
+        Schema::create('failed_jobs', function (Blueprint $table) {
+            $table->id();
+            $table->string('uuid')->unique();
+            $table->text('connection');
+            $table->text('queue');
+            $table->longText('payload');
+            $table->longText('exception');
+            $table->timestamp('failed_at')->useCurrent();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('job_batches');
+        Schema::dropIfExists('failed_jobs');
+    }
+ public function up(): void
+    {
+        Schema::create('vendeg', function (Blueprint $table) {
+            $table->id('vendeg_id'); 
+            $table->string('nev');
+            $table->string('email');
+            $table->string('telefon')->nullable();
+            $table->string('iranyitoszam')->nullable();
+            $table->string('lakcim')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('vendeg');
+    }
+ public function up(): void
+    {
+        Schema::create('admin', function (Blueprint $table) {
+            $table->id('admin_id');
+            $table->string('felhasznalonev');
+            $table->string('jelszo');
+            $table->string('email')->unique();
+            $table->timestamp('utolso_bejelentkezes')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('admin');
+    }
+  public function up(): void
+    {
+        Schema::create('erkezesi_csomagok', function (Blueprint $table) {
+            $table->id('csomag_id');
+            $table->string('nev');
+            $table->text('leiras')->nullable();
+            $table->decimal('ar');
+            $table->boolean('elerheto')->default(true);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('erkezesi_csomagok');
+    }
+public function up(): void
+    {
+        Schema::create('akciok', function (Blueprint $table) {
+            $table->id('akcio_id');
+            $table->string('cim');
+            $table->text('leiras')->nullable();
+            $table->decimal('kedvezmeny_szazalek');
+            $table->date('kezdete');
+            $table->date('vege');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('akciok');
+    }
+public function up(): void
+    {
+        Schema::create('foglalasok', function (Blueprint $table) {
+            $table->id('foglalas_id'); 
+            $table->unsignedBigInteger('vendeg_id');
+            $table->date('erkezes');
+            $table->date('tavozas');
+            $table->integer('felnott');
+            $table->integer('gyerek');
+            $table->decimal('osszeg');
+            $table->string('foglalas_allapot')->default('függőben');
+            $table->string('fizetes_allapot')->default('függőben');
+            $table->text('speciális_keresek')->nullable();
+            $table->unsignedBigInteger('csomag_id')->nullable();
+            $table->unsignedBigInteger('akcio_id')->nullable();
+            $table->foreign('vendeg_id')->references('vendeg_id')->on('vendeg')->onDelete('cascade');
+            $table->foreign('csomag_id')->references('csomag_id')->on('erkezesi_csomagok')->onDelete('set null');
+            $table->foreign('akcio_id')->references('akcio_id')->on('akciok')->onDelete('set null'); 
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('foglalasok');
+    }
+ public function up(): void
+    {
+        Schema::create('fizetesek', function (Blueprint $table) {
+            $table->id('fizetes_id');
+            
+    
+            $table->unsignedBigInteger('foglalas_id');
+
+            $table->foreign('foglalas_id')->references('foglalas_id')->on('foglalasok')->onDelete('cascade');
+            
+            $table->decimal('osszeg');
+            $table->string('fizetesi_mod');
+            $table->string('fizetesi_allapot')->default('függőben');
+            $table->timestamp('tranzakcio_datuma')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamps();
+        });
+    }
+    
+    public function down(): void
+    {
+        Schema::dropIfExists('fizetesek');
+    }
+  public function up(): void
+    {
+        Schema::create('velemenyek', function (Blueprint $table) {
+            $table->id('velemeny_id');
+            $table->unsignedBigInteger('vendeg_id');
+            $table->foreign('vendeg_id')->references('vendeg_id')->on('vendeg')->onDelete('cascade');
+            $table->integer('ertekeles')->check('ertekeles >= 1 AND ertekeles <= 10');
+            $table->text('komment')->nullable();
+            $table->timestamps();
+        });
+    }
+    
+
+    public function down(): void
+    {
+        Schema::dropIfExists('velemenyek');
+    }
+ public function up(): void
+    {
+        Schema::create('chat_uzenetek', function (Blueprint $table) {
+            $table->id('chat_id');
+            
+            $table->unsignedBigInteger('vendeg_id')->nullable();
+            $table->unsignedBigInteger('admin_id')->nullable();
+            
+            $table->foreign('vendeg_id')->references('vendeg_id')->on('vendeg')->onDelete('set null');
+            $table->foreign('admin_id')->references('admin_id')->on('admin')->onDelete('set null');
+            
+            $table->text('uzenet');
+            $table->timestamp('kuldes_datuma')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->enum('kuldo', ['vendeg', 'admin']);
+            
+            $table->timestamps();
+        });
+    }
+    
+    public function down(): void
+    {
+        Schema::dropIfExists('chat_uzenetek');
+    }
+   public function up(): void
+    {
+        Schema::create('foglalasi_modositasok', function (Blueprint $table) {
+            $table->id('modositas_id');
+            $table->unsignedBigInteger('foglalas_id');
+            $table->foreign('foglalas_id')->references('foglalas_id')->on('foglalasok')->onDelete('cascade'); 
+            $table->string('modositas_tipusa', 50);
+            $table->timestamp('kerestet_datuma')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->string('allapot', 50)->default('függőben');
+            $table->timestamps();
+        });
+    }
+    
+    public function down(): void
+    {
+        Schema::dropIfExists('foglalasi_modositasok');
+    }
+    public function up(): void
+    {
+        Schema::create('akcio_foglalas', function (Blueprint $table) {
+            $table->unsignedBigInteger('akcio_id');
+            $table->unsignedBigInteger('foglalas_id');
+            $table->foreign('akcio_id')->references('akcio_id')->on('akciok')->onDelete('cascade');
+            $table->foreign('foglalas_id')->references('foglalas_id')->on('foglalasok')->onDelete('cascade');
+            $table->primary(['akcio_id', 'foglalas_id']);
+        });
+    }
+    
+    public function down(): void
+    {
+        Schema::dropIfExists('akcio_foglalas');
+    }
+    public function up(): void
+    {
+        Schema::create('helyi_programajanlok', function (Blueprint $table) {
+            $table->id('program_id');
+            $table->string('cim');
+            $table->string('kep');
+            $table->text('leiras')->nullable();
+            $table->string('helyszin');
+            $table->string("kezdet");
+            $table->string("vege");
+            $table->string('link')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('helyi_programajanlok');
+    }
+ public function up(): void
+    {
+        Schema::create('csomag_foglalas', function (Blueprint $table) {
+            $table->unsignedBigInteger('csomag_id');
+            $table->unsignedBigInteger('foglalas_id');
+            $table->foreign('csomag_id')->references('csomag_id')->on('erkezesi_csomagok')->onDelete('cascade');
+            $table->foreign('foglalas_id')->references('foglalas_id')->on('foglalasok')->onDelete('cascade');
+            $table->primary(['csomag_id', 'foglalas_id']);
+        });
+    }
+    
+    public function down(): void
+    {
+        Schema::dropIfExists('csomag_foglalas');
+    }
