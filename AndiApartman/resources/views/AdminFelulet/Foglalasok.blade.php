@@ -171,14 +171,15 @@
             </div>
         </div>
     </nav>
-    
+
     <header>
         <div class="container text-center">
             <h1>Foglalási Előzmények</h1>
-            <p class="lead">Nézd meg a korábbi foglalásokat és szűrj könnyedén a táblázatban megjelenő adatok alapján.</p>
+            <p class="lead">Nézd meg a korábbi foglalásokat és szűrj könnyedén a táblázatban megjelenő adatok alapján.
+            </p>
         </div>
     </header>
-    
+
     <div class="container mt-4">
         <div class="row mb-4">
             <div class="col-12 text-center">
@@ -188,9 +189,9 @@
                     időszakra vonatkozó adatokat, és csak a szükséges információkat jelenítse meg.</p>
             </div>
         </div>
-    
-        <!-- Szűrő szekció -->
-        <form method="GET" action="{{ route('foglalas.index') }}">
+
+
+        <form method="GET" action="{{ route('AdminFelulet.Foglalasok') }}">
             <div class="filter-section row mb-4">
                 <div class="col-md-3">
                     <label for="yearFilter" class="form-label">Év</label>
@@ -233,28 +234,30 @@
             </div>
             <button type="submit" class="btn btn-primary">Szűrés alkalmazása</button>
         </form>
-    
+
         <div class="accordion" id="accordionExample">
-            
-            @foreach ($foglalasok as $foglalas)
+            @foreach ($Foglalas as $foglalas)
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="heading{{ $foglalas->id }}">
+                    <h2 class="accordion-header" id="heading{{ $foglalas->foglalas_id }}">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse{{ $foglalas->id }}" aria-expanded="true" aria-controls="collapse{{ $foglalas->id }}">
-                            Foglalás ID: {{ $foglalas->id }}
+                            data-bs-target="#collapse{{ $foglalas->foglalas_id }}" aria-expanded="true"
+                            aria-controls="collapse{{ $foglalas->foglalas_id }}">
+                            {{ $foglalas->vendeg->nev ?? 'Nincs név' }} – {{ $foglalas->erkezes }} →
+                            {{ $foglalas->tavozas }}
+                            (Foglalás ID: #{{ $foglalas->foglalas_id }}, {{ $foglalas->osszeg }} Ft)
                         </button>
                     </h2>
-                    <div id="collapse{{ $foglalas->id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $foglalas->id }}"
-                        data-bs-parent="#accordionExample">
+                    <div id="collapse{{ $foglalas->foglalas_id }}" class="accordion-collapse collapse"
+                        aria-labelledby="heading{{ $foglalas->foglalas_id }}" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <table class="table">
                                 <tr>
-                                    <th scope="col">Foglalás ID</th>
-                                    <td>{{ $foglalas->id }}</td>
+                                    <th scope="col">Vendég Azonosito</th>
+                                    <td>{{ $foglalas->vendeg_id ?? 'Nincs id' }}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="col">Vendég ID</th>
-                                    <td>{{ $foglalas->vendeg_id }}</td>
+                                    <th scope="col">Vendég neve</th>
+                                    <td>{{ $foglalas->vendeg->nev ?? 'Nincs név' }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Érkezés</th>
@@ -291,49 +294,72 @@
             @endforeach
         </div>
     </div>
-    
+
+
     <footer class="footer">
-        <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva.</p>
+        <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva - Készitette: Takács Áron</p>
     </footer>
 
-        <script>
+    <script>
 
-            document.getElementById("loadMoreBtn").addEventListener("click", function () {
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener("click", function () {
                 alert("További foglalások betöltése...");
-
             });
+        }
 
+        document.getElementById('yearFilter').addEventListener('change', filterTable);
+        document.getElementById('monthFilter').addEventListener('change', filterTable);
+        document.getElementById('adultFilter').addEventListener('change', filterTable);
+        document.getElementById('daysFilter').addEventListener('change', filterTable);
 
-            document.getElementById('yearFilter').addEventListener('change', filterTable);
-            document.getElementById('monthFilter').addEventListener('change', filterTable);
-            document.getElementById('adultFilter').addEventListener('change', filterTable);
-            document.getElementById('priceFilter').addEventListener('input', filterTable);
+        function filterTable() {
+            const year = document.getElementById('yearFilter').value;
+            const month = document.getElementById('monthFilter').value;
+            const adults = document.getElementById('adultFilter').value;
+            const days = document.getElementById('daysFilter').value;
 
-            function filterTable() {
-                const year = document.getElementById('yearFilter').value;
-                const month = document.getElementById('monthFilter').value;
-                const adults = document.getElementById('adultFilter').value;
-                const price = document.getElementById('priceFilter').value;
+            const rows = document.querySelectorAll('#reservationTable tbody tr');
 
-                const rows = document.querySelectorAll('#reservationTable tr');
+            rows.forEach(row => {
+                const cells = row.children;
+                if (cells.length < 7) return; // Ellenőrizzük, hogy van-e elég cella
 
-                rows.forEach(row => {
-                    const cells = row.children;
-                    const rowYear = cells[2].textContent.split('-')[0];
-                    const rowMonth = cells[2].textContent.split('-')[1];
-                    const rowAdults = cells[4].textContent;
-                    const rowPrice = cells[6].textContent;
+                const rowDate = cells[2].textContent.trim(); // Pl. "2024-03-02"
+                const rowYear = rowDate.split('-')[0];
+                const rowMonth = rowDate.split('-')[1];
+                const rowAdults = cells[4].textContent.trim();
+                const rowDays = parseInt(cells[6].textContent.trim(), 10); // Átalakítás számra
 
-                    const showRow =
-                        (year === "" || rowYear === year) &&
-                        (month === "" || rowMonth === month) &&
-                        (adults === "" || rowAdults == adults) &&
-                        (price === "" || rowPrice >= price);
+                const showRow =
+                    (year === "" || rowYear === year) &&
+                    (month === "" || rowMonth === month) &&
+                    (adults === "" || rowAdults == adults) &&
+                    (days === "" || rowDays == days);
 
-                    row.style.display = showRow ? "" : "none";
-                });
-            }
-        </script>
+                row.style.display = showRow ? "" : "none";
+            });
+        }
+    </script>
+
+    <script>
+        document.getElementById('yearFilter').addEventListener('change', function () {
+            this.form.submit();
+        });
+
+        document.getElementById('monthFilter').addEventListener('change', function () {
+            this.form.submit();
+        });
+
+        document.getElementById('adultFilter').addEventListener('change', function () {
+            this.form.submit();
+        });
+
+        document.getElementById('daysFilter').addEventListener('change', function () {
+            this.form.submit();
+        });
+    </script>
 </body>
 
 </html>

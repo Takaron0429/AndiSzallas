@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Foglalas extends Model
 {
     protected $table = 'foglalasok';
+   
+
+
+
     public function vendeg(): BelongsTo
     {
         return $this->belongsTo(Vendeg::class, 'vendeg_id');

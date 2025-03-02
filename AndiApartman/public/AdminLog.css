@@ -1,7 +1,4 @@
 
-
-
-
 body::before {
     content: "";
     position: absolute;
@@ -44,7 +41,7 @@ body::before {
     padding: 30px;
     box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 
-
+    
     text-align: center;
     transition: all 0.3s ease-in-out;
 }
@@ -75,6 +72,10 @@ body::before {
 .form-label {
     font-weight: bold;
     color: #333;
+}
+input {
+    font-weight: bolder;
+    font-size: x-large;
 }
 
 .form-control {

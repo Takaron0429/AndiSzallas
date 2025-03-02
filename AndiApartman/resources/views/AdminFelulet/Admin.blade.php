@@ -22,7 +22,7 @@
 <body>
 
 
- 
+
     <div class="container">
         <div class="main-content" id="mainContent">
             <div class="container mt-5">
@@ -44,7 +44,7 @@
             </div>
         </div>
         <br>
-      
+
         </script>
         <div class="row">
             <div class="col-md-4 col-lg-4 col-sm-12">
@@ -75,7 +75,9 @@
                 </div>
             </div>
         </div>
-        <div class="container ">
+
+
+        <div class="container">
             <div class="row">
                 <div class="card mt-4">
                     <div class="card-header">
@@ -94,26 +96,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <tr class="col-12">
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>johndoe@email.com</td>
-                                    <td>2025-02-15</td>
-                                    <td>Folyamatban</td>
-                                    <td><button class="btn btn-info" data-bs-toggle="modal"
-                                            data-bs-target="#bookingModal1">Részletek</button></td>
-                                </tr>
-                                <tr class="col-12">
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>janesmith@email.com</td>
-                                    <td>2025-02-20</td>
-                                    <td>Teljesítve</td>
-                                    <td><button class="btn btn-info" data-bs-toggle="modal"
-                                            data-bs-target="#bookingModal2">Részletek</button></td>
-                                </tr>
-
+                                @foreach ($Foglalas as $foglalas) 
+                                    <tr class="col-12">
+                                        <td>{{ $foglalas->foglalas_id }}</td>
+                                        <td>{{ $foglalas->vendeg->nev ?? 'Nincs név' }}</td>
+                                        <td>{{ $foglalas->vendeg->email ?? 'Nincs email' }}</td>
+                                        <td>{{ $foglalas->erkezes }}</td>
+                                        <td>{{ $foglalas->foglalas_allapot }}</td>
+                                        <td>
+                                            <button class="btn btn-info" data-bs-toggle="modal"
+                                                data-bs-target="#bookingModal{{ $foglalas->foglalas_id }}">
+                                                Részletek
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -121,31 +118,40 @@
             </div>
         </div>
 
-        <div class="modal fade" id="bookingModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Foglalás Részletei</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><strong>Név:</strong> John Doe</p>
-                        <p><strong>Email:</strong> johndoe@email.com</p>
-                        <p><strong>Dátum:</strong> 2025-02-15</p>
-                        <p><strong>Állapot:</strong> Folyamatban</p>
-                        <p><strong>Megjegyzés:</strong> Speciális igények: Külön ágyak, reggeli</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
 
-                        <button type="button" class="btn btn-primary">Foglalás frissítése</button>
-                        <button type="button" class="btn btn-danger">Törlés XXX</button>
+        @foreach ($Foglalas as $foglalas)
+            <div class="modal fade" id="bookingModal{{ $foglalas->foglalas_id }}" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Foglalás Részletei</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Név:</strong> {{ $foglalas->vendeg->nev ?? 'Nincs név' }}</p>
+                            <p><strong>Email:</strong> {{ $foglalas->vendeg->email ?? 'Nincs email' }}</p>
+                            <p><strong>Érkezés:</strong> {{ $foglalas->erkezes }}</p>
+                            <p><strong>Távozás:</strong> {{ $foglalas->tavozas }}</p>
+                            <p><strong>Felnőttek:</strong> {{ $foglalas->felnott }}</p>
+                            <p><strong>Gyerekek:</strong> {{ $foglalas->gyerek }}</p>
+                            <p><strong>Fizetett összeg:</strong> {{ $foglalas->osszeg }} Ft</p>
+                            <p><strong>Foglalás állapot:</strong> {{ $foglalas->foglalas_allapot }}</p>
+                            <p><strong>Fizetés állapot:</strong> {{ $foglalas->fizetes_allapot }}</p>
+                            <p><strong>Megjegyzés:</strong> {{ $foglalas->megjegyzes ?? 'Nincs megjegyzés' }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                            <button type="button" class="btn btn-primary">Foglalás frissítése</button>
+                            <button type="button" class="btn btn-danger">Törlés</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
+
         <a href="{{ route('admin.login') }}" class="btn btn-danger w-100">Kijelentkezés</a>
-       
+
         <div class="footer">
             <p class="text-left">&copy; 2025 Admin Felület | Minden jog fenntartva</p>
         </div>

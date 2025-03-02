@@ -6,6 +6,20 @@ use App\Models\Foglalas;
 
 class FoglalasController extends Controller
 {
+    public function index()
+    {
+        $Foglalas = Foglalas::all();
+        return view('AdminFelulet.Foglalasok', compact('Foglalas'));
+    }
+    public function adminIndex()
+    {
+
+        $Foglalas = Foglalas::all();
+
+        return view('AdminFelulet.Foglalasok', compact('Foglalas'));
+    }
+
+
     public function store(Request $request)
     {
         // Validáld a kötelező mezőket
