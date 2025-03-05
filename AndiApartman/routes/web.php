@@ -23,12 +23,15 @@ Route::get('/foglalas', function () {
 Route::post('/foglalas', [FoglalasController::class, 'store'])->name('foglalas.store');
 
 
-
+//ADMIN ROUTEEEEEEEEEEEEEEEEE DONT TOUCH IT!!!
 Route::get('/AdminFelulet/Login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/AdminFelulet/Login', [AdminController::class, 'login']);
 Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
 //Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('AdminFelulet.Admin');
 Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout'); 
+
+
 Route::get('/AdminFelulet/Modositasok', [AdminController::class, 'modositasok'])->name('admin.modositasok');
 Route::get('AdminFelulet/Modositasok', [ModositasokController::class, 'index'])->name('AdminFelulet.Modositasok');
 
@@ -38,9 +41,12 @@ Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name(
 
 Route::post('/admin/akcio/store', [AkcioController::class, 'store'])->name('Akcio.store');
 Route::get('/admin/akciok', [AkcioController::class, 'store'])->name('akcio.index');
-
 Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
 
+
 Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');
+
 Route::get('AdminFelulet/Admin', [FoglalasController::class, 'adminIndex'])->name('AdminFelulet.Admin');
+
+Route::get('AdminFelulet/Admin', [AdminController::class, 'index'])->name('AdminFelulet.Admin');
 

@@ -14,23 +14,23 @@ class Foglalas extends Model
 
 
 
-    public function vendeg(): BelongsTo
+    public function vendeg()
     {
-        return $this->belongsTo(Vendeg::class, 'vendeg_id');
+        return $this->belongsTo(Vendeg::class, 'vendeg_id', 'vendeg_id');
     }
 
     public function csomag(): BelongsTo
     {
-        return $this->belongsTo(ErkezesiCsomag::class, 'csomag_id');
+        return $this->belongsTo(ErkezesiCsomag::class, 'csomag_id','csomag_id');
     }
 
     public function akcio(): BelongsTo
     {
-        return $this->belongsTo(Akcio::class, 'akcio_id');
+        return $this->belongsTo(Akcio::class, 'akcio_id','akcio_id');
     }
 
     public function fizetesek(): HasMany
     {
-        return $this->hasMany(Fizetes::class, 'foglalas_id');
+        return $this->hasMany(Fizetes::class, 'foglalas_id','foglalas_id');
     }
 }

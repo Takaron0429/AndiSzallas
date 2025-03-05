@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Models\Foglalas;
 
@@ -9,16 +10,17 @@ class FoglalasController extends Controller
     public function index()
     {
         $Foglalas = Foglalas::all();
+
         return view('AdminFelulet.Foglalasok', compact('Foglalas'));
     }
+    
     public function adminIndex()
     {
 
         $Foglalas = Foglalas::all();
-
-        return view('AdminFelulet.Foglalasok', compact('Foglalas'));
+        $Admin = Admin::all();
+        return view('AdminFelulet.Admin', compact('Foglalas','Admin'));
     }
-
 
     public function store(Request $request)
     {

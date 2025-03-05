@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Foglalas;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -12,7 +13,10 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.modositasok');
+        $Admin = Admin::all();
+        $Foglalas = Foglalas::all();
+
+        return view('AdminFelulet.Admin', compact('Admin', 'Foglalas'));
     }
     public function showLoginForm()
     {
@@ -23,7 +27,11 @@ class AdminController extends Controller
         return view('AdminFelulet.modositasok');
     }
 
-    // Bejelentkezési logika
+    public function dashboard2()
+    {
+        return view('AdminFelulet.Admin');
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -31,23 +39,23 @@ class AdminController extends Controller
             'jelszo' => 'required',
             'email' => 'required|email',
         ]);
-
-        // Ellenőrizzük az adatbázisban az admin adatait
+    
         $admin = DB::table('admin')
             ->where('felhasznalonev', $request->felhasznalonev)
-            ->where('jelszo', $request->jelszo)
+            ->where('jelszo', $request->jelszo) // Ezt jobb lenne hash-elni!
             ->where('email', $request->email)
             ->first();
-
+    
         if ($admin) {
-
+            // Beállítjuk a session-ben a bejelentkezett admin adatait
             Session::put('admin', [
                 'felhasznalonev' => $admin->felhasznalonev,
                 'email' => $admin->email,
             ]);
-            return redirect()->route('admin.dashboard');
+    
+            return redirect()->route('AdminFelulet.Admin');
         }
-
+    
         return back()->withErrors(['Hibás felhasználónév, jelszó vagy e-mail cím!']);
     }
     public function dashboard()
@@ -58,8 +66,8 @@ class AdminController extends Controller
 
         return view('AdminFelulet.Admin', ['admin' => Session::get('admin')]);
     }
-    
-    // Logout funkció
+
+
     public function logout()
     {
         Session::flush();

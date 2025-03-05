@@ -62,11 +62,11 @@
         }
 
         .navbar-toggler-icon {
-            background-color: #ffffff;
+           
             border-radius: 5px;
         }
 
-        /* Egyéb stílusok */
+      
         .footer {
             background-color: #ff5722;
             color: white;
