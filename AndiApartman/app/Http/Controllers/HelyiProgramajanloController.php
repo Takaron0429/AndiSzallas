@@ -55,7 +55,7 @@ class HelyiProgramajanloController extends Controller
     // Update Program
     public function update(Request $request, $id)
     {
-        // Validálás
+      
         $validated = $request->validate([
             'cim' => 'required|string|max:255',
             'helyszin' => 'required|string|max:255',
@@ -68,7 +68,7 @@ class HelyiProgramajanloController extends Controller
 
         $program = HelyiProgramajanlo::find($id);
         if (!$program) {
-            return redirect()->route('admin.modositasok')->with('error', 'Program nem található!');
+            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Program nem található!');
         }
 
         if ($request->hasFile('kep')) {
@@ -77,10 +77,10 @@ class HelyiProgramajanloController extends Controller
             $program->kep = $kepPath;
         }
 
-        // Program frissítése
+       
         $program->update($validated);
 
-        return redirect()->route('admin.modositasok')->with('success', 'Program frissítve!');
+        return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Program frissítve!');
     }
 
     public function destroy($id)

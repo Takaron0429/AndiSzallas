@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Foglalas;
+use Carbon\Carbon;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -42,15 +43,21 @@ class AdminController extends Controller
     
         $admin = DB::table('admin')
             ->where('felhasznalonev', $request->felhasznalonev)
-            ->where('jelszo', $request->jelszo) // Ezt jobb lenne hash-elni!
+            ->where('jelszo', $request->jelszo) 
             ->where('email', $request->email)
             ->first();
     
         if ($admin) {
-            // Beállítjuk a session-ben a bejelentkezett admin adatait
+          
+            DB::table('admin')
+                ->where('admin_id', $admin->admin_id)
+                ->update(['utolso_bejelentkezes' => Carbon::now()]);
+    
+           
             Session::put('admin', [
                 'felhasznalonev' => $admin->felhasznalonev,
                 'email' => $admin->email,
+                'utolso_bejelentkezes' => Carbon::now()->toDateTimeString(),
             ]);
     
             return redirect()->route('AdminFelulet.Admin');

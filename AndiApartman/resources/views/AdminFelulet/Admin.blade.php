@@ -33,21 +33,19 @@
                         <div class="card shadow-lg">
                             <div class="card-body text-center">
                                 @foreach([session('admin')] as $admin)
-                                    @if($admin)
-                                        <div class="card shadow-lg mb-3">
-                                            <div class="card-body text-center">
-                                                <img src="{{ asset('kepek/boss.png') }}" class="rounded-circle mb-3"
-                                                    alt="Admin Avatar" width="120">
-                                                <h3 class="card-title text-primary fw-bold">Üdvözlöm,
-                                                    {{ $admin['felhasznalonev'] }}!</h3>
-                                                <p class="card-text text-muted">📧 Email: <strong>{{ $admin['email'] }}</strong>
-                                                </p>
-                                                <p class="badge bg-success p-2">Admin Boss ✅</p>
-                                                <p class="badge bg-success p-2">Fő Admin ✅</p>
-                                            </div>
+                                @if($admin)
+                                    <div class="card shadow-lg mb-2">
+                                        <div class="card-body text-center">
+                                            <img src="{{ asset('kepek/boss.png') }}" class="rounded-circle mb-3" alt="Admin Avatar" width="120">
+                                            <h3 class="card-title text-primary fw-bold">Üdvözlöm, {{ $admin['felhasznalonev'] }}!</h3>
+                                            <p class="card-text text-muted">📧 Email: <strong>{{ $admin['email'] }}</strong></p>
+                                            <p class="card-text text-muted">🕒 Utolsó bejelentkezés: <strong>{{ $admin['utolso_bejelentkezes'] ?? 'N/A' }}</strong></p>
+                                            <p class="badge bg-success p-2">Admin Boss ✅</p>
+                                            <p class="badge bg-success p-2">Fő Admin ✅</p>
                                         </div>
-                                    @endif
-                                @endforeach
+                                    </div>
+                                @endif
+                            @endforeach
                             </div>
                         </div>
                     </div>
@@ -97,7 +95,8 @@
                             <table class="table table-striped table-hover">
                                 <thead class="col-12">
                                     <tr>
-                                        <th>#</th>
+                                        <th>Foglalas</th>
+                                        <th>Azonositó</th>
                                         <th>Név</th>
                                         <th>Email</th>
                                         <th>Foglalás dátuma</th>
@@ -160,7 +159,12 @@
                     </div>
                 </div>
             @endforeach
-
+            
+            <br>
+            <hr>
+            <h2 class="text-center">Statisztika</h2>
+            <hr>
+            <br>
             <a href="{{ route('admin.login') }}" class="btn btn-danger w-100">Kijelentkezés</a>
 
             <div class="footer">
