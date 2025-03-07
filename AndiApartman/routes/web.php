@@ -30,7 +30,7 @@ Route::post('/AdminFelulet/Login', [AdminController::class, 'login']);
 Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 //Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('AdminFelulet.Admin');
-Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout'); 
+Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 
 Route::get('/AdminFelulet/Modositasok', [AdminController::class, 'modositasok'])->name('admin.modositasok');
@@ -43,6 +43,10 @@ Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name(
 Route::post('/admin/akcio/store', [AkcioController::class, 'store'])->name('Akcio.store');
 Route::get('/admin/akciok', [AkcioController::class, 'store'])->name('akcio.index');
 Route::post('/admin/helyi/store', [HelyiProgramajanloController::class, 'store'])->name('Helyi.store');
+
+Route::put('Erkezesi/{id}/update', [ErkezesiCsomagController::class, 'update'])->name('Erkezesi.update');
+Route::put('admin/akcio/{id}/update', [AkcioController::class, 'update'])->name('Akcio.update');
+Route::put('admin/helyi/{id}/update', [HelyiProgramajanloController::class, 'update'])->name('Helyi.update');
 
 
 Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');

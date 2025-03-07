@@ -59,12 +59,12 @@ class ErkezesiCsomagController extends Controller
 
         $csomag = ErkezesiCsomag::find($id);
         if (!$csomag) {
-            return redirect()->route('admin.modositasok')->with('error', 'Csomag nem található!');
+            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Csomag nem található!');
         }
 
         $csomag->update($validated);
 
-        return redirect()->route('admin.modositasok')->with('success', 'Csomag frissítve!');
+        return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Csomag frissítve!');
     }
 
     // Törlés

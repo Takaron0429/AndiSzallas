@@ -49,12 +49,12 @@ class AkcioController extends Controller
     
         $akcio = Akcio::find($id);
         if (!$akcio) {
-            return redirect()->route('admin.modositasok')->with('error', 'Akció nem található!');
+            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Akció nem található!');
         }
 
         $akcio->update($validated);
 
-        return redirect()->route('admin.modositasok')->with('success', 'Akció frissítve!');
+        return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Akció frissítve!');
     }
 
     public function destroy($id)
