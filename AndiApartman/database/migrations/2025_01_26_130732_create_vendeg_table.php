@@ -6,11 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-   
     public function up(): void
     {
         Schema::create('vendeg', function (Blueprint $table) {
-            $table->id('vendeg_id'); 
+            $table->id('vendeg_id');
             $table->string('nev');
             $table->string('email');
             $table->string('telefon')->nullable();
@@ -20,9 +19,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('vendeg');

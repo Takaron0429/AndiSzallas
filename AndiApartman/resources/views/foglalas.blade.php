@@ -43,33 +43,25 @@
     </nav>
 
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <section class="foglalasform">
-                    <form action="{{ route('foglalas.store') }}" method="post">
-                        @csrf <!-- CSRF token automatikusan hozzáadódik -->
-                        <label for="date">Bejelentkezés:</label>
-                        <input type="date" id="checkin" name="checkin" required>
-                        <br><br>
+        <form action="{{ route('foglalas.store') }}" method="post">
+            @csrf
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <section class="foglalasform">
 
-                        <label for="date">Kijelentkezés:</label>
-                        <input type="date" id="checkout" name="checkout" required>
-                        <br><br>
+                        <label for="date"><i class="fa-solid fa-calendar-days"></i> Bejelentkezés:</label>
+                        <input type="date" id="checkin" name="checkin" required><br><br>
+
+                        <label for="date"><i class="fa-solid fa-calendar-days"></i> Kijelentkezés:</label>
+                        <input type="date" id="checkout" name="checkout" required><br><br>
 
                         <p style="display: flex; align-items: center; gap: 10px;">
                             <i class="fa-solid fa-person"></i> Felnőtt
                             <select class="form-select" id="felnott" name="felnott">
                                 <option selected>0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
                             </select>
                         </p>
 
@@ -77,30 +69,46 @@
                             <i class="fa-solid fa-child-reaching"></i> Gyermek (1-12 éves korig)
                             <select class="form-select" id="gyerek" name="gyerek">
                                 <option selected>0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
+                                @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
                             </select>
                         </p>
 
-                        <!-- Speciális kérések szöveges mezője -->
-                        <label for="speciális_keresek">Speciális kérések:</label>
-                        <textarea id="speciális_keresek" name="speciális_keresek" rows="4" cols="50"></textarea>
+                        <label for="specialis_keresek">Speciális kérések:</label>
+                        <textarea id="specialis_keresek" name="specialis_keresek" rows="4" cols="50"></textarea>
                         <br><br>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12">
 
-                        <button type="submit">Küldés</button>
-                    </form>
-                    <p class="errorParagraph"></p>
-                </section>
+                    <!-- ÚJ mezők a vendég adataihoz -->
+                    <label><i class="fa-solid fa-address-card"></i> Név:</label>
+                    <input type="text" name="nev" required>
+                    <br><br>
+
+                    <label><i class="fa-solid fa-envelope"></i> Email:</label>
+                    <input type="email" name="email" required>
+                    <br><br>
+
+                    <label><i class="fa-solid fa-phone"></i> Telefon:</label>
+                    <input type="text" name="telefon">
+                    <br><br>
+
+                    <label><i class="fa-solid fa-location-dot"></i> Irányítószám:</label>
+                    <input type="text" name="iranyitoszam">
+                    <br><br>
+                    <label><i class="fa-solid fa-location-dot"></i> Lakcím:</label>
+                    <input type="text" name="lakcim">
+
+                    <br><br>
+                    <button type="submit">Foglalás elküldése</button>
+                </div>
             </div>
-        </div>
+        </form>
+        <p class="errorParagraph"></p>
+        </section>
+    </div>
+    </div>
     </div>
 
     <footer>
@@ -111,7 +119,7 @@
                         src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJcfmOyAexaUcRbfSI-AjnSfA&key=AIzaSyDClC5YHmbvEWO_pWV44Y-yRW9q1Bq0bok"></iframe>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12" id="contact">
-                    <h3>Elérhetősegeink:</h3>
+                    <h3>Elérhetőségeink:</h3>
                     <p class="strongerp"><i class="fa-brands fa-facebook"></i><a class="linktag"
                             href="https://www.facebook.com/profile.php?id=100057090354050"> Facebook - Andi Apartman</a>
                     </p>

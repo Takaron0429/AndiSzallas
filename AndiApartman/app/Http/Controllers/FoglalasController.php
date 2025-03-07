@@ -1,22 +1,22 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
-use Illuminate\Http\Request;
+use App\Models\Vendeg;
 use App\Models\Foglalas;
+use Illuminate\Http\Request;
 
 class FoglalasController extends Controller
 {
     public function index()
     {
         $Foglalas = Foglalas::all();
-
         return view('AdminFelulet.Foglalasok', compact('Foglalas'));
     }
 
     public function adminIndex()
     {
-
         $Foglalas = Foglalas::all();
         $Admin = Admin::all();
         
@@ -25,38 +25,50 @@ class FoglalasController extends Controller
 
     public function store(Request $request)
     {
-        // Validáld a kötelező mezőket
-        $request->validate([
+        $validated = $request->validate([
             'checkin' => 'required|date',
             'checkout' => 'required|date|after:checkin',
-            'felnott' => 'required|integer|min:0',
-            'gyerek' => 'required|integer|min:0',
+            'felnott' => 'required|integer',
+            'gyerek' => 'required|integer',
+            'nev' => 'required|string',
+            'email' => 'required|email',
+            'telefon' => 'nullable|string',
+            'iranyitoszam' => 'nullable|string',
+            'lakcim' => 'nullable|string',
+            'specialis_keresek' => 'nullable|string',
         ]);
 
-        // Számítsd ki az éjszakák számát
-        $checkinDate = new \DateTime($request->checkin);
-        $checkoutDate = new \DateTime($request->checkout);
-        $daysDifference = $checkoutDate->diff($checkinDate)->days;
+        // Vendég mentése
+        $vendeg = Vendeg::create([
+            'nev' => $validated['nev'],
+            'email' => $validated['email'],
+            'telefon' => $validated['telefon'] ?? null,
+            'iranyitoszam' => $validated['iranyitoszam'] ?? null,
+            'lakcim' => $validated['lakcim'] ?? null,
+        ]);
 
-        // Számítsd ki az összeget
-        $felnottAr = 1; // 1 felnőtt ára
-        $gyerekAr = 2; // 1 gyerek ára
-        $osszeg = ($request->felnott * $felnottAr + $request->gyerek * $gyerekAr) * $daysDifference;
+        // Éjszakák számítása
+        $checkin = new \DateTime($validated['checkin']);
+        $checkout = new \DateTime($validated['checkout']);
+        $ejszakak = $checkin->diff($checkout)->days;
 
-        // Hozz létre egy új foglalást
-        $foglalas = new Foglalas();
-        $foglalas->vendeg_id = auth()->id(); // Bejelentkezett felhasználó ID-je (opcionális)
-        $foglalas->erkezes = $request->checkin;
-        $foglalas->tavozas = $request->checkout;
-        $foglalas->felnott = $request->felnott;
-        $foglalas->gyerek = $request->gyerek;
-        $foglalas->osszeg = $osszeg; // Az összeg mentése
-        $foglalas->speciális_keresek = $request->speciális_keresek; // Nem kötelező
-        $foglalas->csomag_id = $request->csomag_id; // Nem kötelező
-        $foglalas->akcio_id = $request->akcio_id; // Nem kötelező
-        $foglalas->save();
+        // Ár kiszámítása (ezeket később finomíthatod)
+        $felnottAr = 10000; // pl. 10000 Ft / éj
+        $gyerekAr = 5000;   // pl. 5000 Ft / éj
+        $osszeg = ($validated['felnott'] * $felnottAr + $validated['gyerek'] * $gyerekAr) * $ejszakak;
 
-        return redirect()->back()->with('success', 'Foglalás sikeresen rögzítve!');
+        // Foglalás mentése
+        Foglalas::create([
+            'vendeg_id' => $vendeg->id,
+            'erkezes' => $validated['checkin'],
+            'tavozas' => $validated['checkout'],
+            'felnott' => $validated['felnott'],
+            'gyerek' => $validated['gyerek'],
+            'osszeg' => $osszeg,
+            'specialis_keresek' => $validated['specialis_keresek'] ?? null,
+        ]);
+
+        return redirect()->route('foglalas')->with('success', 'Foglalás sikeresen rögzítve!');
     }
 
 
