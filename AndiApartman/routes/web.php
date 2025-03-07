@@ -54,3 +54,5 @@ Route::get('AdminFelulet/Admin', [FoglalasController::class, 'adminIndex'])->nam
 
 Route::get('AdminFelulet/Admin', [AdminController::class, 'index'])->name('AdminFelulet.Admin');
 
+Route::put('AdminFelulet/Admin/{id}/update', [FoglalasController::class, 'update'])->name('AdminFelulet.FoglalasUpdate');
+Route::delete('AdminFelulet/Admin/{id}/delete', [FoglalasController::class, 'destroy'])->name('AdminFelulet.FoglalasDelete');

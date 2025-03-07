@@ -10,16 +10,16 @@ class Vendeg extends Model
     protected $table = 'vendeg';
     public function vendeg()
     {
-        return $this->belongsTo(Vendeg::class, 'vendeg_id');
+        return $this->belongsTo(Vendeg::class, 'vendeg_id','vendeg_id');
     }
     
     public function foglalasok(): HasMany
     {
-        return $this->hasMany(Foglalas::class, 'vendeg_id');
+        return $this->hasMany(Foglalas::class, 'vendeg_id','vendeg_id');
     }
 
     public function velemenyek(): HasMany
     {
-        return $this->hasMany(Velemeny::class, 'vendeg_id');
+        return $this->hasMany(Velemeny::class, 'vendeg_id','vendeg_id');
     }
 }

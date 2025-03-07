@@ -12,7 +12,23 @@ class Foglalas extends Model
     protected $table = 'foglalasok';
    
 
+    protected $primaryKey = 'foglalas_id';
 
+    protected $fillable = [
+        'erkezes',
+        'tavozas',
+        'felnott',
+        'gyerek',
+        'csomag_id',
+        'akcio_id',
+        'osszeg',
+    ];
+
+    
+    protected $dates = [
+        'erkezes',
+        'tavozas',
+    ];
 
     public function vendeg()
     {

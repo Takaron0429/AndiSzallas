@@ -13,13 +13,14 @@ class FoglalasController extends Controller
 
         return view('AdminFelulet.Foglalasok', compact('Foglalas'));
     }
-    
+
     public function adminIndex()
     {
 
         $Foglalas = Foglalas::all();
         $Admin = Admin::all();
-        return view('AdminFelulet.Admin', compact('Foglalas','Admin'));
+        
+        return view('AdminFelulet.Admin', compact('Foglalas', 'Admin'));
     }
 
     public function store(Request $request)
@@ -56,5 +57,49 @@ class FoglalasController extends Controller
         $foglalas->save();
 
         return redirect()->back()->with('success', 'Foglalás sikeresen rögzítve!');
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'erkezes' => 'required|date',
+            'tavozas' => 'required|date|after:erkezes',
+            'felnott' => 'required|integer|min:0',
+            'gyerek' => 'required|integer|min:0',
+            'csomag_id' => 'nullable|exists:erkezesi_csomagok,csomag_id',
+            'akcio_id' => 'nullable|exists:akciok,akcio_id',
+        ]);
+
+        $foglalas = Foglalas::find($id);
+        if (!$foglalas) {
+            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Foglalás nem található!');
+        }
+
+        $foglalas->update($validated);
+
+        $csomag = $foglalas->csomag;
+        $akcio = $foglalas->akcio;
+
+        $days = (new \DateTime($request->tavozas))->diff(new \DateTime($request->erkezes))->days;
+        $total = ($foglalas->felnott * $csomag->ar + $foglalas->gyerek * $csomag->ar) * $days;
+        if ($akcio) {
+            $total = $total - ($total * ($akcio->kedvezmeny_szazalek / 100));
+        }
+
+        $foglalas->osszeg = $total;
+        $foglalas->save();
+
+        return redirect()->route('AdminFelulet.Admin')->with('success', 'Foglalás frissítve!');
+    }
+    public function destroy($id)
+    {
+        $foglalas = Foglalas::find($id);
+        if (!$foglalas) {
+            return redirect()->route('AdminFelulet.Admin')->with('error', 'Foglalás nem található!');
+        }
+
+        $foglalas->delete();
+        return redirect()->route('AdminFelulet.Admin')->with('success', 'Foglalás törölve!');
     }
 }

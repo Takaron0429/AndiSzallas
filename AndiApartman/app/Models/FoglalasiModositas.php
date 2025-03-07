@@ -9,6 +9,6 @@ class FoglalasiModositas extends Model
 {
     public function foglalas(): BelongsTo
     {
-        return $this->belongsTo(Foglalas::class, 'foglalas_id');
+        return $this->belongsTo(Foglalas::class, 'foglalas_id', 'foglalas_id');
     }
 }

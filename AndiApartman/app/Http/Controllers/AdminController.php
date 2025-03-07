@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Akcio;
+use App\Models\ErkezesiCsomag;
 use App\Models\Foglalas;
 use Carbon\Carbon;
 use DB;
@@ -13,11 +15,37 @@ use Session;
 class AdminController extends Controller
 {
     public function index()
-    {
+    { 
+        $startDate = '2025-05-01';
+        $endDate = '2025-08-31';
+    
+        $ujFoglalasok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])->count();
+    
+        $lefoglaltNapok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
+            ->sum(DB::raw('DATEDIFF(tavozas, erkezes)'));
+    
+        $osszeg = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
+            ->sum('osszeg');
+        $osszegKerekitve = round($osszeg);
+    
+
+        $visszajaroVendegSzam = Foglalas::select('vendeg_id')
+            ->whereBetween('erkezes', [$startDate, $endDate])
+            ->groupBy('vendeg_id')
+            ->havingRaw('COUNT(vendeg_id) > 1')
+            ->count();
+    
+
+        $totalDays = (new \DateTime($endDate))->diff(new \DateTime($startDate))->days;
+
         $Admin = Admin::all();
         $Foglalas = Foglalas::all();
+        
+        $csomagok = ErkezesiCsomag::all();  
+        $akciok = Akcio::all();  
 
-        return view('AdminFelulet.Admin', compact('Admin', 'Foglalas'));
+        return view('AdminFelulet.Admin', compact('Admin', 'Foglalas', 'csomagok', 'akciok', 'ujFoglalasok', 'lefoglaltNapok', 'osszegKerekitve', 'visszajaroVendegSzam', 'totalDays'));
+       
     }
     public function showLoginForm()
     {
