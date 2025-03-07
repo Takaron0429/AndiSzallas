@@ -9,15 +9,28 @@ class Foglalas extends Model
 {
     use HasFactory;
 
-    protected $table = 'foglalasok'; // Ez kell
-
     protected $primaryKey = 'foglalas_id';
 
     protected $fillable = [
-        'vendeg_id', 'erkezes', 'tavozas', 'felnott', 'gyerek',
-        'osszeg', 'foglalas_allapot', 'fizetes_allapot',
-        'speciális_keresek', 'csomag_id', 'akcio_id'
+        'erkezes',
+        'tavozas',
+        'felnott',
+        'gyerek',
+        'csomag_id',
+        'akcio_id',
+        'osszeg',
     ];
+
+    
+    protected $dates = [
+        'erkezes',
+        'tavozas',
+    ];
+    protected $table = 'foglalasok'; 
+
+  
+
+  
 
     public function vendeg()
     {
