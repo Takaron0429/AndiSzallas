@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('foglalasok', function (Blueprint $table) {
             $table->id('foglalas_id');
-            $table->unsignedBigInteger('vendeg_id')->nullable(); // Nem kötelező
+            $table->unsignedBigInteger('vendeg_id')->nullable();
             $table->date('erkezes');
             $table->date('tavozas');
             $table->integer('felnott');
@@ -21,16 +18,16 @@ return new class extends Migration
             $table->decimal('osszeg', 8, 2);
             $table->string('foglalas_allapot')->default('függőben');
             $table->string('fizetes_allapot')->default('függőben');
-            $table->text('speciális_keresek')->nullable(); // Nem kötelező
-            $table->unsignedBigInteger('csomag_id')->nullable(); // Nem kötelező
-            $table->unsignedBigInteger('akcio_id')->nullable(); // Nem kötelező
+            $table->text('specialis_keresek')->nullable();
+            $table->unsignedBigInteger('csomag_id')->nullable();
+            $table->unsignedBigInteger('akcio_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('vendeg_id')->references('vendeg_id')->on('vendeg')->onDelete('set null');
         });
     }
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+
+    public function down()
     {
         Schema::dropIfExists('foglalasok');
     }

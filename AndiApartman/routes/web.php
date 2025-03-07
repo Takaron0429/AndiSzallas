@@ -19,6 +19,7 @@ Route::get('/foglalas', function () {
     return view('foglalas');
 })->name('foglalas');
 
+
 // Foglalás adatok fogadása
 Route::post('/foglalas', [FoglalasController::class, 'store'])->name('foglalas.store');
 
