@@ -14,6 +14,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 // Foglalás oldal megjelenítése
 Route::get('/foglalas', function () {
     return view('foglalas');
