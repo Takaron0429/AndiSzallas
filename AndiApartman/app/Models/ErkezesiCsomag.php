@@ -15,8 +15,8 @@ class ErkezesiCsomag extends Model
         'leiras',    // Ha a leírás is változhat
         'elerheto',  // Ha az elérhető mennyiség is változhat
     ];
-    public function foglalasok(): HasMany
+   public function foglalasok()
     {
-        return $this->hasMany(Foglalas::class, 'csomag_id','csomag_id');
+        return $this->belongsToMany(Foglalas::class, 'csomag_foglalas', 'foglalas_id', 'csomag_id');
     }
 }

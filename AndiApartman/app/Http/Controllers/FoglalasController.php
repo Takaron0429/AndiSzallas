@@ -3,23 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Akcio;
+use App\Models\ErkezesiCsomag;
 use App\Models\Vendeg;
 use App\Models\Foglalas;
 use Illuminate\Http\Request;
 
 class FoglalasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Foglalas::query()->with(['csomagok', 'akciok']); // Kapcsolatok betöltése
+
+        if ($request->has('year') && $request->year != '') {
+            $query->whereYear('erkezes', $request->year);
+        }
+
+        if ($request->has('month') && $request->month != '') {
+            $query->whereMonth('erkezes', $request->month);
+        }
+
+        if ($request->has('adults') && $request->adults != '') {
+            $query->where('felnott', $request->adults);
+        }
+
+        if ($request->has('children') && $request->children != '') {
+            $query->where('gyerek', $request->children);
+        }
+
+        if ($request->has('csomag') && $request->csomag != '') {
+            $query->whereHas('csomagok', function ($q) use ($request) {
+                $q->where('nev', $request->csomag);
+            });
+        }
+
+        if ($request->has('akcio') && $request->akcio != '') {
+            $query->whereHas('akciok', function ($q) use ($request) {
+                $q->where('cim', $request->akcio);
+            });
+        }
+
+        $foglalasok = $query->get();
+
+
+        $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
+        $akciok = Akcio::pluck('cim', 'akcio_id');
         $Foglalas = Foglalas::all();
-        return view('AdminFelulet.Foglalasok', compact('Foglalas'));
+        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalasok', 'akciok', 'csomagok'));
     }
 
     public function adminIndex()
     {
         $Foglalas = Foglalas::all();
         $Admin = Admin::all();
-        
+
         return view('AdminFelulet.Admin', compact('Foglalas', 'Admin'));
     }
 

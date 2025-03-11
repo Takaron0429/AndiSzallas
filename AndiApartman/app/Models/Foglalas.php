@@ -28,7 +28,15 @@ class Foglalas extends Model
     ];
     protected $table = 'foglalasok'; 
 
-  
+    public function csomagok()
+    {
+        return $this->belongsToMany(ErkezesiCsomag::class, 'csomag_foglalas', 'foglalas_id', 'csomag_id');
+    }
+
+    public function akciok()
+    {
+        return $this->belongsToMany(Akcio::class, 'akcio_foglalas', 'foglalas_id', 'akcio_id');
+    }
 
   
 

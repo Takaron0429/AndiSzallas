@@ -12,6 +12,41 @@
         body{
             background-color: rgb(243, 242, 242);
         }
+        .navbar {
+            background-color: #ff5722;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            color: #ffffff !important;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .navbar-brand:hover {
+            color: #fff176 !important;
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #fff176 !important;
+            transform: scale(1.1);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+
+            border-radius: 5px;
+        }
+
     </style>
     <title>Modósitás</title>
 </head>
@@ -19,21 +54,32 @@
 <body>
 
     <div class="container mt-4">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-            <div class="container">
-                <a class="navbar-brand" href="#">Admin Felület</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">#Foglalások</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto text-center">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Módosítások</a>
+                            <a class="nav-link active" href="{{ route('AdminFelulet.Admin') }}">Admin#Panel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('AdminFelulet.Foglalasok') }}">Foglalások</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('AdminFelulet.Modositasok') }}">Módosítások</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.logout') }}">Kijelentkezés</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+    
         <div class="container">
             <div class="row category-buttons text-center">
                 <div class="col"><button class="btn btn-primary" onclick="showSection('csomag')">Csomagok</button></div>

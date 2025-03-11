@@ -12,8 +12,9 @@ class Akcio extends Model
     protected $fillable = [
         'cim',     
     ];
-    public function foglalasok(): HasMany
+    public function foglalasok()
     {
-        return $this->hasMany(Foglalas::class, 'akcio_id', 'akcio_id'); 
+        return $this->belongsToMany(Foglalas::class, 'akcio_foglalas', 'foglalas_id', 'akcio_id');
     }
+    
 }

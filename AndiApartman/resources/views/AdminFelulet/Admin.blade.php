@@ -20,9 +20,44 @@
 
 
     <style>
+           .navbar {
+            background-color: #ff5722;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            color: #ffffff !important;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .navbar-brand:hover {
+            color: #fff176 !important;
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #fff176 !important;
+            transform: scale(1.1);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+
+            border-radius: 5px;
+        }
+
         .widget {
             font-size: 2rem;
-            color: #007bff;
+            color: #e6bd06;
         }
 
         .widget-value {
@@ -31,7 +66,7 @@
             color: #333;
         }
 
-        /* Kártyákhoz egy kis háttér és árnyék */
+        
         .mt-4 .card {
             margin-bottom: 20px;
             border: 1px solid #ddd;
@@ -40,7 +75,7 @@
 
         .mt-4  .card-header {
             font-size: 1.25rem;
-            background-color: #f8f9fa;
+            background-color: rgb(255, 145, 0);
         }
 
         .mt-4  .card-body {
@@ -51,8 +86,15 @@
 
         .widget-value {
             font-size: 2rem;
-            color: #495057;
+            color: #08c708;
         }
+
+        .booked {
+    background-color: #ff4d4d; 
+    color: white;
+    font-weight: bold;
+    pointer-events: none;
+}
     </style>
     <title>Admin Főoldal</title>
 
@@ -60,11 +102,39 @@
 
 <body>
 
+    <div class="container">
+        
+    <nav class="container mt-6 navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#foglalas">#Foglalások</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('AdminFelulet.Admin') }}">Admin#Panel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('AdminFelulet.Foglalasok') }}">Foglalások</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('AdminFelulet.Modositasok') }}">Módosítások</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.logout') }}">Kijelentkezés</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
 
     @php
         $admin = Auth::user();
     @endphp
-    <div class="container">
+   
         <div class="main-content" id="mainContent">
             <div class="container mt-5">
                 <div class="row justify-content-center">
@@ -102,7 +172,7 @@
             <div class="row">
                 <div class="container mt-4">
                     <div class="row">
-                        <!-- Új foglalások -->
+                      
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Új foglalások</div>
@@ -113,19 +183,19 @@
                             </div>
                         </div>
 
-                        <!-- Szobák elérhetősége -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
-                                <div class="card-header">Szobák elérhetősége</div>
+                                <div class="card-header">Időpontok elérhetősége</div>
                                 <div class="card-body">
                                     <i class="fas fa-bed widget"></i>
                                     <div class="widget-value">{{ $lefoglaltNapok }} / {{ $totalDays ?? 0 }}</div>
-                                    <!-- Lefoglalt / Összes nap -->
+                                   
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Eddig befolyt összeg -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Eddig Befolyt Összeg</div>
@@ -136,7 +206,7 @@
                             </div>
                         </div>
 
-                        <!-- Visszajáró vendégek -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Visszajáró vendégek</div>
@@ -147,7 +217,7 @@
                             </div>
                         </div>
 
-                        <!-- További statisztika -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">További statisztika</div>
@@ -168,9 +238,56 @@
                 </div>
 
             </div>
+            <div class="container mt-4">
+                <div class="row">
+                   
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">Május</div>
+                            <div class="card-body">
+                                <table id="calendar-may" class="table table-bordered">
+                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">Június</div>
+                            <div class="card-body">
+                                <table id="calendar-june" class="table table-bordered">
+                                  
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">Július</div>
+                            <div class="card-body">
+                                <table id="calendar-july" class="table table-bordered">
+                                  
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">Augusztus</div>
+                            <div class="card-body">
+                                <table id="calendar-august" class="table table-bordered">
+                                 
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-
-            <div class="container">
+            <div class="container" id="foglalas">
                 <div class="row">
                     <div class="card mt-4">
                         <div class="card-header">
@@ -362,8 +479,66 @@
 
 
     </div>
-
+      
     <script>
+       const bookedDays = {
+    5: [1, 5, 12, 15, 22],  
+    6: [3, 9, 18, 25],   
+    7: [2, 4, 7, 14],      
+    8: [5, 11, 20, 30]      
+};
+
+function generateCalendar(month, year) {
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+    const daysInMonth = lastDay.getDate();
+    
+    
+    let weeks = [];
+    let currentWeek = [];
+    
+   
+    for (let day = 1; day <= daysInMonth; day++) {
+        const currentDay = new Date(year, month - 1, day);
+        currentWeek.push(day);
+
+        
+        if (currentDay.getDay() === 0 || day === daysInMonth) {
+            weeks.push(currentWeek);
+            currentWeek = [];
+        }
+    }
+
+    return weeks;
+}
+
+
+function renderCalendar(month, year, calendarId) {
+    const calendarTable = document.getElementById(calendarId);
+    const weeks = generateCalendar(month, year);
+
+    let tableHtml = '<thead><tr>';
+    tableHtml += '<th>H</th><th>K</th><th>Sze</th><th>Cs</th><th>P</th><th>Szo</th><th>V</th>';
+    tableHtml += '</tr></thead><tbody>';
+
+    weeks.forEach(week => {
+        tableHtml += '<tr>';
+        week.forEach(day => {
+            tableHtml += `<td class="${bookedDays[month].includes(day) ? 'booked' : ''}">${day}</td>`;
+        });
+        tableHtml += '</tr>';
+    });
+
+    tableHtml += '</tbody>';
+    calendarTable.innerHTML = tableHtml;
+}
+
+
+renderCalendar(5, 2025, 'calendar-may');   
+renderCalendar(6, 2025, 'calendar-june');  
+renderCalendar(7, 2025, 'calendar-july');   
+renderCalendar(8, 2025, 'calendar-august');
+
         document.querySelectorAll('select[name="csomag_id"], select[name="akcio_id"], input[name="felnott"], input[name="gyerek"], input[name="erkezes"], input[name="tavozas"]').forEach((input) => {
             input.addEventListener('change', function () {
                 const form = this.closest('form');
