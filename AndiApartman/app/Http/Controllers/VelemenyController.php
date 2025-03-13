@@ -3,62 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Velemeny;
+use Illuminate\Support\Facades\Auth;
+
 
 class VelemenyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        // Validálás
+        $request->validate([
+            'nev' => 'required|string|max:255', // Név validálása
+            'email' => 'required|email|max:255', // Email validálása
+            'ertekeles' => 'required|integer|between:1,5',
+            'komment' => 'required|string|max:1000',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        // Vélemény létrehozása
+        Velemeny::create([
+            'nev' => $request->nev, // Név mentése
+            'email' => $request->email, // Email mentése
+            'ertekeles' => $request->ertekeles,
+            'komment' => $request->komment,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        // Visszairányítás üzenettel
+        return redirect()->back()->with('success', 'Köszönjük a véleményedet!');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function index()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        // Vélemények lekérése
+        $velemenyek = Velemeny::latest()->get();
+    
+        // Debug: Ellenőrizd, hogy a vélemények lekérdezése sikeres-e
+        dd($velemenyek);
+    
+        // Adatok átadása a nézetnek
+        return view('welcome', [
+            'velemenyek' => $velemenyek,
+        ]);
     }
 }

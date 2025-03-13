@@ -18,6 +18,7 @@
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <script src="https://kit.fontawesome.com/be1715d162.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
@@ -298,13 +299,68 @@
         </div>
     </section>
 
-    <!-- ERTEKELESEK majd jon -->
+    <!-- Meglévő vélemények megjelenítése -->
+    <section id="meglevo-velemenyek" class="mt-5">
+        <div class="container">
+            <h3 class="text-center">Korábbi vélemények</h3>
 
-    <div class="container text-center">
-        <p>ertekelesek szepen csillagokkal kulsos honlaprol</p>
-        <img src="img/ertekeles.PNG" alt="">
-    </div>
+            <!-- Értékelések átlaga -->
+            <div class="text-center mb-4">
+                <h4>Átlagos értékelés: {{ isset($atlagErtekeles) ? number_format($atlagErtekeles, 1) : 'N/A' }}/5</h4>
+            </div>
 
+            <!-- Vélemények listája -->
+            @if(isset($velemenyek) && $velemenyek->count() > 0)
+                @foreach($velemenyek as $velemeny)
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $velemeny->nev }}</h5>
+                            <p class="card-text"><strong>Email:</strong> {{ $velemeny->email }}</p>
+                            <p class="card-text"><strong>Értékelés:</strong> {{ $velemeny->ertekeles }}/5</p>
+                            <p class="card-text">{{ $velemeny->komment }}</p>
+                            <p class="text-muted">{{ $velemeny->created_at->diffForHumans() }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-center">Nincsenek vélemények.</p>
+            @endif
+        </div>
+    </section>
+
+    <!-- Vélemények űrlapja -->
+    <section id="velemenyek" class="mt-5">
+        <div class="container">
+            <h3 class="text-center">Véleményezés</h3>
+            <form action="{{ route('velemeny.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="nev">Név:</label>
+                    <input type="text" class="form-control" id="nev" name="nev" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="ertekeles">Értékelés (1-5):</label>
+                    <select class="form-control" id="ertekeles" name="ertekeles" required>
+                        <option value="1">1 - Rossz</option>
+                        <option value="2">2 - Elég gyenge</option>
+                        <option value="3">3 - Közepes</option>
+                        <option value="4">4 - Jó</option>
+                        <option value="5">5 - Kiváló</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="komment">Tapasztalataid:</label>
+                    <textarea class="form-control" id="komment" name="komment" rows="3"
+                        placeholder="Írd le a tapasztalataidat..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Küldés</button>
+            </form>
+        </div>
+    </section>
     <footer>
         <div class="container">
             <div class="row">
