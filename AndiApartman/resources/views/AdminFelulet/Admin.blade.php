@@ -322,6 +322,68 @@
                         <div class="card-header">
                             <h4 style="font: 700">Aktuális Foglalások</h4>
                         </div>
+                        <br>
+                        <form method="GET" action="{{ route('AdminFelulet.Admin') }}">
+                            <div class="filter-section row mb-4 justify-content-center">
+                                <!-- Hónap szűrés -->
+                                <div class="col-md-4">
+                                    <label for="monthFilter" class="form-label">Hónap</label>
+                                    <select class="form-select" name="month" id="monthFilter">
+                                        <option value="">Minden hónap</option>
+                                        @foreach(range(5, 8) as $month)
+                                            <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                                                {{ \Carbon\Carbon::create()->month($month)->format('F') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <label for="peopleFilter" class="form-label">Emberek száma (Felnőttek +
+                                        Gyerekek)</label>
+                                    <input type="number" class="form-control" name="people" id="peopleFilter"
+                                        placeholder="Összesen (Felnőttek + Gyerekek)" value="{{ request('people') }}">
+                                </div>
+                            </div>
+
+                            <div class="filter-section row mb-4 justify-content-center">
+                                <!-- Legtöbb napot tartó foglalás -->
+                                <div class="col-md-4">
+                                    <label for="mostDaysFilter" class="form-label">Legtöbb napot tartó foglalás</label>
+                                    <select class="form-select" name="most_days" id="mostDaysFilter">
+                                        <option value="">Minden foglalás</option>
+                                        <option value="1" {{ request('most_days') == '1' ? 'selected' : '' }}>Legtöbb nap
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Fizetés szűrés -->
+                                <div class="col-md-4">
+                                    <label for="paymentFilter" class="form-label">Fizetés állapota</label>
+                                    <select class="form-select" name="payment_status" id="paymentFilter">
+                                        <option value="">Minden fizetés</option>
+                                        <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>
+                                            Kifizetett</option>
+                                        <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Függőben lévő</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="filter-section row mb-4 justify-content-center">
+                                <!-- Email címre vagy telefonszámra keresés -->
+                                <div class="col-md-4">
+                                    <label for="searchFilter" class="form-label">Keresés Email / Telefonszám</label>
+                                    <input type="text" class="form-control" name="search" id="searchFilter"
+                                        placeholder="Email vagy Telefonszám" value="{{ request('search') }}">
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Szűrés</button>
+                            </div>
+                        </form>
+                        <br>
                         <div class="card-body col-sm-12">
                             <table class="table table-striped table-hover">
                                 <thead class="col-12">
@@ -371,6 +433,7 @@
                                     <h5 class="modal-title">Foglalás Kezelése</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
+
                                 <div class="modal-body">
                                     <ul class="nav nav-tabs" id="foglalasTab{{ $foglalas->foglalas_id }}">
                                         <li class="nav-item">
