@@ -8,6 +8,17 @@ use App\Http\Controllers\ModositasokController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\FoglalasController;
+use App\Http\Controllers\VelemenyController;
+
+// Főoldal útvonala
+Route::get('/', [VelemenyController::class, 'index']);
+
+// Vélemény beküldése
+Route::post('/velemeny', [VelemenyController::class, 'store'])->name('velemeny.store');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 Route::get('/', function () {

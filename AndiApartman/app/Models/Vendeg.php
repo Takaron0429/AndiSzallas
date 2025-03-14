@@ -27,11 +27,15 @@ class Vendeg extends Model
     protected $fillable = [
         'nev', 'email', 'telefon', 'iranyitoszam', 'lakcim'
     ];
-    /*
-    public function foglalasok()
+    
+    public function velemenyek()
     {
-        return $this->hasMany(Velemeny::class, 'vendeg_id','vendeg_id');
+        return $this->hasMany(Velemeny::class, 'vendeg_id', 'vendeg_id');
+    }
+    
+    public function foglalasForeign()
+    {
         return $this->hasMany(Foglalas::class, 'vendeg_id', 'vendeg_id');
     }
-        */
+    
 }
