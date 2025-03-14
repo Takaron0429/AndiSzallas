@@ -43,8 +43,8 @@ class AdminController extends Controller
         
         $csomagok = ErkezesiCsomag::all();  
         $akciok = Akcio::all();  
-
-        return view('AdminFelulet.Admin', compact('Admin', 'Foglalas', 'csomagok', 'akciok', 'ujFoglalasok', 'lefoglaltNapok', 'osszegKerekitve', 'visszajaroVendegSzam', 'totalDays'));
+        $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
+        return view('AdminFelulet.Admin', compact('Admin', 'Foglalas', 'foglalas','csomagok', 'akciok', 'ujFoglalasok', 'lefoglaltNapok', 'osszegKerekitve', 'visszajaroVendegSzam', 'totalDays'));
        
     }
     public function showLoginForm()
