@@ -7,13 +7,16 @@ use App\Models\Akcio;
 use App\Models\ErkezesiCsomag;
 use App\Models\Vendeg;
 use App\Models\Foglalas;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 
 class FoglalasController extends Controller
 {
+
     public function index(Request $request)
     {
-        $query = Foglalas::query()->with(['csomagok', 'akciok']); // Kapcsolatok betöltése
+        $query = Foglalas::query()->with(['csomagok', 'akciok']); 
 
         if ($request->has('year') && $request->year != '') {
             $query->whereYear('erkezes', $request->year);
@@ -36,7 +39,7 @@ class FoglalasController extends Controller
                 $q->where('nev', $request->csomag);
             });
         }
-
+    
         if ($request->has('akcio') && $request->akcio != '') {
             $query->whereHas('akciok', function ($q) use ($request) {
                 $q->where('cim', $request->akcio);
@@ -45,11 +48,14 @@ class FoglalasController extends Controller
 
         $foglalasok = $query->get();
 
-
+       
+        $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
         $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
         $akciok = Akcio::pluck('cim', 'akcio_id');
-        $Foglalas = Foglalas::all();
-        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalasok', 'akciok', 'csomagok'));
+        $Foglalas = Foglalas::whereYear('erkezes', 2025)
+            ->where('tavozas', '<=', Carbon::create(2025, 8, 31))
+            ->get();
+        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas','foglalasok', 'akciok', 'csomagok','foglalas'));
     }
 
     public function adminIndex()
@@ -59,6 +65,33 @@ class FoglalasController extends Controller
 
         return view('AdminFelulet.Admin', compact('Foglalas', 'Admin'));
     }
+
+    public function getBookedDates()
+    {
+      
+        $foglalasok = DB::table('foglalasok') 
+            ->select('erkezes', 'tavozas')
+            ->get();
+
+        $bookedDates = [];
+
+        
+        foreach ($foglalasok as $foglalas) {
+            $startDate = Carbon::parse($foglalas->erkezes);
+            $endDate = Carbon::parse($foglalas->tavozas);
+
+          
+            while ($startDate <= $endDate) {
+               
+                $bookedDates[] = $startDate->format('Y-m-d');
+                $startDate->addDay();
+            }
+        }
+
+      
+        return response()->json($bookedDates);
+    }
+
 
     public function store(Request $request)
     {

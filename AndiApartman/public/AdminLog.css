@@ -79,6 +79,9 @@ input {
 }
 
 .form-control {
+    font-weight: bold;
+    font-size: large;
+    background-color: rgb(255, 255, 255);
     border-radius: 8px;
     padding: 12px;
     border: 1px solid #ccc;
@@ -140,7 +143,7 @@ input {
 @media (max-width: 576px) {
     .login-container {
         padding: 20px;
-        width: 90%;
+        width: 100%;
     }
 
     button {
