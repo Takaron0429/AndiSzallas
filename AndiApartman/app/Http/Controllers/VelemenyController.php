@@ -37,13 +37,14 @@ class VelemenyController extends Controller
     {
         // Vélemények lekérése
         $velemenyek = Velemeny::latest()->get();
-    
-        // Debug: Ellenőrizd, hogy a vélemények lekérdezése sikeres-e
-        dd($velemenyek);
-    
+
+        // Értékelések átlagának kiszámítása
+        $atlagErtekeles = $velemenyek->avg('ertekeles');
+
         // Adatok átadása a nézetnek
         return view('welcome', [
             'velemenyek' => $velemenyek,
+            'atlagErtekeles' => $atlagErtekeles,
         ]);
     }
 }

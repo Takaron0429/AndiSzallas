@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Velemeny extends Model
 {
-    protected $table = 'velemenyek'; // Tábla neve
-
+    protected $table = 'velemenyek'; // Ellenőrizd, hogy a tábla neve helyes-e
     protected $fillable = [
-        'nev', // Új mező: név
-        'email', // Új mező: email
+        'nev',
+        'email',
         'ertekeles',
         'komment',
     ];

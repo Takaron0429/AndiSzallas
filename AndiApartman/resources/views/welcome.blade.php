@@ -302,7 +302,7 @@
     <!-- Meglévő vélemények megjelenítése -->
     <section id="meglevo-velemenyek" class="mt-5">
         <div class="container">
-            <h3 class="text-center">Korábbi vélemények</h3>
+            <h3 class="text-center">Nyaralóink írták:</h3>
 
             <!-- Értékelések átlaga -->
             <div class="text-center mb-4">
@@ -311,17 +311,30 @@
 
             <!-- Vélemények listája -->
             @if(isset($velemenyek) && $velemenyek->count() > 0)
-                @foreach($velemenyek as $velemeny)
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $velemeny->nev }}</h5>
-                            <p class="card-text"><strong>Email:</strong> {{ $velemeny->email }}</p>
-                            <p class="card-text"><strong>Értékelés:</strong> {{ $velemeny->ertekeles }}/5</p>
-                            <p class="card-text">{{ $velemeny->komment }}</p>
-                            <p class="text-muted">{{ $velemeny->created_at->diffForHumans() }}</p>
+                <div class="row flex-nowrap overflow-auto">
+                    @foreach($velemenyek as $velemeny)
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $velemeny->nev }}</h5>
+                                    <p class="card-text"><strong>Email:</strong> {{ $velemeny->email }}</p>
+                                    <p class="card-text">
+                                        <strong>Értékelés:</strong>
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $velemeny->ertekeles)
+                                                <i class="fas fa-star"></i>
+                                            @else
+                                                <i class="far fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </p>
+                                    <p class="card-text">{{ $velemeny->komment }}</p>
+                                    <p class="text-muted">{{ $velemeny->created_at->diffForHumans() }}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             @else
                 <p class="text-center">Nincsenek vélemények.</p>
             @endif
@@ -331,34 +344,37 @@
     <!-- Vélemények űrlapja -->
     <section id="velemenyek" class="mt-5">
         <div class="container">
-            <h3 class="text-center">Véleményezés</h3>
-            <form action="{{ route('velemeny.store') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="nev">Név:</label>
-                    <input type="text" class="form-control" id="nev" name="nev" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="ertekeles">Értékelés (1-5):</label>
-                    <select class="form-control" id="ertekeles" name="ertekeles" required>
-                        <option value="1">1 - Rossz</option>
-                        <option value="2">2 - Elég gyenge</option>
-                        <option value="3">3 - Közepes</option>
-                        <option value="4">4 - Jó</option>
-                        <option value="5">5 - Kiváló</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="komment">Tapasztalataid:</label>
-                    <textarea class="form-control" id="komment" name="komment" rows="3"
-                        placeholder="Írd le a tapasztalataidat..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Küldés</button>
-            </form>
+            <h3 class="text-center">Üdült már nálunk? Írjon véleményt!</h3>
+            <div class="card p-4 shadow"
+                style="border: 2px solid #3d7abc; border-radius: 10px; transition: transform 0.3s ease-in-out;">
+                <form action="{{ route('velemeny.store') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="nev">Név:</label>
+                        <input type="text" class="form-control" id="nev" name="nev" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ertekeles">Értékelés (1-5):</label>
+                        <select class="form-control" id="ertekeles" name="ertekeles" required>
+                            <option value="1">1 - Rossz</option>
+                            <option value="2">2 - Elég gyenge</option>
+                            <option value="3">3 - Közepes</option>
+                            <option value="4">4 - Jó</option>
+                            <option value="5">5 - Kiváló</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="komment">Tapasztalataid:</label>
+                        <textarea class="form-control" id="komment" name="komment" rows="3"
+                            placeholder="Írd le a tapasztalataidat..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Küldés</button>
+                </form>
+            </div>
         </div>
     </section>
     <footer>
