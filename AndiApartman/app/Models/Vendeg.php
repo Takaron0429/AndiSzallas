@@ -19,7 +19,6 @@ class Vendeg extends Model
         return $this->hasManyy(Foglalas::class, 'vendeg_id','vendeg_id');
     }
     use HasFactory;
-
  
 
     protected $primaryKey = 'vendeg_id';

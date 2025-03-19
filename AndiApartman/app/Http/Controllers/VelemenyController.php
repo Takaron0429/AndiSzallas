@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
+use App\Models\Akcio;
+use App\Models\AkcioFoglalas;
+use App\Models\CsomagFoglalas;
+use App\Models\ErkezesiCsomag;
+use App\Models\Foglalas;
 use Illuminate\Http\Request;
 use App\Models\Velemeny;
 use Illuminate\Support\Facades\Auth;
@@ -12,8 +18,37 @@ class VelemenyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function velemenyek()
+    {
+        $Admin = Admin::all();
+        $Foglalas = Foglalas::all();
+        $akcio_ = AkcioFoglalas::all();
+        $csomag_ = CsomagFoglalas::all();
+        $csomagok = ErkezesiCsomag::all();
+        $akciok = Akcio::all();
+        $velemenyek = Velemeny::all();
+        return view('AdminFelulet.Admin', compact('velemenyek', 'Admin', 'Foglalas', 'csomagok', 'akciok', 'akcio_', 'csomag_'));
+    }
+
+    public function approveVelemeny($velemeny_id)
+    {
+       
+        $velemenyek = Velemeny::where('velemeny_id', $velemeny_id)->first();
+
+        if ($velemenyek) {
+         
+            $velemenyek->status = 'approved';
+            $velemenyek->save(); 
+
+        
+            return redirect()->route('AdminFelulet.Admin')->with('success', 'A vélemény jóváhagyva lett.');
+        }
+
+        return redirect()->route('AdminFelulet.Admin')->with('error', 'Vélemény nem található.');
+    }
     public function store(Request $request)
     {
+
         // Validálás
         $request->validate([
             'nev' => 'required|string|max:255', // Név validálása
@@ -35,13 +70,13 @@ class VelemenyController extends Controller
     }
     public function index()
     {
-        // Vélemények lekérése
+
         $velemenyek = Velemeny::latest()->get();
 
-        // Értékelések átlagának kiszámítása
+
         $atlagErtekeles = $velemenyek->avg('ertekeles');
 
-        // Adatok átadása a nézetnek
+
         return view('welcome', [
             'velemenyek' => $velemenyek,
             'atlagErtekeles' => $atlagErtekeles,

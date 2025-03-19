@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Akcio;
+use App\Models\AkcioFoglalas;
+use App\Models\CsomagFoglalas;
 use App\Models\ErkezesiCsomag;
 use App\Models\Vendeg;
 use App\Models\Foglalas;
@@ -13,7 +15,6 @@ use Illuminate\Http\Request;
 
 class FoglalasController extends Controller
 {
-
     public function index(Request $request)
     {
         $query = Foglalas::query()->with(['csomagok', 'akciok']); 
@@ -55,15 +56,18 @@ class FoglalasController extends Controller
         $Foglalas = Foglalas::whereYear('erkezes', 2025)
             ->where('tavozas', '<=', Carbon::create(2025, 8, 31))
             ->get();
-        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas','foglalasok', 'akciok', 'csomagok','foglalas'));
+        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas','foglalasok', 'akciok', 'csomagok'));
     }
 
     public function adminIndex()
     {
         $Foglalas = Foglalas::all();
         $Admin = Admin::all();
-
-        return view('AdminFelulet.Admin', compact('Foglalas', 'Admin'));
+        $akcio_ = AkcioFoglalas::all();
+        $csomag_ = CsomagFoglalas::all();
+        $csomagok = ErkezesiCsomag::all();
+        $akciok = Akcio::all();
+        return view('AdminFelulet.Admin', compact('Foglalas', 'Admin','csomagok','akciok','akcio_','csomag_'));
     }
 
     public function getBookedDates()

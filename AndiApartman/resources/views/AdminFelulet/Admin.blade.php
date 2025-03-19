@@ -197,7 +197,42 @@
             </div>
             <br>
 
+            <div class="row">
+                <h2>Beérkezett Vélemények</h2>
 
+                @if(isset($velemenyek) && $velemenyek->count() > 0)
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Név</th>
+                                <th>Email</th>
+                                <th>Értékelés</th>
+                                <th>Megjegyzés</th>
+                                <th>Dátum</th>
+                                <th>Jóváhagyás</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($velemenyek as $velemeny)
+                                @if($velemeny->status !== 'approved') 
+                                    <tr>
+                                        <td>{{ $velemeny->nev }}</td>
+                                        <td>{{ $velemeny->email }}</td>
+                                        <td>{{ $velemeny->ertekeles }}/5</td>
+                                        <td>{{ $velemeny->komment }}</td>
+                                        <td>{{ $velemeny->created_at->format('Y-m-d H:i') }}</td>
+                                        <td>
+                                            <a href="{{ route('velemeny.approve', ['velemeny_id' => $velemeny->velemeny_id]) }}" class="btn btn-success">Jóváhagyás</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <p class="text-center">Nincsenek vélemények.</p>
+                @endif
+            </div>
             <div class="row">
                 <div class="container mt-4">
                     <div class="row">
@@ -207,7 +242,7 @@
                                 <div class="card-header">Új foglalások</div>
                                 <div class="card-body">
                                     <i class="fas fa-calendar-check widget"></i>
-                                    <div class="widget-value">{{ $ujFoglalasok }}</div>
+                                    <div class="widget-value">{{ $ujFoglalasok ?? 'Nincs adat' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +253,9 @@
                                 <div class="card-header">Időpontok elérhetősége</div>
                                 <div class="card-body">
                                     <i class="fas fa-bed widget"></i>
-                                    <div class="widget-value">{{ $lefoglaltNapok }} / {{ $totalDays ?? 0 }}</div>
+                                    <div class="widget-value">{{ $lefoglaltNapok ?? 'Nincs adat'}} /
+                                        {{ $totalDays ?? 0  }}
+                                    </div>
 
                                 </div>
                             </div>
@@ -230,7 +267,7 @@
                                 <div class="card-header">Eddig Befolyt Összeg</div>
                                 <div class="card-body">
                                     <i class="fas fa-dollar-sign widget"></i>
-                                    <div class="widget-value">{{ $osszegKerekitve }} Ft</div>
+                                    <div class="widget-value">{{ $osszegKerekitve ?? 'Nincs adat' }} Ft</div>
                                 </div>
                             </div>
                         </div>
@@ -241,7 +278,7 @@
                                 <div class="card-header">Visszajáró vendégek</div>
                                 <div class="card-body">
                                     <i class="fas fa-users widget"></i>
-                                    <div class="widget-value">{{ $visszajaroVendegSzam }}</div>
+                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 'Nincs adat'}}</div>
                                 </div>
                             </div>
                         </div>
@@ -251,7 +288,7 @@
                             <div class="card">
                                 <div class="card-header">További statisztika</div>
                                 <div class="card-body">
-                                    <div class="widget-value">{{ $visszajaroVendegSzam }}</div>
+                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 'Nincs adat' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -259,7 +296,7 @@
                             <div class="card">
                                 <div class="card-header">További statisztika</div>
                                 <div class="card-body">
-                                    <div class="widget-value">{{ $visszajaroVendegSzam }}</div>
+                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 'Nincs adat'}}</div>
                                 </div>
                             </div>
                         </div>

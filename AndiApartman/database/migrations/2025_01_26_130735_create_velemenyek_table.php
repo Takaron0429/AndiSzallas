@@ -11,8 +11,8 @@ return new class extends Migration
     {
         Schema::create('velemenyek', function (Blueprint $table) {
             $table->id('velemeny_id');
-            $table->string('nev'); // Új mező: név
-            $table->string('email'); // Új mező: email
+            $table->string('nev'); 
+            $table->string('email'); 
             $table->integer('ertekeles')->check('ertekeles >= 1 AND ertekeles <= 5');
             $table->text('komment')->nullable();
             $table->timestamps();

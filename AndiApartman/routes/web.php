@@ -5,6 +5,7 @@ use App\Http\Controllers\AkcioController;
 use App\Http\Controllers\ErkezesiCsomagController;
 use App\Http\Controllers\HelyiProgramajanloController;
 use App\Http\Controllers\ModositasokController;
+use App\Http\Controllers\VendegController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\FoglalasController;
@@ -24,6 +25,9 @@ Route::get('/foglalas', function () {
 // Foglalás adatok fogadása
 Route::post('/foglalas', [FoglalasController::class, 'store'])->name('foglalas.store');
 
+
+
+
 // ADMIN ROUTES
 Route::get('/AdminFelulet/Login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/AdminFelulet/Login', [AdminController::class, 'login']);
@@ -31,9 +35,8 @@ Route::get('/AdminFelulet/Admin', [AdminController::class, 'dashboard'])->name('
 Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // Admin módosítások
-Route::get('/AdminFelulet/Modositasok', [AdminController::class, 'modositasok'])->name('admin.modositasok');
 Route::get('/AdminFelulet/Modositasok', [ModositasokController::class, 'index'])->name('AdminFelulet.Modositasok');
-
+Route::post('/AdminFelulet/Modositasok', [FoglalasController::class, 'store'])->name('foglalas.store');
 // Érkezési csomagok kezelése
 Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name('Erkezesi.store');
 Route::put('Erkezesi/{id}/update', [ErkezesiCsomagController::class, 'update'])->name('Erkezesi.update');
@@ -52,6 +55,7 @@ Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->nam
 Route::get('AdminFelulet/Admin', [FoglalasController::class, 'adminIndex'])->name('AdminFelulet.Admin');
 Route::put('AdminFelulet/Admin/{id}/update', [FoglalasController::class, 'update'])->name('AdminFelulet.FoglalasUpdate');
 Route::delete('AdminFelulet/Admin/{id}/delete', [FoglalasController::class, 'destroy'])->name('AdminFelulet.FoglalasDelete');
-
+Route::get('AdminFelulet/Admin', [VelemenyController::class, 'velemenyek'])->name('AdminFelulet.Admin');
+Route::get('AdminFelulet/Admin/{velemeny_id}/approve', [VelemenyController::class, 'approveVelemeny'])->name('velemeny.approve');
 
 Route::get('/getBookedDates', [FoglalasController::class, 'getBookedDates'])->name('getBookedDates');

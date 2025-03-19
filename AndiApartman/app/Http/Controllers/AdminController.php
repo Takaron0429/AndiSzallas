@@ -8,6 +8,7 @@ use App\Models\AkcioFoglalas;
 use App\Models\CsomagFoglalas;
 use App\Models\ErkezesiCsomag;
 use App\Models\Foglalas;
+use App\Models\Velemeny;
 use Carbon\Carbon;
 use DB;
 use Hash;
@@ -98,6 +99,12 @@ class AdminController extends Controller
     {
         return view('AdminFelulet.Admin');
     }
+    public function velemenyek()
+    {
+        $velemenyek = Velemeny::all(); 
+        return view('AdminFelulet.Admin', compact('velemenyek'));
+    }
+    
 
     public function login(Request $request)
     {

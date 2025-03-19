@@ -202,7 +202,7 @@
                     <label for="monthFilter" class="form-label">Hónap</label>
                     <select class="form-select" name="month" id="monthFilter">
                         <option value="">Minden hónap</option>
-                        @foreach(range(1, 12) as $month)
+                        @foreach(range(5, 8) as $month)
                             <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
                                 {{ \Carbon\Carbon::create()->month($month)->format('F') }}
                             </option>
@@ -271,7 +271,7 @@
         <br>
 
         <div class="accordion" id="accordionExample">
-            @foreach ($foglalasok as $foglalas)
+            @foreach ($Foglalas as $foglalas)
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{ $foglalas->foglalas_id }}">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
