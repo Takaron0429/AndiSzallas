@@ -124,6 +124,69 @@
             border-radius: 5px;
 
         }
+
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff9800;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .notification-container:hover {
+            transform: scale(1.1);
+        }
+
+        /* Új vélemények száma */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        /* Vélemények szekció alapból rejtve */
+        #velemenyContainer.hidden {
+            display: none;
+        }
+
+     
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #velemenyContainer {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
     </style>
     <title>Admin Főoldal</title>
 
@@ -197,42 +260,73 @@
             </div>
             <br>
 
-            <div class="row">
-                <h2>Beérkezett Vélemények</h2>
-
+            <div class="notification-container" onclick="toggleVelemenyek()">
+                <i class="fas fa-bell"></i>
                 @if(isset($velemenyek) && $velemenyek->count() > 0)
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Név</th>
-                                <th>Email</th>
-                                <th>Értékelés</th>
-                                <th>Megjegyzés</th>
-                                <th>Dátum</th>
-                                <th>Jóváhagyás</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($velemenyek as $velemeny)
-                                @if($velemeny->status !== 'approved') 
-                                    <tr>
-                                        <td>{{ $velemeny->nev }}</td>
-                                        <td>{{ $velemeny->email }}</td>
-                                        <td>{{ $velemeny->ertekeles }}/5</td>
-                                        <td>{{ $velemeny->komment }}</td>
-                                        <td>{{ $velemeny->created_at->format('Y-m-d H:i') }}</td>
-                                        <td>
-                                            <a href="{{ route('velemeny.approve', ['velemeny_id' => $velemeny->velemeny_id]) }}" class="btn btn-success">Jóváhagyás</a>
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                @else
-                    <p class="text-center">Nincsenek vélemények.</p>
+                
+                    <span class="notification-badge">{{ $velemenyek->count() }}</span>
                 @endif
             </div>
+
+
+            <div id="velemenyContainer" class="hidden">
+                <div class="accordion" id="velemenyAccordion">
+                    @foreach($velemenyek as $velemeny)
+                        @if(!$velemeny->approved)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $velemeny->velemeny_id }}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse{{ $velemeny->velemeny_id }}" aria-expanded="false"
+                                        aria-controls="collapse{{ $velemeny->velemeny_id }}">
+                                        <strong>{{ $velemeny->nev }}</strong> - {{ $velemeny->ertekeles }}/10
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ $velemeny->velemeny_id }}" class="accordion-collapse collapse"
+                                    aria-labelledby="heading{{ $velemeny->velemeny_id }}" data-bs-parent="#velemenyAccordion">
+                                    <div class="accordion-body">
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <th>Email</th>
+                                                <td>{{ $velemeny->email }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Komment</th>
+                                                <td>{{ $velemeny->komment }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Értékelés</th>
+                                                <td>{{ $velemeny->ertekeles }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Dátum</th>
+                                                <td>{{ $velemeny->created_at->format('Y-m-d H:i') }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="text-center">
+                                                    <a href="{{ route('velemeny.approve', $velemeny->velemeny_id) }}"
+                                                        class="btn btn-success">
+                                                        <i class="fas fa-check"></i> Jóváhagyás
+                                                    </a>
+                                                    <a href="{{ route('velemeny.delete', ['email' => $velemeny->email]) }}"
+                                                        class="btn btn-danger">
+                                                        <i class="fas fa-trash-alt"></i> Törlés
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+            <script>
+                function toggleVelemenyek() {
+                    let container = document.getElementById('velemenyContainer');
+                    container.classList.toggle('hidden');
+                }
+            </script>
             <div class="row">
                 <div class="container mt-4">
                     <div class="row">

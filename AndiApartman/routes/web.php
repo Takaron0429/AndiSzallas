@@ -56,6 +56,8 @@ Route::get('AdminFelulet/Admin', [FoglalasController::class, 'adminIndex'])->nam
 Route::put('AdminFelulet/Admin/{id}/update', [FoglalasController::class, 'update'])->name('AdminFelulet.FoglalasUpdate');
 Route::delete('AdminFelulet/Admin/{id}/delete', [FoglalasController::class, 'destroy'])->name('AdminFelulet.FoglalasDelete');
 Route::get('AdminFelulet/Admin', [VelemenyController::class, 'velemenyek'])->name('AdminFelulet.Admin');
-Route::get('AdminFelulet/Admin/{velemeny_id}/approve', [VelemenyController::class, 'approveVelemeny'])->name('velemeny.approve');
+Route::get('AdminFelulet/Admin/{id}/approve', [VelemenyController::class, 'approveVelemeny'])->name('velemeny.approve');
+Route::get('AdminFelulet/Admin/delete/{email}', [VelemenyController::class, 'deleteVelemeny'])->name('velemeny.delete');
+Route::get('velemenyek', [VelemenyController::class, 'approvedVelemenyek'])->name('velemenyek.list');
 
 Route::get('/getBookedDates', [FoglalasController::class, 'getBookedDates'])->name('getBookedDates');

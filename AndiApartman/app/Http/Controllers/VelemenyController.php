@@ -8,6 +8,7 @@ use App\Models\AkcioFoglalas;
 use App\Models\CsomagFoglalas;
 use App\Models\ErkezesiCsomag;
 use App\Models\Foglalas;
+use DB;
 use Illuminate\Http\Request;
 use App\Models\Velemeny;
 use Illuminate\Support\Facades\Auth;
@@ -27,24 +28,27 @@ class VelemenyController extends Controller
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
         $velemenyek = Velemeny::all();
+        
         return view('AdminFelulet.Admin', compact('velemenyek', 'Admin', 'Foglalas', 'csomagok', 'akciok', 'akcio_', 'csomag_'));
     }
 
-    public function approveVelemeny($velemeny_id)
+    public function approveVelemeny($id)
     {
-       
-        $velemenyek = Velemeny::where('velemeny_id', $velemeny_id)->first();
+        $velemeny = Velemeny::find($id);
+        if ($velemeny) {
+            $velemeny->approved = 1;
+             $velemeny->save();
 
-        if ($velemenyek) {
-         
-            $velemenyek->status = 'approved';
-            $velemenyek->save(); 
-
-        
+    
             return redirect()->route('AdminFelulet.Admin')->with('success', 'A vélemény jóváhagyva lett.');
         }
-
+    
         return redirect()->route('AdminFelulet.Admin')->with('error', 'Vélemény nem található.');
+    }
+    public function deleteVelemeny($email)
+    {
+        Velemeny::where('email', $email)->delete();
+        return redirect()->route('AdminFelulet.Admin')->with('success', 'A vélemény törölve lett.');
     }
     public function store(Request $request)
     {

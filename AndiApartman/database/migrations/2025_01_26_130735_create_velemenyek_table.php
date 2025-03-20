@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('email'); 
             $table->integer('ertekeles')->check('ertekeles >= 1 AND ertekeles <= 5');
             $table->text('komment')->nullable();
+            $table->boolean('approved');
             $table->timestamps();
         });
     }
