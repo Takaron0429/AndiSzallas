@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('style.css') }}">
 
-    <script src="{{ asset('foglalasScript.js') }}"></script>
+    <script src="{{ asset('script.js') }}"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -264,33 +264,38 @@
         </div>
     </div>
 
-    <!-- atmeneti, articlekkel lesz megoldva -->
     <section id="programajanlo" class="mt-5">
         <div class="container">
             <div class="container">
                 <div class="row">
                     <h3 style="margin-top: 10px;" class="text-center">Közeli látványosságok</h3>
                     <div class="col-lg-3 col-sm-4 col-6">
-                        <a href="https://szallas.hu/programok/zier-bisztro-balatonszemes-p19512" target="_blank"><img
-                                src="img/prog/bisztro.jpg" alt=""></a>
+                        <a href="https://szallas.hu/programok/zier-bisztro-balatonszemes-p19512" target="_blank">
+                            <img src="img/prog/bisztro.jpg" class="img-fluid" alt="">
+                        </a>
                         <h5>Zier Bisztró</h5>
                         <p class="strongerp">300 m</p>
                     </div>
                     <div class="col-lg-3 col-sm-4 col-6">
                         <a href="https://szallas.hu/programok/balatonszemesi-elmenyfurdo-balatonszemes-p123"
-                            target="_blank"><img src="img/prog/furdo.jpg" alt=""></a>
+                            target="_blank">
+                            <img src="img/prog/furdo.jpg" class="img-fluid" alt="">
+                        </a>
                         <h5>Balatonszemesi élményfürdő</h5>
                         <p class="strongerp">700 m</p>
                     </div>
                     <div class="col-lg-3 col-sm-4 col-6">
                         <a href="https://szallas.hu/programok/berzsenyi-utcai-szabadstrand-balatonszemes-p3836"
-                            target="_blank"><img src="img/prog/part.jpg" alt=""></a>
+                            target="_blank">
+                            <img src="img/prog/part.jpg" class="img-fluid" alt="">
+                        </a>
                         <h5>Berzsenyi utcai szabadstrand</h5>
                         <p class="strongerp">600 m</p>
                     </div>
                     <div class="col-lg-3 col-sm-4 col-6">
-                        <a href="https://szallas.hu/programok/balatonszemes" target="_blank"><img src="img/szemes.webp"
-                                class="blurred" alt=""></a>
+                        <a href="https://szallas.hu/programok/balatonszemes" target="_blank">
+                            <img src="img/szemes.webp" class="img-fluid blurred" alt="">
+                        </a>
                         <h5>További látnivalók</h5>
                         <p class="strongerp">Katt</p>
                     </div>
@@ -378,6 +383,15 @@
         </div>
     </section>
     <footer>
+        <!-- Hullámok SVG -->
+        <div class="wave-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#ffffff" fill-opacity="0.2"
+                    d="M0,64L48,85.3C96,107,192,149,288,165.3C384,181,480,171,576,138.7C672,107,768,53,864,74.7C960,96,1056,192,1152,234.7C1248,277,1344,267,1392,261.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
+                </path>
+            </svg>
+        </div>
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12">

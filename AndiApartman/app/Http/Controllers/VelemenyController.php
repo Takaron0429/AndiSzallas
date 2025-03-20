@@ -28,7 +28,7 @@ class VelemenyController extends Controller
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
         $velemenyek = Velemeny::all();
-        
+
         return view('AdminFelulet.Admin', compact('velemenyek', 'Admin', 'Foglalas', 'csomagok', 'akciok', 'akcio_', 'csomag_'));
     }
 
@@ -37,12 +37,12 @@ class VelemenyController extends Controller
         $velemeny = Velemeny::find($id);
         if ($velemeny) {
             $velemeny->approved = 1;
-             $velemeny->save();
+            $velemeny->save();
 
-    
+
             return redirect()->route('AdminFelulet.Admin')->with('success', 'A vélemény jóváhagyva lett.');
         }
-    
+
         return redirect()->route('AdminFelulet.Admin')->with('error', 'Vélemény nem található.');
     }
     public function deleteVelemeny($email)
@@ -52,7 +52,6 @@ class VelemenyController extends Controller
     }
     public function store(Request $request)
     {
-
         // Validálás
         $request->validate([
             'nev' => 'required|string|max:255', // Név validálása
@@ -67,6 +66,7 @@ class VelemenyController extends Controller
             'email' => $request->email, // Email mentése
             'ertekeles' => $request->ertekeles,
             'komment' => $request->komment,
+            'approved' => 0, // Alapértelmezett érték beállítása
         ]);
 
         // Visszairányítás üzenettel
@@ -74,13 +74,12 @@ class VelemenyController extends Controller
     }
     public function index()
     {
-
-        $velemenyek = Velemeny::latest()->get();
-
-
+        // Csak az approved = 1 értékű vélemények lekérése
+        $velemenyek = Velemeny::where('approved', 1)->latest()->get();
+    
+        // Átlagos értékelés számítása
         $atlagErtekeles = $velemenyek->avg('ertekeles');
-
-
+    
         return view('welcome', [
             'velemenyek' => $velemenyek,
             'atlagErtekeles' => $atlagErtekeles,

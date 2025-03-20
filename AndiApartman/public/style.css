@@ -78,6 +78,10 @@ body {
     border-radius: 10px;
     transition: transform 0.3s ease-in-out;
 }
+#velemenyek
+{
+    padding-bottom: 2%;
+}
 
 #velemenyek .card:hover {
     transform: scale(1.02);
@@ -111,8 +115,39 @@ body {
     z-index: 1;
 }
 
+/* Footer stílusa */
 footer {
     background-color: #3d7abc;
+    position: relative; /* A footer relatív pozícióban legyen */
+    overflow: hidden; /* A hullámok ne lógjanak ki */
+}
+
+/* Hullámok konténer stílusa */
+.wave-container {
+    position: absolute;
+    top: -5%; /* A hullámok a footer tetején */
+    left: 0;
+    width: 100%;
+    height: 100%; /* A hullámok magassága */
+    z-index: 0; /* A hullámok az iframe és az írások mögött legyenek */
+    overflow: hidden;
+}
+
+/* Hullámok stílusa */
+.wave {
+    position: absolute;
+    top: 0; /* A hullámok a footer tetején */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    fill: #0099ff; /* Hullámok színe (kék) */
+    fill-opacity: 1; /* Teljesen látható */
+}
+
+/* Az iframe és az írások stílusa */
+iframe, #contact {
+    position: relative;
+    z-index: 1; /* Az iframe és az írások a hullámok felett legyenek */
 }
 
 iframe {
@@ -132,6 +167,7 @@ iframe {
 
     h5 {
         color: aliceblue;
+        padding-top: 3% ;
     }
 
     h3 {

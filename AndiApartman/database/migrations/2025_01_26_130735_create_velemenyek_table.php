@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-   
     public function up(): void
     {
         Schema::create('velemenyek', function (Blueprint $table) {
@@ -15,11 +14,10 @@ return new class extends Migration
             $table->string('email'); 
             $table->integer('ertekeles')->check('ertekeles >= 1 AND ertekeles <= 5');
             $table->text('komment')->nullable();
-            $table->boolean('approved');
+            $table->boolean('approved')->default(0); // Alapértelmezett érték beállítása
             $table->timestamps();
         });
     }
-    
 
     public function down(): void
     {
