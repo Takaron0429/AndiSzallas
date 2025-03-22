@@ -50,6 +50,7 @@ class VelemenyController extends Controller
         Velemeny::where('email', $email)->delete();
         return redirect()->route('AdminFelulet.Admin')->with('success', 'A vélemény törölve lett.');
     }
+    
     public function store(Request $request)
     {
         // Validálás

@@ -193,7 +193,7 @@
                     <label for="yearFilter" class="form-label">Év</label>
                     <select class="form-select" name="year" id="yearFilter">
                         <option value="">Minden év</option>
-                        @for($i = 2020; $i <= now()->year; $i++)
+                        @for($i = 2020; $i <= now()->year ; $i++)
                             <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
                         @endfor
                     </select>

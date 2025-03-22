@@ -36,7 +36,8 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // Admin módosítások
 Route::get('/AdminFelulet/Modositasok', [ModositasokController::class, 'index'])->name('AdminFelulet.Modositasok');
-Route::post('/AdminFelulet/Modositasok', [FoglalasController::class, 'store'])->name('foglalas.store');
+Route::post('AdminFelulet/Modositasok', [FoglalasController::class, 'Mod'])->name('foglalas.Mod');
+Route::post('AdminFelulet/Modositasok', [FoglalasController::class, 'Adminstore'])->name('foglalas.Adminstore');
 // Érkezési csomagok kezelése
 Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name('Erkezesi.store');
 Route::put('Erkezesi/{id}/update', [ErkezesiCsomagController::class, 'update'])->name('Erkezesi.update');
