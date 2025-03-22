@@ -126,67 +126,62 @@
         }
 
         .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff9800;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease-in-out;
-        }
+        cursor: pointer;
+        padding: 10px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        display: inline-block;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        margin: 10px auto;
+    }
 
-        .notification-container:hover {
-            transform: scale(1.1);
-        }
+    .notification-badge {
+        background-color: #dc3545;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 50%;
+        font-size: 14px;
+        margin-left: 5px;
+    }
 
-        /* Új vélemények száma */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: red;
-            color: white;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 50%;
-            font-weight: bold;
+    /* Reszponzivitás */
+    @media (max-width: 768px) {
+        .notification-container {
+            display: block;
+            text-align: center;
         }
+    }
 
-        /* Vélemények szekció alapból rejtve */
-        #velemenyContainer.hidden {
-            display: none;
-        }
+    /* Accordion stílus */
+    .accordion {
+        margin-top: 15px;
+    }
 
-     
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+    .accordion-item {
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .accordion-button {
+        background-color: #f1f1f1;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
 
-        #velemenyContainer {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            width: 400px;
-            max-height: 500px;
-            overflow-y: auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            animation: fadeIn 0.3s ease-in-out;
-        }
+    .table {
+        margin-bottom: 0;
+    }
+
+    .btn {
+        margin: 5px;
+    }
     </style>
     <title>Admin Főoldal</title>
 
@@ -261,16 +256,22 @@
             <br>
 
             <div class="notification-container" onclick="toggleVelemenyek()">
-                <i class="fas fa-bell"></i>
-                @if(isset($velemenyek) && $velemenyek->count() > 0)
-                
-                    <span class="notification-badge">{{ $velemenyek->count() }}</span>
+                @if(isset($velemenyek))
+                    @php
+                        $notApprovedVelemenyek = $velemenyek->where('approved', 0)->count();
+                    @endphp
+                    @if($notApprovedVelemenyek > 0)
+                        Nem jóváhagyott vélemények: <span class="notification-badge">{{ $notApprovedVelemenyek }}</span>
+                    @else
+                        Nincs függőben lévő vélemény
+                    @endif
                 @endif
             </div>
-
-
+            
+            <!-- Vélemények listája -->
             <div id="velemenyContainer" class="hidden">
                 <div class="accordion" id="velemenyAccordion">
+                    <h4 style="font-weight: bolder; text-align: center;">Bejövő Értékelések</h4>
                     @foreach($velemenyek as $velemeny)
                         @if(!$velemeny->approved)
                             <div class="accordion-item">
@@ -321,10 +322,11 @@
                     @endforeach
                 </div>
             </div>
+            
             <script>
                 function toggleVelemenyek() {
-                    let container = document.getElementById('velemenyContainer');
-                    container.classList.toggle('hidden');
+                    var container = document.getElementById("velemenyContainer");
+                    container.classList.toggle("hidden");
                 }
             </script>
             <div class="row">

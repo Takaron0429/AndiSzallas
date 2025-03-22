@@ -286,7 +286,7 @@
                             <th>Kezdés</th>
                             <th>Befejezés</th>
                             <th>Link</th>
-                            <th>Kép</th>
+                            
                             <th>Akciók</th>
                         </tr>
                     </thead>
@@ -299,7 +299,7 @@
                                 <td>{{ $program->kezdet }}</td>
                                 <td>{{ $program->vege }}</td>
                                 <td><a href="{{ $program->link }}" target="_blank">Megtekintés</a></td>
-                                <td><img src="{{ asset('kepek/' . $program->kep) }}" alt="{{ $program->kep }}" width="100">
+                                
                                 </td>
                                 <td>
                                     <!-- Módosítás gomb -->
@@ -375,19 +375,7 @@
                                                 <div class="alert alert-danger">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="kep" class="form-label">Kép</label>
-                                            <input type="file" class="form-control" name="kep" accept="image/*">
-                                            @error('kep')
-                                                <div class="alert alert-danger">{{ $message }}</div>
-                                            @enderror
-                                            <div class="mt-2">
-                                                @if ($program->kep)
-                                                    <img src="{{ asset('storage/' . $program->kep) }}" alt="Program Kép"
-                                                        width="100">
-                                                @endif
-                                            </div>
-                                        </div>
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Mégse</button>
@@ -450,13 +438,7 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="mb-3">
-                        <label for="kep" class="form-label">Kép</label>
-                        <input type="file" class="form-control" name="kep" accept="image/*" required>
-                        @error('kep')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    
                     <button type="submit" class="btn btn-warning">Hozzáadás</button>
                 </form>
             </div>
@@ -549,7 +531,7 @@
                     }
                 }
             </style>
-            <form class="form-container" action="{{ route('foglalas.store') }}" method="POST">
+            <form class="form-container" action="{{ route('foglalas.Adminstore') }}" method="POST">
                 @csrf
                 <div class="row">
 
@@ -626,8 +608,8 @@
                 <div>
                     <h5>Összeg: <span id="total-amount">0 Ft</span></h5>
                 </div>
-            </form> 
-             
+            </form>
+
         </div>
         <div class="footer">
             <p class="text-left" style="font-size: x-large">&copy; 2025 Admin Felület | Minden jog fenntartva |
@@ -642,46 +624,39 @@
             document.querySelectorAll('.table-container').forEach(el => el.style.display = 'none');
             document.getElementById(sectionId).style.display = 'block';
         }
-        const csomagSelect = document.getElementById('csomag');
-    const akcioSelect = document.getElementById('akcio');
-    const checkinDate = document.getElementById('checkin');
-    const checkoutDate = document.getElementById('checkout');
-    const totalAmountElement = document.getElementById('total-amount');
+        document.addEventListener("DOMContentLoaded", function () {
+            const felnottInput = document.getElementById("felnott");
+            const gyerekInput = document.getElementById("gyerek");
+            const csomagSelect = document.getElementById("csomag");
+            const akcioSelect = document.getElementById("akcio");
+            const totalAmountSpan = document.getElementById("total-amount");
 
-    function calculateTotal() {
-        const csomagPrice = csomagSelect.selectedOptions[0]?.dataset?.ar || 0;
-        const akcioDiscount = akcioSelect.selectedOptions[0]?.dataset?.kedvezmeny || 0;
-        const checkin = new Date(checkinDate.value);
-        const checkout = new Date(checkoutDate.value);
+            function updateTotalAmount() {
+                const felnottSzam = parseInt(felnottInput.value) || 0;
+                const gyerekSzam = parseInt(gyerekInput.value) || 0;
+                const csomagAr = parseInt(csomagSelect.options[csomagSelect.selectedIndex].dataset.ar) || 0;
+                const akcioSzazalek = parseInt(akcioSelect.options[akcioSelect.selectedIndex]?.dataset.kedvezmeny) || 0;
 
-        // Napok számítása
-        const days = (checkout - checkin) / (1000 * 60 * 60 * 24);
-        if (days < 0) {
-            totalAmountElement.textContent = "Érvénytelen dátum";
-            return;
-        }
+                const checkin = new Date(document.getElementById("checkin").value);
+                const checkout = new Date(document.getElementById("checkout").value);
+                const napokSzama = (checkout - checkin) / (1000 * 60 * 60 * 24) || 1;
 
-        // Felnőttek és gyerekek száma
-        const felnottCount = document.getElementById('felnott').value;
-        const gyerekCount = document.getElementById('gyerek').value;
+                let total = (felnottSzam * csomagAr + gyerekSzam * csomagAr * 0.5) * napokSzama;
 
-        // Összeg kiszámítása
-        let total = (csomagPrice * (felnottCount + gyerekCount) * days);
+                if (akcioSzazalek > 0) {
+                    total -= total * (akcioSzazalek / 100);
+                }
 
-        // Akció kedvezményének alkalmazása
-        if (akcioDiscount) {
-            total -= total * (akcioDiscount / 100);
-        }
+                totalAmountSpan.textContent = total.toLocaleString("hu-HU") + " Ft";
+            }
 
-        // Az összeg frissítése
-        totalAmountElement.textContent = total.toFixed(0) + ' Ft';
-    }
-
-    // Figyelő események a kiválasztott csomagok és akciók változására
-    csomagSelect.addEventListener('change', calculateTotal);
-    akcioSelect.addEventListener('change', calculateTotal);
-    checkinDate.addEventListener('change', calculateTotal);
-    checkoutDate.addEventListener('change', calculateTotal);
+            felnottInput.addEventListener("change", updateTotalAmount);
+            gyerekInput.addEventListener("change", updateTotalAmount);
+            csomagSelect.addEventListener("change", updateTotalAmount);
+            akcioSelect.addEventListener("change", updateTotalAmount);
+            document.getElementById("checkin").addEventListener("change", updateTotalAmount);
+            document.getElementById("checkout").addEventListener("change", updateTotalAmount);
+        });
     </script>
 </body>
 

@@ -17,7 +17,7 @@ class FoglalasController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Foglalas::query()->with(['csomagok', 'akciok']); 
+        $query = Foglalas::query()->with(['csomagok', 'akciok']);
 
         if ($request->has('year') && $request->year != '') {
             $query->whereYear('erkezes', $request->year);
@@ -40,7 +40,7 @@ class FoglalasController extends Controller
                 $q->where('nev', $request->csomag);
             });
         }
-    
+
         if ($request->has('akcio') && $request->akcio != '') {
             $query->whereHas('akciok', function ($q) use ($request) {
                 $q->where('cim', $request->akcio);
@@ -49,14 +49,14 @@ class FoglalasController extends Controller
 
         $foglalasok = $query->get();
 
-       
+
         $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
         $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
         $akciok = Akcio::pluck('cim', 'akcio_id');
         $Foglalas = Foglalas::whereYear('erkezes', 2025)
             ->where('tavozas', '<=', Carbon::create(2025, 8, 31))
             ->get();
-        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas','foglalasok', 'akciok', 'csomagok'));
+        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas', 'foglalasok', 'akciok', 'csomagok'));
     }
 
     public function adminIndex()
@@ -67,32 +67,41 @@ class FoglalasController extends Controller
         $csomag_ = CsomagFoglalas::all();
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
-        return view('AdminFelulet.Admin', compact('Foglalas', 'Admin','csomagok','akciok','akcio_','csomag_'));
+        return view('AdminFelulet.Admin', compact('Foglalas', 'Admin', 'csomagok', 'akciok', 'akcio_', 'csomag_'));
     }
-
+    public function Mod()
+    {
+        $Foglalas = Foglalas::all();
+        $Admin = Admin::all();
+        $akcio_ = AkcioFoglalas::all();
+        $csomag_ = CsomagFoglalas::all();
+        $csomagok = ErkezesiCsomag::all();
+        $akciok = Akcio::all();
+        return view('AdminFelulet.Modositasok', compact('Foglalas', 'Admin', 'csomagok', 'akciok', 'akcio_', 'csomag_'));
+    }
     public function getBookedDates()
     {
-      
-        $foglalasok = DB::table('foglalasok') 
+
+        $foglalasok = DB::table('foglalasok')
             ->select('erkezes', 'tavozas')
             ->get();
 
         $bookedDates = [];
 
-        
+
         foreach ($foglalasok as $foglalas) {
             $startDate = Carbon::parse($foglalas->erkezes);
             $endDate = Carbon::parse($foglalas->tavozas);
 
-          
+
             while ($startDate <= $endDate) {
-               
+
                 $bookedDates[] = $startDate->format('Y-m-d');
                 $startDate->addDay();
             }
         }
 
-      
+
         return response()->json($bookedDates);
     }
 
@@ -187,5 +196,62 @@ class FoglalasController extends Controller
 
         $foglalas->delete();
         return redirect()->route('AdminFelulet.Admin')->with('success', 'Foglalás törölve!');
+    }
+    public function Adminstore(Request $request)
+    {
+        $validated = $request->validate([
+            'checkin' => 'required|date',
+            'checkout' => 'required|date|after:checkin',
+            'felnott' => 'required|integer|min:1',
+            'gyerek' => 'required|integer|min:0',
+            'csomag_id' => 'required|exists:csomagok,id',
+            'akcio_id' => 'nullable|exists:akciok,id',
+            'nev' => 'required|string|max:255',
+            'email' => 'required|email',
+            'telefon' => 'nullable|string|max:20',
+            'iranyitoszam' => 'nullable|string|max:10',
+            'lakcim' => 'nullable|string|max:255',
+            'specialis_keresek' => 'nullable|string',
+        ]);
+
+
+        $vendeg = new Vendeg();
+        $vendeg->nev = $validated['nev'];
+        $vendeg->email = $validated['email'];
+        $vendeg->telefon = $validated['telefon'] ?? null;
+        $vendeg->iranyitoszam = $validated['iranyitoszam'] ?? null;
+        $vendeg->lakcim = $validated['lakcim'] ?? null;
+        $vendeg->save();
+
+
+        $csomag = ErkezesiCsomag::find($validated['csomag_id']);
+        $akcio = Akcio::find($validated['akcio_id']);
+
+        if (!$csomag) {
+            return redirect()->back()->with('error', 'A kiválasztott csomag nem található.');
+        }
+
+
+        $napokSzama = (new \DateTime($validated['checkout']))->diff(new \DateTime($validated['checkin']))->days;
+        $total = ($validated['felnott'] * $csomag->ar + $validated['gyerek'] * $csomag->ar * 0.5) * $napokSzama;
+
+        if ($akcio) {
+            $total -= $total * ($akcio->kedvezmeny_szazalek / 100);
+        }
+
+
+        $foglalas = new Foglalas();
+        $foglalas->vendeg_id = $vendeg->id;
+        $foglalas->checkin = $validated['checkin'];
+        $foglalas->checkout = $validated['checkout'];
+        $foglalas->felnott = $validated['felnott'];
+        $foglalas->gyerek = $validated['gyerek'];
+        $foglalas->csomag_id = $csomag->id ?? null;
+        $foglalas->akcio_id = $akcio->id ?? null;
+        $foglalas->specialis_keresek = $validated['specialis_keresek'];
+        $foglalas->osszeg = $total;
+        $foglalas->save();
+
+        return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Foglalás sikeresen rögzítve!');
     }
 }

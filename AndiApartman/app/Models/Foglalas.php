@@ -19,6 +19,10 @@ class Foglalas extends Model
         'csomag_id',
         'akcio_id',
         'osszeg',
+      
+            'vendeg_id', 'checkin', 'checkout', 'felnott', 'gyerek',
+            'csomag_id', 'akcio_id', 'specialis_keresek', 'osszeg'
+       
     ];
 
     
