@@ -23,24 +23,38 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Szállás</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBottom"
-                aria-controls="navbarBottom" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Toggler gomb mobil nézethez -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarBottom">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="foglalas.html">Foglalás</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" target="_blank" href="https://szallas.hu/programok/balatonszemes">Program
-                            Ajánló</a>
-                    </li>
-                </ul>
+
+            <!-- Bal oldali linkek -->
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link" href="#">Kezdőlap</a>
+                    <a class="nav-link" href="#meglevo-velemenyek">Vélemények</a>
+                    <a class="nav-link" href="foglalas">Foglalás</a>
+                </div>
+            </div>
+
+            <!-- Jobb oldali elérhetőségek -->
+            <div class="navbar-contact-info">
+                <span class="contact-item"><i class="fa fa-phone" style="font-size: 24px;"></i> +06-30/560-1999</span>
+                <span class="separator">|</span>
+                <span class="contact-item"><i class="fa fa-envelope" style="font-size: 24px;"></i>
+                    andi68andi@gmail.com</span>
+                <span class="separator">|</span>
+                <span class="contact-item"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Balatonszemes,
+                    Vörösmarty u. 42</span>
+                <span class="separator">|</span>
+                <a href="https://facebook.com" class="contact-item" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
             </div>
         </div>
     </nav>
+
     <!-- Carousel -->
     <div id="carouselExampleIndicators" class="carousel slide custom-carousel" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -56,7 +70,7 @@
                 <img src="img/szemeswide.jpg" class="d-block w-100 carousel-image" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Szállás</h5>
-                    <p>udv a szallason blablabla</p>
+                    <p>üdv a szálláson blablabla</p>
                 </div>
             </div>
             <div class="carousel-item">
@@ -140,129 +154,132 @@
         </div>
     </section>
 
-    <div class="container text-center" style="padding-top: 1%;">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <h2>Távolsági helyek az apartmantól:</h2>
-                <p class="strongerp">Szántódi Rév</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30"
-                        aria-valuemin="0" aria-valuemax="100">
-                        15 km
+    <section class="distances">
+        <div class="container text-center" style="padding-top: 1%;">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <h2>Távolsági helyek az apartmantól:</h2>
+                    <p class="strongerp">Szántódi Rév</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30"
+                            aria-valuemin="0" aria-valuemax="100">
+                            15 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Siófok</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50"
+                            aria-valuemin="0" aria-valuemax="100">
+                            25 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Balatonboglár bob pálya</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30"
+                            aria-valuemin="0" aria-valuemax="100">
+                            15 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Zamárdi kalandpark</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 36%;" aria-valuenow="36"
+                            aria-valuemin="0" aria-valuemax="100">
+                            18 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Keszthely</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100">
+                            50 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Hévíz</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100">
+                            55 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Csisztapuszta fürdő</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60"
+                            aria-valuemin="0" aria-valuemax="100">
+                            30 km
+                        </div>
+                    </div>
+                    <p class="strongerp">Balatonlelle</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20"
+                            aria-valuemin="0" aria-valuemax="100">
+                            5,5 km
+                        </div>
                     </div>
                 </div>
-                <p class="strongerp">Siófok</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50"
-                        aria-valuemin="0" aria-valuemax="100">
-                        25 km
-                    </div>
-                </div>
-                <p class="strongerp">Balatonboglár bob pálya</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30"
-                        aria-valuemin="0" aria-valuemax="100">
-                        15 km
-                    </div>
-                </div>
-                <p class="strongerp">Zamárdi kalandpark</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 36%;" aria-valuenow="36"
-                        aria-valuemin="0" aria-valuemax="100">
-                        18 km
-                    </div>
-                </div>
-                <p class="strongerp">Keszthely</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100"
-                        aria-valuemin="0" aria-valuemax="100">
-                        50 km
-                    </div>
-                </div>
-                <p class="strongerp">Hévíz</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100"
-                        aria-valuemin="0" aria-valuemax="100">
-                        55 km
-                    </div>
-                </div>
-                <p class="strongerp">Csisztapuszta fürdő</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60"
-                        aria-valuemin="0" aria-valuemax="100">
-                        30 km
-                    </div>
-                </div>
-                <p class="strongerp">Balatonlelle</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20"
-                        aria-valuemin="0" aria-valuemax="100">
-                        5,5 km
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="col-lg-6 col-md-12 col-sm-12">
 
-                <h2>Helyi távolságok az apartmantól:</h2>
-                <p class="strongerp">Kistücsök Étterem</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="30"
-                        aria-valuemin="0" aria-valuemax="100">
-                        1500 m
+                    <h2>Helyi távolságok az apartmantól:</h2>
+                    <p class="strongerp">Kistücsök Étterem</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="30"
+                            aria-valuemin="0" aria-valuemax="100">
+                            1500 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Élelmiszerüzlet</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="50"
-                        aria-valuemin="0" aria-valuemax="30">
-                        360 m
+                    <p class="strongerp">Élelmiszerüzlet</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="50"
+                            aria-valuemin="0" aria-valuemax="30">
+                            360 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Balaton</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="30"
-                        aria-valuemin="0" aria-valuemax="33">
-                        500 m
+                    <p class="strongerp">Balaton</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="30"
+                            aria-valuemin="0" aria-valuemax="33">
+                            500 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Strand, élményfürdő</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="36"
-                        aria-valuemin="0" aria-valuemax="40">
-                        600 m
+                    <p class="strongerp">Strand, élményfürdő</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="36"
+                            aria-valuemin="0" aria-valuemax="40">
+                            600 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Játszótér</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="100"
-                        aria-valuemin="0" aria-valuemax="33">
-                        500 m
+                    <p class="strongerp">Játszótér</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="33">
+                            500 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Hajókikötő</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100"
-                        aria-valuemin="0" aria-valuemax="100">
-                        1500 m
+                    <p class="strongerp">Hajókikötő</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100">
+                            1500 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Vasútállomás</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="60"
-                        aria-valuemin="0" aria-valuemax="100">
-                        1500 m
+                    <p class="strongerp">Vasútállomás</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="60"
+                            aria-valuemin="0" aria-valuemax="100">
+                            1500 m
+                        </div>
                     </div>
-                </div>
-                <p class="strongerp">Buszmegálló</p>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20"
-                        aria-valuemin="0" aria-valuemax="100">
-                        250 m
+                    <p class="strongerp">Buszmegálló</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20"
+                            aria-valuemin="0" aria-valuemax="100">
+                            250 m
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 
     <section id="programajanlo" class="mt-5">
         <div class="container">
@@ -405,7 +422,7 @@
                     </p>
                     <p class="strongerp"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Balatonszemes,
                         Vörösmarty u. 42</p>
-                    <p class="strongerp"><i class="fa fa-phone" style="font-size: 24px;"></i> +06305601999</p>
+                    <p class="strongerp"><i class="fa fa-phone" style="font-size: 24px;"></i> +06-30/560-1999</p>
                     <p class="strongerp"><i class="fa fa-envelope" style="font-size: 24px;"></i> andi68andi@gmail.com
                     </p>
                 </div>
