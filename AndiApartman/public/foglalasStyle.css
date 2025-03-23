@@ -5,9 +5,43 @@ body {
 {
     font-size: 20px;
 }
-footer
-{
+/* Footer stílusa */
+footer {
     background-color: #3d7abc;
+    position: relative; /* A footer relatív pozícióban legyen */
+    overflow: hidden; /* A hullámok ne lógjanak ki */
+}
+
+/* Hullámok konténer stílusa */
+.wave-container {
+    position: absolute;
+    top: -5%; /* A hullámok a footer tetején */
+    left: 0;
+    width: 100%;
+    height: 100%; /* A hullámok magassága */
+    z-index: 0; /* A hullámok az iframe és az írások mögött legyenek */
+    overflow: hidden;
+}
+
+/* Hullámok stílusa */
+.wave {
+    position: absolute;
+    top: 0; /* A hullámok a footer tetején */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    fill: #0099ff; /* Hullámok színe (kék) */
+    fill-opacity: 1; /* Teljesen látható */
+}
+
+/* Az iframe és az írások stílusa */
+iframe, #contact {
+    position: relative;
+    z-index: 1; /* Az iframe és az írások a hullámok felett legyenek */
+}
+
+iframe {
+    padding-top: 10px;
 }
 iframe
 {
@@ -35,8 +69,48 @@ i:hover {
     width: 10%;
 }
 
+/* Navbar stílusok */
 .custom-navbar {
-    background-color: rgba(61, 122, 188, 0.8);
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(116, 116, 116, 0.84);
+    backdrop-filter: blur(5px);
+    padding: 10px 0;
+}
+
+.navbar-contact-info {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Jobbra tolja az elemet */
+    margin-right: 20px; /* Távolság a jobb széltől */
+}
+
+.contact-item {
+    margin: 0 10px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.contact-item:hover {
+    color: #3d7abc;
+}
+
+.separator {
+    margin: 5px;
+    color: #3d7abc;
+    
+}
+
+.nav-link {
+    color: #ffffff;
+    margin-left: 15px;
+}
+
+.nav-link:hover {
+    color: #3d7abc;
 }
 
 textarea {

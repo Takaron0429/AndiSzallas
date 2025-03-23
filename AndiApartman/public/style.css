@@ -339,20 +339,8 @@ i:hover {
 .custom-carousel p {
     font-size: 1.2rem;
 }
-.progress {
-    height: 15px;
-    width: 60%;
-    margin: 0 auto;
-    border-radius: 10px;
-}
 
-.progress-bar {
-    background-color: #3d7abc;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: bold;
-    border-radius: 10px;
-}
+
 /* GPS pinpoint SVG háttérkép a jobb felső sarokban */
 .distances {
     position: relative; /* Pozicionáláshoz szükséges */
@@ -371,4 +359,43 @@ i:hover {
     background-size: contain;
     opacity: 0.2; /* Átlátszóság */
     z-index: -1; /* Háttérben marad */
+}
+
+/* Progress bar alapstílusok */
+.progress {
+    background-color: #e9ecef; /* Háttérszín a progress barhoz */
+    border-radius: 4px; /* Kerekített sarkok */
+    overflow: hidden; /* A progress bar ne lógjon ki */
+    height: 25px; /* Progress bar magassága */
+    width: 60%; /* Progress bar hosszúsága (rövidebb) */
+    margin: 0 auto 10px; /* Középre igazítás és távolság a következő elemig */
+}
+.progress:hover
+{
+    transform: scale(1.25);
+    border: 1px solid black; /* Fekete keret hozzáadva */
+
+}
+.progress-bar {
+    background-color: #3d7abc; /* Progress bar színe */
+    height: 100%; /* Teljes magasság */
+    width: 0; /* Kezdetben 0% */
+    border-radius: 4px; /* Kerekített sarkok */
+    animation: fillProgress 2s ease-in-out forwards; /* Animáció */
+    animation-play-state: paused; /* Animáció kezdetben szünetel */
+}
+
+/* Animáció definíciója */
+@keyframes fillProgress {
+    from {
+        width: 0; /* Kezdetben 0% */
+    }
+    to {
+        width: var(--progress-width); /* A megadott értékre animál */
+    }
+}
+
+/* Ha a progress bar látható, akkor animáljuk */
+.progress-bar.animate {
+    animation-play-state: running; /* Animáció indítása */
 }

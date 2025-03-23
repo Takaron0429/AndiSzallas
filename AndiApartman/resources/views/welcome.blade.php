@@ -32,7 +32,7 @@
             <!-- Bal oldali linkek -->
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link" href="#">Kezdőlap</a>
+                    <a class="nav-link" href="welcome">Kezdőlap</a>
                     <a class="nav-link" href="#meglevo-velemenyek">Vélemények</a>
                     <a class="nav-link" href="foglalas">Foglalás</a>
                 </div>
