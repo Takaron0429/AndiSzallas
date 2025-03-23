@@ -38,6 +38,7 @@ Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 Route::get('/AdminFelulet/Modositasok', [ModositasokController::class, 'index'])->name('AdminFelulet.Modositasok');
 Route::post('AdminFelulet/Modositasok', [FoglalasController::class, 'Mod'])->name('foglalas.Mod');
 Route::post('AdminFelulet/Modositasok', [FoglalasController::class, 'Adminstore'])->name('foglalas.Adminstore');
+
 // Érkezési csomagok kezelése
 Route::post('Erkezesi.store', [ErkezesiCsomagController::class, 'store'])->name('Erkezesi.store');
 Route::put('Erkezesi/{id}/update', [ErkezesiCsomagController::class, 'update'])->name('Erkezesi.update');
@@ -54,11 +55,13 @@ Route::put('admin/helyi/{id}/update', [HelyiProgramajanloController::class, 'upd
 // Foglalások kezelése
 Route::get('AdminFelulet/Foglalasok', [FoglalasController::class, 'index'])->name('AdminFelulet.Foglalasok');
 Route::get('AdminFelulet/Admin', [FoglalasController::class, 'adminIndex'])->name('AdminFelulet.Admin');
+Route::get('/admin', [AdminController::class, 'index'])->name('AdminFelulet.Admin');
 Route::put('AdminFelulet/Admin/{id}/update', [FoglalasController::class, 'update'])->name('AdminFelulet.FoglalasUpdate');
 Route::delete('AdminFelulet/Admin/{id}/delete', [FoglalasController::class, 'destroy'])->name('AdminFelulet.FoglalasDelete');
 Route::get('AdminFelulet/Admin', [VelemenyController::class, 'velemenyek'])->name('AdminFelulet.Admin');
 Route::get('AdminFelulet/Admin/{id}/approve', [VelemenyController::class, 'approveVelemeny'])->name('velemeny.approve');
 Route::get('AdminFelulet/Admin/delete/{email}', [VelemenyController::class, 'deleteVelemeny'])->name('velemeny.delete');
 Route::get('velemenyek', [VelemenyController::class, 'approvedVelemenyek'])->name('velemenyek.list');
-
+Route::get('/admin/foglalt-napok', [FoglalasController::class, 'getFoglaltNapok']);
 Route::get('/getBookedDates', [FoglalasController::class, 'getBookedDates'])->name('getBookedDates');
+

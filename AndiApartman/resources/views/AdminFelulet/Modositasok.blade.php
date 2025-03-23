@@ -546,7 +546,7 @@
                             <label for="felnott"><i class="fa-solid fa-person"></i> Felnőtt</label>
                             <select class="form-select mb-2" id="felnott" name="felnott" required>
                                 <option selected>0</option>
-                                @for ($i = 1; $i <= 10; $i++)
+                                @for ($i = 1; $i <= 6; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>
@@ -554,7 +554,7 @@
                             <label for="gyerek"><i class="fa-solid fa-child-reaching"></i> Gyermek</label>
                             <select class="form-select mb-2" id="gyerek" name="gyerek" required>
                                 <option selected>0</option>
-                                @for ($i = 1; $i <= 10; $i++)
+                                @for ($i = 1; $i <= 6; $i++)
                                     <option value="{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>

@@ -18,11 +18,13 @@ class FoglalasController extends Controller
     public function index(Request $request)
     {
         $query = Foglalas::query()->with(['csomagok', 'akciok']);
+        $query->whereBetween('erkezes', [Carbon::create(2020, 1, 1), Carbon::create(2024, 12, 31)])
+            ->whereBetween('tavozas', [Carbon::create(2020, 1, 1), Carbon::create(2024, 12, 31)]);
+
 
         if ($request->has('year') && $request->year != '') {
             $query->whereYear('erkezes', $request->year);
         }
-
         if ($request->has('month') && $request->month != '') {
             $query->whereMonth('erkezes', $request->month);
         }
@@ -31,32 +33,33 @@ class FoglalasController extends Controller
             $query->where('felnott', $request->adults);
         }
 
+
         if ($request->has('children') && $request->children != '') {
             $query->where('gyerek', $request->children);
         }
 
+
         if ($request->has('csomag') && $request->csomag != '') {
             $query->whereHas('csomagok', function ($q) use ($request) {
-                $q->where('nev', $request->csomag);
+                $q->where('nev', 'like', '%' . $request->csomag . '%');
             });
         }
 
+
         if ($request->has('akcio') && $request->akcio != '') {
             $query->whereHas('akciok', function ($q) use ($request) {
-                $q->where('cim', $request->akcio);
+                $q->where('cim', 'like', '%' . $request->akcio . '%');
             });
         }
 
         $foglalasok = $query->get();
 
-
+        $Foglalas = Foglalas::all();
         $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
         $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
         $akciok = Akcio::pluck('cim', 'akcio_id');
-        $Foglalas = Foglalas::whereYear('erkezes', 2025)
-            ->where('tavozas', '<=', Carbon::create(2025, 8, 31))
-            ->get();
-        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas', 'foglalasok', 'akciok', 'csomagok'));
+
+        return view('AdminFelulet.Foglalasok', compact('Foglalas','foglalas', 'foglalasok', 'akciok', 'csomagok'));
     }
 
     public function adminIndex()
@@ -157,6 +160,12 @@ class FoglalasController extends Controller
 
     public function update(Request $request, $id)
     {
+        $foglalas = Foglalas::find($id);
+        if (!$foglalas) {
+            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Foglalás nem található!');
+        }
+
+
         $validated = $request->validate([
             'erkezes' => 'required|date',
             'tavozas' => 'required|date|after:erkezes',
@@ -164,29 +173,66 @@ class FoglalasController extends Controller
             'gyerek' => 'required|integer|min:0',
             'csomag_id' => 'nullable|exists:erkezesi_csomagok,csomag_id',
             'akcio_id' => 'nullable|exists:akciok,akcio_id',
+            'foglalas_allapot' => 'nullable|in:függőben,elfogadva',
+            'fizetes_allapot' => 'nullable|in:függőben,kifizetett',
         ]);
-
-        $foglalas = Foglalas::find($id);
-        if (!$foglalas) {
-            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Foglalás nem található!');
-        }
 
         $foglalas->update($validated);
 
-        $csomag = $foglalas->csomag;
-        $akcio = $foglalas->akcio;
 
-        $days = (new \DateTime($request->tavozas))->diff(new \DateTime($request->erkezes))->days;
-        $total = ($foglalas->felnott * $csomag->ar + $foglalas->gyerek * $csomag->ar) * $days;
-        if ($akcio) {
-            $total = $total - ($total * ($akcio->kedvezmeny_szazalek / 100));
+        $erkezes = Carbon::parse($foglalas->erkezes);
+        $tavozas = Carbon::parse($foglalas->tavozas);
+        $days = $erkezes->diffInDays($tavozas);
+
+        $total = 0;
+        foreach ($foglalas->csomagok as $csomag) {
+            $total += ($foglalas->felnott * $csomag->ar + $foglalas->gyerek * $csomag->ar) * $days;
         }
 
+        foreach ($foglalas->akciok as $akcio) {
+            $total -= ($total * ($akcio->kedvezmeny / 100));
+        }
+        if ($request->filled('foglalas_allapot')) {
+            $foglalas->foglalas_allapot = $request->input('foglalas_allapot');
+        }
+        
+        if ($request->filled('fizetes_allapot')) {
+            $foglalas->fizetes_allapot = $request->input('fizetes_allapot');
+        }
         $foglalas->osszeg = $total;
-        $foglalas->save();
 
-        return redirect()->route('AdminFelulet.Admin')->with('success', 'Foglalás frissítve!');
+        DB::beginTransaction();
+        try {
+            $foglalas->save();
+            DB::commit();
+            return redirect()->route('AdminFelulet.Admin')->with('success', 'Foglalás sikeresen frissítve!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Hiba történt a foglalás frissítésekor: ' . $e->getMessage());
+            return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Hiba történt a foglalás frissítésekor!');
+        }
     }
+        public function getFoglaltNapok()
+    {
+        $foglalasok = Foglalas::all();
+        $foglaltNapok = [];
+
+        foreach ($foglalasok as $foglalas) {
+            $start = Carbon::parse($foglalas->erkezes);
+            $end = Carbon::parse($foglalas->tavozas);
+
+          
+            while ($start->lte($end)) {
+                $foglaltNapok[] = $start->format('Y-m-d');
+                $start->addDay(); 
+            }
+        }
+
+        return response()->json($foglaltNapok); 
+    }
+
+    
+   
     public function destroy($id)
     {
         $foglalas = Foglalas::find($id);
@@ -214,44 +260,49 @@ class FoglalasController extends Controller
             'specialis_keresek' => 'nullable|string',
         ]);
 
+        // Vendég mentése
+        $vendeg = Vendeg::create([
+            'nev' => $validated['nev'],
+            'email' => $validated['email'],
+            'telefon' => $validated['telefon'] ?? null,
+            'iranyitoszam' => $validated['iranyitoszam'] ?? null,
+            'lakcim' => $validated['lakcim'] ?? null,
+        ]);
 
-        $vendeg = new Vendeg();
-        $vendeg->nev = $validated['nev'];
-        $vendeg->email = $validated['email'];
-        $vendeg->telefon = $validated['telefon'] ?? null;
-        $vendeg->iranyitoszam = $validated['iranyitoszam'] ?? null;
-        $vendeg->lakcim = $validated['lakcim'] ?? null;
-        $vendeg->save();
-
-
+        // Csomag és akció lekérése
         $csomag = ErkezesiCsomag::find($validated['csomag_id']);
         $akcio = Akcio::find($validated['akcio_id']);
+
 
         if (!$csomag) {
             return redirect()->back()->with('error', 'A kiválasztott csomag nem található.');
         }
 
 
-        $napokSzama = (new \DateTime($validated['checkout']))->diff(new \DateTime($validated['checkin']))->days;
-        $total = ($validated['felnott'] * $csomag->ar + $validated['gyerek'] * $csomag->ar * 0.5) * $napokSzama;
+        $checkin = new \DateTime($validated['checkin']);
+        $checkout = new \DateTime($validated['checkout']);
+        $ejszakak = $checkin->diff($checkout)->days;
+
+
+        $total = ($validated['felnott'] * $csomag->ar + $validated['gyerek'] * ($csomag->ar * 0.5)) * $ejszakak;
+
 
         if ($akcio) {
             $total -= $total * ($akcio->kedvezmeny_szazalek / 100);
         }
 
 
-        $foglalas = new Foglalas();
-        $foglalas->vendeg_id = $vendeg->id;
-        $foglalas->checkin = $validated['checkin'];
-        $foglalas->checkout = $validated['checkout'];
-        $foglalas->felnott = $validated['felnott'];
-        $foglalas->gyerek = $validated['gyerek'];
-        $foglalas->csomag_id = $csomag->id ?? null;
-        $foglalas->akcio_id = $akcio->id ?? null;
-        $foglalas->specialis_keresek = $validated['specialis_keresek'];
-        $foglalas->osszeg = $total;
-        $foglalas->save();
-
+        Foglalas::create([
+            'vendeg_id' => $vendeg->veneg_id,
+            'checkin' => $validated['checkin'],
+            'checkout' => $validated['checkout'],
+            'felnott' => $validated['felnott'],
+            'gyerek' => $validated['gyerek'],
+            'csomag_id' => $csomag->csomag_id,
+            'akcio_id' => $akcio->akcio_id ?? null,
+            'specialis_keresek' => $validated['specialis_keresek'] ?? null,
+            'osszeg' => $total,
+        ]);
         return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Foglalás sikeresen rögzítve!');
     }
 }

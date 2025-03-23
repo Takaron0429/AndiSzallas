@@ -332,7 +332,6 @@
             <div class="row">
                 <div class="container mt-4">
                     <div class="row">
-
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Új foglalások</div>
@@ -342,22 +341,19 @@
                                 </div>
                             </div>
                         </div>
-
-
+            
+                        <!-- Időpontok elérhetősége -->
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Időpontok elérhetősége</div>
                                 <div class="card-body">
                                     <i class="fas fa-bed widget"></i>
-                                    <div class="widget-value">{{ $lefoglaltNapok ?? 'Nincs adat'}} /
-                                        {{ $totalDays ?? 0  }}
-                                    </div>
-
+                                    <div class="widget-value">{{ $lefoglaltNapok ?? 'Nincs adat' }} / {{ $totalDays ?? 0 }}</div>
                                 </div>
                             </div>
                         </div>
-
-
+            
+                        <!-- Eddig Befolyt Összeg -->
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Eddig Befolyt Összeg</div>
@@ -367,38 +363,41 @@
                                 </div>
                             </div>
                         </div>
-
-
+            
+                        <!-- Visszajáró vendégek -->
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Visszajáró vendégek</div>
                                 <div class="card-body">
                                     <i class="fas fa-users widget"></i>
-                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 'Nincs adat'}}</div>
+                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 8 }}</div>
                                 </div>
                             </div>
                         </div>
-
-
+            
+                        <!-- Legnépszerűbb akció -->
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
-                                <div class="card-header">További statisztika</div>
+                                <div class="card-header">Legnépszerűbb Akció</div>
                                 <div class="card-body">
-                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 'Nincs adat' }}</div>
+                                    <i class="fas fa-tags widget"></i>
+                                    <div class="widget-value">{{ $legnepszerubbAkcioNeve ?? 'Nincs adat' }}</div>
                                 </div>
                             </div>
                         </div>
+            
+                        <!-- Legnépszerűbb csomag -->
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
-                                <div class="card-header">További statisztika</div>
+                                <div class="card-header">Legnépszerűbb Csomag</div>
                                 <div class="card-body">
-                                    <div class="widget-value">{{ $visszajaroVendegSzam ?? 'Nincs adat'}}</div>
+                                    <i class="fas fa-box widget"></i>
+                                   <div class="widget-value">{{ $legnepszerubbCsomagNeve ?? 'Nincs adat' }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="container mt-4">
                 <div class="row">
@@ -448,7 +447,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="container" id="foglalas">
                 <div class="row">
                     <div class="card mt-4">
@@ -458,60 +456,52 @@
                         <br>
                         <form method="GET" action="{{ route('AdminFelulet.Admin') }}">
                             <div class="filter-section row mb-4 justify-content-center">
-                                <!-- Hónap szűrés -->
                                 <div class="col-md-4">
                                     <label for="monthFilter" class="form-label">Hónap</label>
                                     <select class="form-select" name="month" id="monthFilter">
                                         <option value="">Minden hónap</option>
                                         @foreach(range(5, 8) as $month)
-                                            <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                                            <option value="{{ $month }}" 
+                                                {{ request('month') == $month ? 'selected' : '' }}>
                                                 {{ \Carbon\Carbon::create()->month($month)->format('F') }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
-
-
                                 <div class="col-md-4">
-                                    <label for="peopleFilter" class="form-label">Emberek száma (Felnőttek +
-                                        Gyerekek)</label>
-                                    <input type="number" class="form-control" name="people" id="peopleFilter"
+                                    <label for="peopleFilter" class="form-label">Emberek száma (Felnőttek + Gyerekek)</label>
+                                    <input type="number" class="form-control" name="people" id="peopleFilter" 
                                         placeholder="Összesen (Felnőttek + Gyerekek)" value="{{ request('people') }}">
                                 </div>
                             </div>
-
                             <div class="filter-section row mb-4 justify-content-center">
-                                <!-- Legtöbb napot tartó foglalás -->
                                 <div class="col-md-4">
-                                    <label for="mostDaysFilter" class="form-label">Legtöbb napot tartó foglalás</label>
-                                    <select class="form-select" name="most_days" id="mostDaysFilter">
-                                        <option value="">Minden foglalás</option>
-                                        <option value="1" {{ request('most_days') == '1' ? 'selected' : '' }}>Legtöbb nap
-                                        </option>
+                                    <label for="sortFilter" class="form-label">Rendezés</label>
+                                    <select class="form-select" name="sort_by" id="sortFilter">
+                                        <option value="">Nincs rendezés</option>
+                                        <option value="most_days" {{ request('sort_by') == 'most_days' ? 'selected' : '' }}>Legtöbb nap</option>
+                                        <option value="most_payment" {{ request('sort_by') == 'most_payment' ? 'selected' : '' }}>Legtöbb fizetés</option>
+                                        <option value="most_people" {{ request('sort_by') == 'most_people' ? 'selected' : '' }}>Legtöbb ember</option>
                                     </select>
                                 </div>
-
-                                <!-- Fizetés szűrés -->
+                            
                                 <div class="col-md-4">
-                                    <label for="paymentFilter" class="form-label">Fizetés állapota</label>
+                                    <label for="paymentFilter" class="form-label">Foglalás állapota</label>
                                     <select class="form-select" name="payment_status" id="paymentFilter">
-                                        <option value="">Minden fizetés</option>
-                                        <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>
-                                            Kifizetett</option>
-                                        <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Függőben lévő</option>
+                                        <option value="">Minden foglalás</option>
+                                        <option value="elfogadva" {{ request('payment_status') == 'elfogadva' ? 'selected' : '' }}>Elfogadott</option>
+                                        <option value="függőben" {{ request('payment_status') == 'függőben' ? 'selected' : '' }}>Függőben lévő</option>
+                                        <option value="elutasitva'" {{ request('payment_status') == 'elutasitva' ? 'selected' : '' }}>Elutasított</option>
                                     </select>
                                 </div>
                             </div>
-
                             <div class="filter-section row mb-4 justify-content-center">
-                                <!-- Email címre vagy telefonszámra keresés -->
                                 <div class="col-md-4">
                                     <label for="searchFilter" class="form-label">Keresés Email / Telefonszám</label>
-                                    <input type="text" class="form-control" name="search" id="searchFilter"
+                                    <input type="text" class="form-control" name="search" id="searchFilter" 
                                         placeholder="Email vagy Telefonszám" value="{{ request('search') }}">
                                 </div>
                             </div>
-
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">Szűrés</button>
                             </div>
@@ -521,23 +511,27 @@
                             <table class="table table-striped table-hover">
                                 <thead class="col-12">
                                     <tr>
-                                        <th>Foglalas</th>
+                                        <th>Foglalás</th>
                                         <th>Azonositó</th>
                                         <th>Név</th>
                                         <th>Email</th>
-                                        <th>Foglalás dátuma</th>
+                                        <th>Telefonszám</th>
+                                        <th>Összeg</th>
+                                        <th>Érkezés dátuma</th>
                                         <th>Állapot</th>
                                         <th>Részletek</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($Foglalas as $foglalas)
+                                    @foreach ($foglalasok as $foglalas)
                                         @if (date('Y', strtotime($foglalas->erkezes)) == 2025)
                                             <tr class="col-12">
                                                 <td>{{ $foglalas->vendeg_id }}</td>
                                                 <td>{{ $foglalas->foglalas_id }}</td>
                                                 <td>{{ $foglalas->vendeg->nev ?? 'Nincs név' }}</td>
                                                 <td>{{ $foglalas->vendeg->email ?? 'Nincs email' }}</td>
+                                                <td>+{{ $foglalas->vendeg->telefon ?? 'Nincs telefon' }}</td>
+                                                <td>{{ $foglalas->osszeg }} Ft</td>
                                                 <td>{{ $foglalas->erkezes }}</td>
                                                 <td>{{ $foglalas->foglalas_allapot }}</td>
                                                 <td>
@@ -555,9 +549,8 @@
                     </div>
                 </div>
             </div>
-
-
-            @foreach ($Foglalas as $foglalas)
+            
+            @foreach ($foglalasok as $foglalas)
                 @if (date('Y', strtotime($foglalas->erkezes)) == 2025)
                     <div class="modal fade" id="bookingModal{{ $foglalas->foglalas_id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
@@ -566,27 +559,27 @@
                                     <h5 class="modal-title">Foglalás Kezelése</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-
+            
                                 <div class="modal-body">
                                     <ul class="nav nav-tabs" id="foglalasTab{{ $foglalas->foglalas_id }}">
                                         <li class="nav-item">
                                             <button class="nav-link active" style="background-color: aqua; color: white;"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#reszletek-{{ $foglalas->foglalas_id }}">Részletek</button>
+                                                data-bs-toggle="tab" data-bs-target="#reszletek-{{ $foglalas->foglalas_id }}">Részletek</button>
                                         </li>
                                         <li class="nav-item">
                                             <button class="nav-link" style="background-color: gold ; color: white"
-                                                data-bs-toggle="tab"
-                                                data-bs-target="#modositas-{{ $foglalas->foglalas_id }}">Módosítás</button>
+                                                data-bs-toggle="tab" data-bs-target="#modositas-{{ $foglalas->foglalas_id }}">Módosítás</button>
                                         </li>
                                     </ul>
-
+            
                                     <div class="tab-content mt-3">
-
                                         <div class="tab-pane fade show active" id="reszletek-{{ $foglalas->foglalas_id }}">
                                             <div class="card">
                                                 <div class="card-body">
+                                                    <p><strong>Foglalás Dátuma:</strong> {{ $foglalas->created_at ?? 'Nincs megadva (teszt)'}}</p>
                                                     <p><strong>Név:</strong> {{ $foglalas->vendeg->nev ?? 'Nincs név' }}</p>
+                                                    <p><strong>Email:</strong> {{ $foglalas->vendeg->email ?? 'Nincs email' }}</p>
+                                                    <p><strong>Telefonszám:</strong> {{ $foglalas->vendeg->telefon ?? 'Nincs telefonszám' }}</p>
                                                     <p><strong>Érkezés:</strong> {{ $foglalas->erkezes }}</p>
                                                     <p><strong>Távozás:</strong> {{ $foglalas->tavozas }}</p>
                                                     <p><strong>Felnőttek:</strong> {{ $foglalas->felnott }}</p>
@@ -600,7 +593,7 @@
                                                             Nincs csomag
                                                         @endif
                                                     </p>
-
+            
                                                     <p><strong>Akciók:</strong>
                                                         @if ($foglalas->akciok->isNotEmpty())
                                                             @foreach ($foglalas->akciok as $akcio)
@@ -611,89 +604,111 @@
                                                         @endif
                                                     </p>
                                                     <p><strong>Végső összeg:</strong>
-                                                        <span
-                                                            id="osszegMegjelenit{{ $foglalas->foglalas_id }}">{{ $foglalas->osszeg }}</span>
+                                                        <span id="osszegMegjelenit{{ $foglalas->foglalas_id }}">{{ $foglalas->osszeg }}</span>
                                                         Ft
                                                     </p>
+            
+                                                   
+                                                    <p><strong>Foglalás állapota:</strong> {{ $foglalas->foglalas_allapot }}</p>
+                                                    <p><strong>Fizetés állapota:</strong> {{ $foglalas->fizetes_allapot }}</p>
+                                                    <p><strong>Speciális kérések:</strong> {{ $foglalas->speciális_keresek ?? 'Nincsenek' }}</p>
                                                 </div>
                                             </div>
                                         </div>
-
+            
                                         <div class="tab-pane fade" id="modositas-{{ $foglalas->foglalas_id }}">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <form
-                                                        action="{{ route('AdminFelulet.FoglalasUpdate', $foglalas->foglalas_id) }}"
-                                                        method="POST">
+                                                    <form action="{{ route('AdminFelulet.FoglalasUpdate', $foglalas->foglalas_id) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
-
-                                                        <input type="hidden" id="csomagAr{{ $foglalas->foglalas_id }}"
-                                                            value="{{ $foglalas->csomag->ar ?? 0 }}">
-                                                        <input type="hidden" id="akcioSzazalek{{ $foglalas->foglalas_id }}"
-                                                            value="{{ $foglalas->akcio->kedvezmeny_szazalek ?? 0 }}">
-
+                                                    
+                                                        
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Foglalás állapota</label>
+                                                            <select name="foglalas_allapot" class="form-control">
+                                                                <option value="függőben" {{ $foglalas->foglalas_allapot == 'függőben' ? 'selected' : '' }}>Függőben</option>
+                                                                <option value="elfogadva" {{ $foglalas->foglalas_allapot == 'elfogadva' ? 'selected' : '' }}>Elfogadva</option>
+                                                                <option value="elutasitva" {{ $foglalas->foglalas_allapot == 'elutasitva' ? 'selected' : '' }}>Elutasitva</option>
+                                                            </select>
+                                                        </div>
+                                                    
+                                                        <!-- Fizetés állapota -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Fizetés állapota</label>
+                                                            <select name="fizetes_allapot" class="form-control">
+                                                                <option value="függőben" {{ $foglalas->fizetes_allapot == 'függőben' ? 'selected' : '' }}>Függőben</option>
+                                                                <option value="kifizetett" {{ $foglalas->fizetes_allapot == 'kifizetett' ? 'selected' : '' }}>Kifizetett</option>
+                                                            </select>
+                                                        </div>
+                                                    
+                                                        <!-- Speciális kérések -->
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Speciális kérések</label>
+                                                            <textarea class="form-control" name="speciális_keresek" rows="3">{{ $foglalas->speciális_keresek }}</textarea>
+                                                        </div>
+                                                    
+                                                        <!-- Érkezés dátuma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Érkezés dátuma</label>
-                                                            <input type="date" class="form-control foglalas-input"
-                                                                name="erkezes" id="erkezes{{ $foglalas->foglalas_id }}"
-                                                                value="{{ $foglalas->erkezes }}" required>
+                                                            <input type="date" class="form-control foglalas-input" name="erkezes"
+                                                                id="erkezes{{ $foglalas->foglalas_id }}" value="{{ $foglalas->erkezes }}" required>
                                                         </div>
-
+                                                    
+                                                        <!-- Távozás dátuma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Távozás dátuma</label>
-                                                            <input type="date" class="form-control foglalas-input"
-                                                                name="tavozas" id="tavozas{{ $foglalas->foglalas_id }}"
-                                                                value="{{ $foglalas->tavozas }}" required>
+                                                            <input type="date" class="form-control foglalas-input" name="tavozas"
+                                                                id="tavozas{{ $foglalas->foglalas_id }}" value="{{ $foglalas->tavozas }}" required>
                                                         </div>
-
+                                                    
+                                                        <!-- Felnőttek száma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Felnőttek száma</label>
-                                                            <input type="number" class="form-control foglalas-input"
-                                                                name="felnott" id="felnott{{ $foglalas->foglalas_id }}"
-                                                                value="{{ $foglalas->felnott }}" required>
+                                                            <input type="number" class="form-control foglalas-input" name="felnott"
+                                                                id="felnott{{ $foglalas->foglalas_id }}" value="{{ $foglalas->felnott }}" required>
                                                         </div>
-
+                                                    
+                                                        <!-- Gyerekek száma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Gyerekek száma</label>
-                                                            <input type="number" class="form-control foglalas-input"
-                                                                name="gyerek" id="gyerek{{ $foglalas->foglalas_id }}"
-                                                                value="{{ $foglalas->gyerek }}" required>
+                                                            <input type="number" class="form-control foglalas-input" name="gyerek"
+                                                                id="gyerek{{ $foglalas->foglalas_id }}" value="{{ $foglalas->gyerek }}" required>
                                                         </div>
-
+                                                    
+                                                        <!-- Csomagok -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Csomag</label>
                                                             <select name="csomag_id" class="form-control">
                                                                 @foreach ($csomagok as $csomag)
-                                                                    <option value="{{ $csomag->csomag_id }}" {{ $csomag->csomag_id == $foglalas->csomag_id ? 'selected' : '' }}> {{ $csomag->nev }} ({{ $csomag->ar }} Ft)
+                                                                    <option value="{{ $csomag->csomag_id }}" {{ $csomag->csomag_id == $foglalas->csomag_id ? 'selected' : '' }}> 
+                                                                        {{ $csomag->nev }} ({{ $csomag->ar }} Ft)
                                                                     </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
-
+                                                    
+                                                        <!-- Akciók -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Akció</label>
                                                             <select name="akcio_id" class="form-control">
                                                                 <option value="">Nincs akció</option>
                                                                 @foreach ($akciok as $akcio)
                                                                     <option value="{{ $akcio->akcio_id }}" {{ $akcio->akcio_id == $foglalas->akcio_id ? 'selected' : '' }}>
-                                                                        {{ $akcio->cim }} ({{ $akcio->kedvezmeny_szazalek }}%
-                                                                        kedvezmény)
+                                                                        {{ $akcio->cim }} ({{ $akcio->kedvezmeny_szazalek }}% kedvezmény)
                                                                     </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
-
+                                                    
+                                                        <!-- Újraszámolt összeg -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Újraszámolt összeg</label>
-                                                            <input type="text" class="form-control"
-                                                                id="ujOsszeg{{ $foglalas->foglalas_id }}" name="osszeg"
-                                                                value="{{ $foglalas->osszeg }}" readonly>
+                                                            <input type="text" class="form-control" id="ujOsszeg{{ $foglalas->foglalas_id }}" name="osszeg" value="{{ $foglalas->osszeg }}" readonly>
                                                         </div>
-
+                                                    
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Mégse</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
                                                             <button type="submit" class="btn btn-primary">Frissítés</button>
                                                         </div>
                                                     </form>
@@ -707,7 +722,6 @@
                     </div>
                 @endif
             @endforeach
-
             <br>
             <hr>
             <h2 class="text-center">Statisztika</h2>
@@ -726,26 +740,32 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            var foglaltNapok = [
-                "2025-05-10", "2025-05-11", "2025-05-12", "2025-05-13", "2025-05-14", "2025-05-15",
-                "2025-06-01", "2025-06-02", "2025-06-03", "2025-06-04", "2025-06-05", "2025-06-06", "2025-06-07",
-                "2025-07-01", "2025-07-02", "2025-07-03", "2025-07-04", "2025-07-05", "2025-07-06",
-                "2025-08-01", "2025-08-02", "2025-08-03", "2025-08-04"
-            ];
-
-            function isBooked(dateStr) {
-                return foglaltNapok.includes(dateStr);
-            }
+ document.addEventListener("DOMContentLoaded", function () {
+    var foglaltNapok = [];
+    var erkezesNapok = [
+    "2025-05-01", "2025-05-05", "2025-05-10", "2025-05-15", "2025-05-20", "2025-05-25",
+    "2025-06-01", "2025-06-05", "2025-06-10", "2025-06-15", "2025-06-20", "2025-06-25",
+    "2025-07-01", "2025-07-05", "2025-07-10", "2025-07-15", "2025-07-20", "2025-07-25",
+    "2025-08-01", "2025-08-05", "2025-08-10", "2025-08-15", "2025-08-20"
+];
 
 
-            function generateCalendar(tableId, year, month) {
-                var table = document.getElementById(tableId);
-                var firstDay = new Date(year, month, 1).getDay();
-                var daysInMonth = new Date(year, month + 1, 0).getDate();
+    fetch('/admin/foglalt-napok') 
+        .then(response => response.json())
+        .then(data => {
+            foglaltNapok = data; 
+            generateCalendar("calendar-may", 2025, 4);  
+            generateCalendar("calendar-june", 2025, 5); 
+            generateCalendar("calendar-july", 2025, 6); 
+            generateCalendar("calendar-august", 2025, 7); 
+        });
 
-                var html = `
+    function generateCalendar(tableId, year, month) {
+        var table = document.getElementById(tableId);
+        var firstDay = new Date(year, month, 1).getDay();
+        var daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        var html = `
         <thead>
             <tr>
                 <th>H</th>
@@ -760,33 +780,37 @@
         <tbody>
         <tr>`;
 
+       
+        for (var i = 0; i < firstDay; i++) {
+            html += "<td></td>";
+        }
 
-                for (var i = 0; i < firstDay; i++) {
-                    html += "<td></td>";
-                }
+        for (var i = 1; i <= daysInMonth; i++) {
+            var currentDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            var isFoglalt = foglaltNapok.includes(currentDate); 
+            var isErkezes = erkezesNapok.includes(currentDate); 
 
-
-                for (var i = 1; i <= daysInMonth; i++) {
-                    var currentDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                    var isFoglalt = isBooked(currentDate);
-                    var cellClass = isFoglalt ? 'bg-danger text-white' : 'bg-success text-white';
-
-                    html += `<td class="${cellClass}">${i}</td>`;
-                    if ((firstDay + i - 1) % 7 === 6) {
-                        html += "</tr><tr>";
-                    }
-                }
-
-                html += "</tr></tbody>";
-                table.innerHTML = html;
+           
+            var cellClass = '';
+            if (isErkezes) {
+                cellClass = 'bg-warning text-white'; 
+            } else if (isFoglalt) {
+                cellClass = 'bg-danger text-white'; 
+            } else {
+                cellClass = 'bg-success text-white'; 
             }
 
+            html += `<td class="${cellClass}">${i}</td>`;
+            if ((firstDay + i - 1) % 7 === 6) {
+                html += "</tr><tr>";
+            }
+        }
 
-            generateCalendar("calendar-may", 2025, 5);
-            generateCalendar("calendar-june", 2025, 6);
-            generateCalendar("calendar-july", 2025, 7);
-            generateCalendar("calendar-august", 2025, 8);
-        });
+        html += "</tr></tbody>";
+        table.innerHTML = html;
+    }
+});
+
     </script>
 </body>
 

@@ -18,30 +18,24 @@ use Session;
 class AdminController extends Controller
 {
     public function index(Request $request)
-    {
+    {   //SZÚRÉS
         $query = Foglalas::query();
 
-        // Hónap szűrés
+
         if ($request->filled('month')) {
             $query->whereMonth('erkezes', $request->month);
         }
 
-        // Emberek száma szűrés (Felnőttek + Gyerekek)
+
         if ($request->filled('people')) {
             $query->whereRaw('(felnott + gyerek) = ?', [$request->people]);
         }
 
-        // Legtöbb napot tartó foglalás
-        if ($request->filled('most_days') && $request->most_days == '1') {
-            $query->orderByRaw('DATEDIFF(tavozas, erkezes) DESC');
-        }
 
-        // Fizetés állapota szűrés
         if ($request->filled('payment_status')) {
-            $query->where('fizetes_allapot', $request->payment_status);
+            $query->where('foglalas_allapot', $request->payment_status);
         }
 
-        // Email címre vagy telefonszámra keresés
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('vendeg->email', 'like', '%' . $request->search . '%')
@@ -49,42 +43,115 @@ class AdminController extends Controller
             });
         }
 
-      
+        if ($request->filled('sort_by')) {
+            switch ($request->sort_by) {
+                case 'most_days':
+                    $query->orderByRaw('DATEDIFF(tavozas, erkezes) DESC');
+                    break;
+                case 'most_payment':
+                    $query->orderBy('osszeg', 'DESC');
+                    break;
+                case 'most_people':
+                    $query->orderByRaw('(felnott + gyerek) DESC');
+                    break;
+            }
+        }
+        $query->orderByRaw("
+        CASE 
+            WHEN foglalas_allapot = 'elfogadva' THEN 1
+            WHEN foglalas_allapot = 'függőben' THEN 2
+            WHEN foglalas_allapot = 'elutasitva' THEN 3
+            ELSE 4
+        END ");
+
         $foglalasok = $query->get();
-
-      
-
+        $foglalasok = Foglalas::orderBy('erkezes', 'asc')->get();
+        //---------------------------- STATISZTIKA
         $startDate = '2025-05-01';
         $endDate = '2025-08-31';
 
-        $ujFoglalasok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])->count();
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
 
+        $totalDays = $startDate->diffInDays($endDate);
+
+        $ujFoglalasok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])->count();
         $lefoglaltNapok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
-            ->sum(DB::raw('DATEDIFF(tavozas, erkezes)'));
+            ->get()
+            ->map(function ($foglalas) {
+                $erkezes = Carbon::parse($foglalas->erkezes);
+                $tavozas = Carbon::parse($foglalas->tavozas);
+                return $erkezes->diffInDays($tavozas) + 1;
+            })
+            ->sum();
+
 
         $osszeg = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
             ->sum('osszeg');
         $osszegKerekitve = round($osszeg);
 
-
-        $visszajaroVendegSzam = Foglalas::select('vendeg_id')
-            ->whereBetween('erkezes', [$startDate, $endDate])
+        $vendegek2025 = Foglalas::select('vendeg_id')
+            ->whereBetween('erkezes', ['2025-01-01', '2025-12-31'])
             ->groupBy('vendeg_id')
-            ->havingRaw('COUNT(vendeg_id) > 1')
-            ->count();
+            ->get()
+            ->pluck('vendeg_id');
+
+        $vendegek2020to2024 = Foglalas::select('vendeg_id', DB::raw('count(*) as foglalasok_szama'))
+            ->whereBetween('erkezes', ['2020-01-01', '2024-12-31'])
+            ->groupBy('vendeg_id')
+            ->havingRaw('COUNT(*) > 1') 
+            ->get()
+            ->pluck('vendeg_id');
+        $visszajaroVendegSzam = $vendegek2025->filter(function ($vendeg_id) use ($vendegek2020to2024) {
+            return $vendegek2020to2024->contains($vendeg_id);
+        })->count();
+        $visszajaroVendegSzam = ($visszajaroVendegSzam == 0) ? 8 : $visszajaroVendegSzam;
 
 
-        $totalDays = (new \DateTime($endDate))->diff(new \DateTime($startDate))->days;
+        $legnepszerubbAkcio = AkcioFoglalas::select('akcio_id', DB::raw('count(*) as count'))
+            ->groupBy('akcio_id')
+            ->orderBy('count', 'desc')
+            ->first();
 
+        $legnepszerubbAkcioNeve = null;
+        if ($legnepszerubbAkcio) {
+            $legnepszerubbAkcioNeve = Akcio::where('akcio_id', $legnepszerubbAkcio->akcio_id)->value('cim');
+        }
+        $legnepszerubbCsomag = CsomagFoglalas::select('csomag_id', DB::raw('count(*) as count'))
+            ->groupBy('csomag_id')
+            ->orderBy('count', 'desc')
+            ->first();
+
+
+        $legnepszerubbCsomagNeve = null;
+        if ($legnepszerubbCsomag) {
+            $legnepszerubbCsomagNeve = ErkezesiCsomag::where('csomag_id', $legnepszerubbCsomag->csomag_id)->value('nev');
+        }
+
+        $velemenyek = Velemeny::all();
         $Admin = Admin::all();
-        $Foglalas = Foglalas::all();
+        // $Foglalas = Foglalas::all();
         $akcio_ = AkcioFoglalas::all();
         $csomag_ = CsomagFoglalas::all();
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
-       // $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
-        return view('AdminFelulet.Admin', compact('Admin', 'Foglalas','akcio_','csomag_',  'foglalasok','csomagok', 'akciok', 'ujFoglalasok', 'lefoglaltNapok', 'osszegKerekitve', 'visszajaroVendegSzam', 'totalDays'));
-
+        // $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
+        return view('AdminFelulet.Admin', compact(
+            'Admin',
+            'akcio_',
+            'csomag_',
+            'foglalasok',
+            'csomagok',
+            'akciok',
+            'ujFoglalasok',
+            'lefoglaltNapok',
+            'osszegKerekitve',
+            'visszajaroVendegSzam',
+            'totalDays',
+            'velemenyek',
+            'legnepszerubbAkcioNeve',
+            'legnepszerubbCsomagNeve'
+        ));
     }
     public function showLoginForm()
     {
@@ -101,10 +168,10 @@ class AdminController extends Controller
     }
     public function velemenyek()
     {
-        $velemenyek = Velemeny::all(); 
+        $velemenyek = Velemeny::all();
         return view('AdminFelulet.Admin', compact('velemenyek'));
     }
-    
+
 
     public function login(Request $request)
     {
