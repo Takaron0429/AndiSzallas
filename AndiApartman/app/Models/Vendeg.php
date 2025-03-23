@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Vendeg extends Model
 {
     protected $table = 'vendeg';
+    protected $primaryKey = 'vendeg_id';
     public function vendeg()
     {
         return $this->belongsTo(Vendeg::class, 'vendeg_id','vendeg_id');
@@ -21,7 +22,7 @@ class Vendeg extends Model
     use HasFactory;
  
 
-    protected $primaryKey = 'vendeg_id';
+  
 
     protected $fillable = [
         'nev', 'email', 'telefon', 'iranyitoszam', 'lakcim'

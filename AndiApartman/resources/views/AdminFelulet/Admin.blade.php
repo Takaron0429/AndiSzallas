@@ -268,7 +268,7 @@
                 @endif
             </div>
             
-            <!-- Vélemények listája -->
+           
             <div id="velemenyContainer" class="hidden">
                 <div class="accordion" id="velemenyAccordion">
                     <h4 style="font-weight: bolder; text-align: center;">Bejövő Értékelések</h4>
@@ -342,7 +342,7 @@
                             </div>
                         </div>
             
-                        <!-- Időpontok elérhetősége -->
+              
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Időpontok elérhetősége</div>
@@ -353,7 +353,7 @@
                             </div>
                         </div>
             
-                        <!-- Eddig Befolyt Összeg -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Eddig Befolyt Összeg</div>
@@ -364,7 +364,7 @@
                             </div>
                         </div>
             
-                        <!-- Visszajáró vendégek -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Visszajáró vendégek</div>
@@ -375,7 +375,7 @@
                             </div>
                         </div>
             
-                        <!-- Legnépszerűbb akció -->
+                        
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Legnépszerűbb Akció</div>
@@ -386,7 +386,7 @@
                             </div>
                         </div>
             
-                        <!-- Legnépszerűbb csomag -->
+                       
                         <div class="col-md-4 col-lg-4 col-sm-12 mb-4">
                             <div class="card">
                                 <div class="card-header">Legnépszerűbb Csomag</div>

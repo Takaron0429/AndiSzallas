@@ -11,9 +11,9 @@ class ErkezesiCsomag extends Model
     protected $primaryKey = 'csomag_id';
     protected $fillable = [
         'nev',
-        'ar',        // Ha az ár is változhat
-        'leiras',    // Ha a leírás is változhat
-        'elerheto',  // Ha az elérhető mennyiség is változhat
+        'ar',       
+        'leiras',    
+        'elerheto', 
     ];
    public function foglalasok()
     {

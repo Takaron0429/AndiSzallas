@@ -20,7 +20,8 @@ class ModositasokController extends Controller
         $Foglalasok = Foglalas::all();
         $Akcio = Akcio::all();
         $Csomag = ErkezesiCsomag::all();
-        return view('AdminFelulet.Modositasok', compact('ErkezesiCsomag', 'Akcio', 'HelyiProgramajanlo','Foglalasok','Akcio','Csomag'));
+        $Foglalas = Foglalas::all();
+        return view('AdminFelulet.Modositasok', compact('ErkezesiCsomag', 'Akcio', 'HelyiProgramajanlo','Foglalasok','Akcio','Csomag','Foglalas'));
 
     }
 
@@ -30,8 +31,8 @@ class ModositasokController extends Controller
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
         $programok = HelyiProgramajanlo::all();
+        $Foglalas = Foglalas::all();
 
-
-        return view('AdminFelulet.Modositasok', compact('ErkezesiCsomag', 'Akcio', 'HelyiProgramajanlo'));
+        return view('AdminFelulet.Modositasok', compact('ErkezesiCsomag', 'Akcio', 'HelyiProgramajanlo','Foglalas'));
     }
 }

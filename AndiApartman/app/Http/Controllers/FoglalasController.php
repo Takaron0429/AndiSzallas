@@ -59,7 +59,7 @@ class FoglalasController extends Controller
         $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
         $akciok = Akcio::pluck('cim', 'akcio_id');
 
-        return view('AdminFelulet.Foglalasok', compact('Foglalas','foglalas', 'foglalasok', 'akciok', 'csomagok'));
+        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas', 'foglalasok', 'akciok', 'csomagok'));
     }
 
     public function adminIndex()
@@ -74,12 +74,13 @@ class FoglalasController extends Controller
     }
     public function Mod()
     {
-        $Foglalas = Foglalas::all();
+
         $Admin = Admin::all();
         $akcio_ = AkcioFoglalas::all();
         $csomag_ = CsomagFoglalas::all();
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
+        $Foglalas = Foglalas::all();
         return view('AdminFelulet.Modositasok', compact('Foglalas', 'Admin', 'csomagok', 'akciok', 'akcio_', 'csomag_'));
     }
     public function getBookedDates()
@@ -195,7 +196,7 @@ class FoglalasController extends Controller
         if ($request->filled('foglalas_allapot')) {
             $foglalas->foglalas_allapot = $request->input('foglalas_allapot');
         }
-        
+
         if ($request->filled('fizetes_allapot')) {
             $foglalas->fizetes_allapot = $request->input('fizetes_allapot');
         }
@@ -212,7 +213,7 @@ class FoglalasController extends Controller
             return redirect()->route('AdminFelulet.Modositasok')->with('error', 'Hiba történt a foglalás frissítésekor!');
         }
     }
-        public function getFoglaltNapok()
+    public function getFoglaltNapok()
     {
         $foglalasok = Foglalas::all();
         $foglaltNapok = [];
@@ -221,18 +222,18 @@ class FoglalasController extends Controller
             $start = Carbon::parse($foglalas->erkezes);
             $end = Carbon::parse($foglalas->tavozas);
 
-          
+
             while ($start->lte($end)) {
                 $foglaltNapok[] = $start->format('Y-m-d');
-                $start->addDay(); 
+                $start->addDay();
             }
         }
 
-        return response()->json($foglaltNapok); 
+        return response()->json($foglaltNapok);
     }
 
-    
-   
+
+
     public function destroy($id)
     {
         $foglalas = Foglalas::find($id);
@@ -260,49 +261,54 @@ class FoglalasController extends Controller
             'specialis_keresek' => 'nullable|string',
         ]);
 
-        // Vendég mentése
-        $vendeg = Vendeg::create([
-            'nev' => $validated['nev'],
-            'email' => $validated['email'],
-            'telefon' => $validated['telefon'] ?? null,
-            'iranyitoszam' => $validated['iranyitoszam'] ?? null,
-            'lakcim' => $validated['lakcim'] ?? null,
-        ]);
+        DB::beginTransaction();
 
-        // Csomag és akció lekérése
-        $csomag = ErkezesiCsomag::find($validated['csomag_id']);
-        $akcio = Akcio::find($validated['akcio_id']);
-
-
-        if (!$csomag) {
-            return redirect()->back()->with('error', 'A kiválasztott csomag nem található.');
+        try {
+            // Vendég mentése
+            $vendeg = Vendeg::create([
+                'nev' => $validated['nev'],
+                'email' => $validated['email'],
+                'telefon' => $validated['telefon'] ?? null,
+                'iranyitoszam' => $validated['iranyitoszam'] ?? null,
+                'lakcim' => $validated['lakcim'] ?? null,
+            ]);
+        
+            if (!$vendeg || !$vendeg->vendeg_id) {
+                throw new \Exception("Vendég mentése sikertelen!");
+            }
+        
+            // Éjszakák számítása
+            $checkin = new \DateTime($validated['checkin']);
+            $checkout = new \DateTime($validated['checkout']);
+            $ejszakak = $checkin->diff($checkout)->days;
+        
+            // Ár kiszámítása
+            $felnottAr = 10000;
+            $gyerekAr = 5000;
+            $osszeg = ($validated['felnott'] * $felnottAr + $validated['gyerek'] * $gyerekAr) * $ejszakak;
+        
+            // Csak a foglalás táblába mentünk
+            $foglalas = Foglalas::create([
+                'vendeg_id' => $vendeg->id,
+                'erkezes' => $validated['checkin'],
+                'tavozas' => $validated['checkout'],
+                'felnott' => $validated['felnott'],
+                'gyerek' => $validated['gyerek'],
+                'osszeg' => $osszeg,
+                'akcio_id' => $request->akcio_id ?? null, // Akció ID
+                'csomag_id' => $request->csomag_id ?? null, // Csomag ID
+                'specialis_keresek' => $validated['specialis_keresek'] ?? null,
+            ]);
+        
+            if (!$foglalas || !$foglalas->id) {
+                throw new \Exception("Foglalás mentése sikertelen!");
+            }
+        
+            DB::commit();
+            return redirect()->route('foglalas')->with('success', 'Foglalás sikeresen rögzítve!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Hiba: ' . $e->getMessage()]);
         }
-
-
-        $checkin = new \DateTime($validated['checkin']);
-        $checkout = new \DateTime($validated['checkout']);
-        $ejszakak = $checkin->diff($checkout)->days;
-
-
-        $total = ($validated['felnott'] * $csomag->ar + $validated['gyerek'] * ($csomag->ar * 0.5)) * $ejszakak;
-
-
-        if ($akcio) {
-            $total -= $total * ($akcio->kedvezmeny_szazalek / 100);
-        }
-
-
-        Foglalas::create([
-            'vendeg_id' => $vendeg->veneg_id,
-            'checkin' => $validated['checkin'],
-            'checkout' => $validated['checkout'],
-            'felnott' => $validated['felnott'],
-            'gyerek' => $validated['gyerek'],
-            'csomag_id' => $csomag->csomag_id,
-            'akcio_id' => $akcio->akcio_id ?? null,
-            'specialis_keresek' => $validated['specialis_keresek'] ?? null,
-            'osszeg' => $total,
-        ]);
-        return redirect()->route('AdminFelulet.Modositasok')->with('success', 'Foglalás sikeresen rögzítve!');
     }
 }
