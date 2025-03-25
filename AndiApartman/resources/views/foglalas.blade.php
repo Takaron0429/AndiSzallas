@@ -57,41 +57,46 @@
     </nav>
 
     <div class="container">
+        <div id="messages-container"></div>
         <form action="{{ route('foglalas.store') }}" method="post">
             @csrf
             <div class="row">
                 <div class="col-lg-6 col-md-12 col-sm-12">
-                    <section class="foglalasform">
+                    <div class="booking-calendar" id="booking-calendar"></div>
 
-                        <label for="date"><i class="fa-solid fa-calendar-days"></i> Bejelentkezés:</label>
-                        <input type="date" id="checkin" name="checkin" required><br><br>
+                    <input type="hidden" id="checkin" name="checkin">
+                    <input type="hidden" id="checkout" name="checkout">
 
-                        <label for="date"><i class="fa-solid fa-calendar-days"></i> Kijelentkezés:</label>
-                        <input type="date" id="checkout" name="checkout" required><br><br>
+                    <div class="selected-dates">
+                        <p><strong>Bejelentkezés:</strong> <span id="selected-checkin">-</span></p>
+                        <p><strong>Kijelentkezés:</strong> <span id="selected-checkout">-</span></p>
+                    </div>
+                    <p class="errorParagraph"></p>
 
-                        <p style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fa-solid fa-person"></i> Felnőtt
-                            <select class="form-select" id="felnott" name="felnott">
-                                <option selected>0</option>
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </p>
+                    <p style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-person"></i> Felnőtt
+                        <select class="form-select" id="felnott" name="felnott">
+                            <option selected>0</option>
+                            @for ($i = 1; $i <= 10; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </p>
 
-                        <p style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fa-solid fa-child-reaching"></i> Gyermek (1-12 éves korig)
-                            <select class="form-select" id="gyerek" name="gyerek">
-                                <option selected>0</option>
-                                @for ($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </p>
+                    <p style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-child-reaching"></i> Gyermek (1-12 éves korig)
+                        <select class="form-select" id="gyerek" name="gyerek">
+                            <option selected>0</option>
+                            @for ($i = 1; $i <= 10; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </p>
 
-                        <label for="specialis_keresek">Speciális kérések:</label>
-                        <textarea id="specialis_keresek" name="specialis_keresek" rows="4" cols="50"></textarea>
-                        <br><br>
+                    <label for="specialis_keresek">Speciális kérések:</label>
+                    <textarea id="specialis_keresek" name="specialis_keresek" rows="4" cols="50"></textarea>
+                    <p id="calculatedPrice" class="mt-3"></p>
+                    <br><br>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12">
 
@@ -119,7 +124,6 @@
                 </div>
             </div>
         </form>
-        <p class="errorParagraph"></p>
         </section>
     </div>
     </div>
@@ -157,6 +161,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 
 </html>

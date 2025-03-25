@@ -1,84 +1,234 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const checkin = document.getElementById("checkin");
-    const checkout = document.getElementById("checkout");
+    // Elemek kiválasztása
+    const calendarEl = document.getElementById('booking-calendar');
+    const checkinInput = document.getElementById('checkin');
+    const checkoutInput = document.getElementById('checkout');
+    const errorParagraph = document.querySelector('.errorParagraph');
+    const calculatedPrice = document.getElementById('calculatedPrice'); // Összeg megjelenítésére
+    
+    // Űrlap elemek
     const felnott = document.getElementById("felnott");
-    const gyerek = document.getElementById("gyerek"); // Gyerekek száma
-    const result = document.getElementById("days");
-    const errorParagraph = document.querySelector(".errorParagraph"); // Az errorParagraph class-ú p tag
-    const form = document.querySelector("form"); // Az űrlap elem
+    const gyerek = document.getElementById("gyerek");
+    const form = document.querySelector("form");
+    
+    // Állapot változók
+    let foglaltNapok = [];
+    let kivalasztottCheckin = null;
+    let kivalasztottCheckout = null;
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
 
-    function validateForm() {
-        const checkinDate = new Date(checkin.value);
-        const checkoutDate = new Date(checkout.value);
-        const felnottCount = parseInt(felnott.value, 10); // Felnőttek száma
-        const gyerekCount = parseInt(gyerek.value, 10); // Gyerekek száma
-        const today = new Date(); // Jelenlegi dátum
-        today.setHours(0, 0, 0, 0); // Az időpontot 00:00:00-ra állítjuk
+    // Inicializálás
+    function initialize() {
+        loadBookedDates();
+        setupFormValidation();
+    }
 
-        // Töröljük a korábbi hibákat
+    // Foglalt dátumok betöltése
+    function loadBookedDates() {
+        fetch('/admin/foglalt-napok')
+            .then(response => response.json())
+            .then(data => {
+                foglaltNapok = data;
+                renderCalendar();
+            })
+            .catch(error => {
+                showError("Hiba történt a foglalt dátumok betöltésekor");
+            });
+    }
+
+    // Naptár renderelése
+    function renderCalendar() {
         errorParagraph.textContent = "";
 
-        // Ellenőrizd, hogy legalább 1 felnőtt van-e kiválasztva
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const today = new Date();
+
+        let html = `
+            <div class="calendar-header">
+                <button class="nav-button" id="prev-month">❮</button>
+                <h3>${getMonthName(currentMonth)} ${currentYear}</h3>
+                <button class="nav-button" id="next-month">❯</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="day-header">H</div>
+                <div class="day-header">K</div>
+                <div class="day-header">Sze</div>
+                <div class="day-header">Cs</div>
+                <div class="day-header">P</div>
+                <div class="day-header">Szo</div>
+                <div class="day-header">V</div>
+        `;
+
+        // Üres cellák
+        for (let i = 0; i < (firstDay === 0 ? 6 : firstDay - 1); i++) {
+            html += `<div class="calendar-day empty"></div>`;
+        }
+
+        // Napok generálása
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const dateObj = new Date(dateStr);
+            const isBooked = foglaltNapok.includes(dateStr);
+            const isToday = dateObj.toDateString() === today.toDateString();
+            const isCheckin = dateStr === kivalasztottCheckin;
+            const isCheckout = dateStr === kivalasztottCheckout;
+            const isBetween = kivalasztottCheckin && kivalasztottCheckout &&
+                dateObj > new Date(kivalasztottCheckin) && 
+                dateObj < new Date(kivalasztottCheckout);
+
+            let dayClass = 'calendar-day';
+            if (isBooked) dayClass += ' booked';
+            if (isToday) dayClass += ' today';
+            if (isCheckin) dayClass += ' checkin';
+            if (isCheckout) dayClass += ' checkout';
+            if (isBetween) dayClass += ' between';
+
+            html += `
+                <div class="${dayClass}" data-date="${dateStr}">
+                    ${day}
+                    ${isCheckin ? '<div class="selection-label">Be</div>' : ''}
+                    ${isCheckout ? '<div class="selection-label">Ki</div>' : ''}
+                </div>`;
+        }
+
+        html += `</div>`;
+        calendarEl.innerHTML = html;
+
+        // Eseménykezelők napokhoz
+        document.querySelectorAll('.calendar-day:not(.booked):not(.empty)').forEach(day => {
+            day.addEventListener('click', () => {
+                const selectedDate = day.dataset.date;
+                
+                if (!kivalasztottCheckin || (kivalasztottCheckin && kivalasztottCheckout)) {
+                    kivalasztottCheckin = selectedDate;
+                    kivalasztottCheckout = null;
+                    showError("");
+                } else if (new Date(selectedDate) > new Date(kivalasztottCheckin)) {
+                    kivalasztottCheckout = selectedDate;
+                    showError("");
+                } else {
+                    showError("A kijelentkezés dátuma a bejelentkezés után kell legyen!");
+                    return;
+                }
+
+                checkinInput.value = kivalasztottCheckin;
+                checkoutInput.value = kivalasztottCheckout;
+                renderCalendar();
+                validateForm();
+            });
+        });
+
+        // Hónap navigáció
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+    }
+
+    // Űrlap validáció
+    function setupFormValidation() {
+        checkinInput.addEventListener("change", validateForm);
+        checkoutInput.addEventListener("change", validateForm);
+        felnott.addEventListener("change", validateForm);
+        gyerek.addEventListener("change", validateForm);
+
+        form.addEventListener("submit", function(event) {
+            if (!validateForm()) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    function validateForm() {
+        const checkinDate = new Date(checkinInput.value);
+        const checkoutDate = new Date(checkoutInput.value);
+        const felnottCount = parseInt(felnott.value, 10);
+        const gyerekCount = parseInt(gyerek.value, 10);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Hibák törlése
+        errorParagraph.textContent = "";
+        calculatedPrice.textContent = "";
+
+        // Validációk
         if (felnottCount < 1) {
-            errorParagraph.textContent = "Hiba: Legalább 1 felnőttet kell kiválasztani!";
-            errorParagraph.style.color = "red";
-            return false; // Az űrlap nem küldhető el
+            showError("Hiba: Legalább 1 felnőttet kell kiválasztani!");
+            return false;
         }
 
-        // Ellenőrizd, hogy mindkét dátum ki van-e töltve
-        if (!checkin.value || !checkout.value) {
-            errorParagraph.textContent = "Hiba: Mindkét dátumot ki kell tölteni!";
-            errorParagraph.style.color = "red";
-            return false; // Az űrlap nem küldhető el
+        if (!checkinInput.value || !checkoutInput.value) {
+            showError("Hiba: Mindkét dátumot ki kell tölteni!");
+            return false;
         }
 
-        // Ellenőrizd, hogy a bejelentkezés dátuma nem korábbi a mai dátumnál
         if (checkinDate < today) {
-            errorParagraph.textContent = "Hiba: A bejelentkezés dátuma nem lehet korábbi a mai dátumnál!";
-            errorParagraph.style.color = "red";
-            return false; // Az űrlap nem küldhető el
+            showError("Hiba: A bejelentkezés dátuma nem lehet korábbi a mai dátumnál!");
+            return false;
         }
 
-        // Ellenőrizd, hogy a kijelentkezés dátuma későbbi-e a bejelentkezésnél
         if (checkoutDate <= checkinDate) {
-            errorParagraph.textContent = "Hiba: A kijelentkezés dátuma későbbinek kell lennie a bejelentkezésnél!";
-            errorParagraph.style.color = "red";
-            return false; // Az űrlap nem küldhető el
+            showError("Hiba: A kijelentkezés dátuma későbbinek kell lennie a bejelentkezésnél!");
+            return false;
         }
 
-        // Ellenőrizd, hogy legalább 1 éjszaka különbség legyen
         const timeDifference = checkoutDate - checkinDate;
-        const daysDifference = timeDifference / (1000 * 60 * 60 * 24); // Átalakítás napokká
+        const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
 
         if (daysDifference < 1) {
-            errorParagraph.textContent = "Hiba: Legalább 1 éjszaka különbség szükséges a két dátum között!";
-            errorParagraph.style.color = "red";
-            return false; // Az űrlap nem küldhető el
+            showError("Hiba: Legalább 1 éjszaka különbség szükséges a két dátum között!");
+            return false;
         }
 
-        // Számítsd ki az összeget
-        const felnottAr = 1; // 1 felnőtt ára
-        const gyerekAr = 2; // 1 gyerek ára
+        // Ár kiszámítása
+        const felnottAr = 10000;
+        const gyerekAr = 5000;
         const osszeg = (felnottCount * felnottAr + gyerekCount * gyerekAr) * daysDifference;
 
-        // Jelenítsd meg az összeget
-        errorParagraph.textContent = `Összeg: ${osszeg} Ft`;
-        errorParagraph.style.color = "green"; // Zöld szín az összeghez
-
-        // Ha minden rendben, engedélyezzük az űrlap elküldését
+        // Összeg megjelenítése
+        calculatedPrice.textContent = `Összeg: ${osszeg.toLocaleString('hu-HU')} Ft`;
+        calculatedPrice.style.color = "green";
+        calculatedPrice.style.fontWeight = "bold";
         return true;
     }
 
-    // Eseményfigyelők a dátumváltozásokra és a felnőttek/gyerekek számának változására
-    checkin.addEventListener("change", validateForm);
-    checkout.addEventListener("change", validateForm);
-    felnott.addEventListener("change", validateForm);
-    gyerek.addEventListener("change", validateForm);
-
-    // Az űrlap elküldésének megakadályozása, ha hiba van
-    form.addEventListener("submit", function(event) {
-        if (!validateForm()) {
-            event.preventDefault(); // Megakadályozzuk az űrlap elküldését
+    // Segédfüggvények
+    function showError(message) {
+        errorParagraph.textContent = message;
+        if (message) {
+            errorParagraph.style.display = "block";
+            errorParagraph.style.color = "red";
+            setTimeout(() => {
+                errorParagraph.style.opacity = 0;
+                setTimeout(() => {
+                    errorParagraph.style.display = "none";
+                    errorParagraph.style.opacity = 1;
+                }, 500);
+            }, 10000);
         }
-    });
+    }
+
+    function getMonthName(month) {
+        const months = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június',
+                       'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'];
+        return months[month];
+    }
+
+    // Indítás
+    initialize();
 });

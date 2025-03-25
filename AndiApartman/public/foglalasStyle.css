@@ -1,58 +1,227 @@
 body {
     font-family: "Raleway";
 }
-.strongerp
-{
+
+.bg-danger {
+    background-color: #dc3545 !important;
+    /* Piros háttérszín */
+    color: white !important;
+    /* Fehér szöveg */
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+    /* Zöld háttérszín */
+    color: white !important;
+    /* Fehér szöveg */
+}
+
+
+
+/* Stílus a sikeres üzenetekhez */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: opacity 0.5s ease;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.errorParagraph {
+    display: none;
+    padding: 10px;
+    background-color: #ffebee;
+    color: #c62828;
+    border-radius: 4px;
+    margin: 10px 0;
+    border-left: 4px solid #c62828;
+    transition: opacity 0.5s ease;
+}
+
+/* Naptár konténer */
+.booking-calendar {
+    max-width: 400px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Fejléc */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #3d7abc;
+    color: white;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.nav-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Napok rács */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e0e0e0;
+}
+
+/* Napok stílusa */
+.calendar-day {
+    position: relative;
+    padding: 15px 5px;
+    background: white;
+    text-align: center;
+    min-height: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.day-header {
+    padding: 10px;
+    background: #f5f5f5;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Speciális állapotok */
+.calendar-day.today {
+    font-weight: bold;
+    color: #3d7abc;
+}
+
+.calendar-day.booked {
+    background: #ffdddd;
+    color: #cc0000;
+    cursor: not-allowed;
+}
+
+.calendar-day.checkin {
+    background: #7cc576;
+    font-weight: bold;
+}
+
+.calendar-day.checkout {
+    background: #3d7abc;
+    font-weight: bold;
+}
+
+.calendar-day.between {
+    background: #e3f2fd;
+}
+
+.selection-label {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.7rem;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    border-radius: 3px;
+    padding: 0 3px;
+}
+
+/* Üres cellák */
+.calendar-day.empty {
+    background: #f9f9f9;
+    cursor: default;
+}
+
+
+
+
+
+
+
+.strongerp {
     font-size: 20px;
 }
+
 /* Footer stílusa */
 footer {
     background-color: #3d7abc;
-    position: relative; /* A footer relatív pozícióban legyen */
-    overflow: hidden; /* A hullámok ne lógjanak ki */
+    position: relative;
+    /* A footer relatív pozícióban legyen */
+    overflow: hidden;
+    /* A hullámok ne lógjanak ki */
 }
 
 /* Hullámok konténer stílusa */
 .wave-container {
     position: absolute;
-    top: -5%; /* A hullámok a footer tetején */
+    top: -5%;
+    /* A hullámok a footer tetején */
     left: 0;
     width: 100%;
-    height: 100%; /* A hullámok magassága */
-    z-index: 0; /* A hullámok az iframe és az írások mögött legyenek */
+    height: 100%;
+    /* A hullámok magassága */
+    z-index: 0;
+    /* A hullámok az iframe és az írások mögött legyenek */
     overflow: hidden;
 }
 
 /* Hullámok stílusa */
 .wave {
     position: absolute;
-    top: 0; /* A hullámok a footer tetején */
+    top: 0;
+    /* A hullámok a footer tetején */
     left: 0;
     width: 100%;
     height: 100%;
-    fill: #0099ff; /* Hullámok színe (kék) */
-    fill-opacity: 1; /* Teljesen látható */
+    fill: #0099ff;
+    /* Hullámok színe (kék) */
+    fill-opacity: 1;
+    /* Teljesen látható */
 }
 
 /* Az iframe és az írások stílusa */
-iframe, #contact {
+iframe,
+#contact {
     position: relative;
-    z-index: 1; /* Az iframe és az írások a hullámok felett legyenek */
+    z-index: 1;
+    /* Az iframe és az írások a hullámok felett legyenek */
 }
 
 iframe {
     padding-top: 10px;
 }
-iframe
-{
+
+iframe {
     padding-top: 10px;
 }
-#contact
-{
+
+#contact {
     color: aliceblue;
 }
-.linktag
-{
+
+.linktag {
     color: aliceblue;
 }
 
@@ -64,8 +233,8 @@ i {
 i:hover {
     transform: scale(1.3);
 }
-.form-select
-{
+
+.form-select {
     width: 10%;
 }
 
@@ -84,8 +253,10 @@ i:hover {
 .navbar-contact-info {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Jobbra tolja az elemet */
-    margin-right: 20px; /* Távolság a jobb széltől */
+    margin-left: auto;
+    /* Jobbra tolja az elemet */
+    margin-right: 20px;
+    /* Távolság a jobb széltől */
 }
 
 .contact-item {
@@ -101,7 +272,7 @@ i:hover {
 .separator {
     margin: 5px;
     color: #3d7abc;
-    
+
 }
 
 .nav-link {
@@ -119,5 +290,6 @@ textarea {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    resize: vertical; /* Lehetővé teszi a függőleges átméretezést */
+    resize: vertical;
+    /* Lehetővé teszi a függőleges átméretezést */
 }
