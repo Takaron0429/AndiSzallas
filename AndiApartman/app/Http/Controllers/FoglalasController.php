@@ -17,7 +17,7 @@ class FoglalasController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Foglalas::query()->with(['csomagok', 'akciok']);
+        $query = Foglalas::query()->with('vendeg','csomagok', 'akciok');
         $query->whereBetween('erkezes', [Carbon::create(2020, 1, 1), Carbon::create(2024, 12, 31)])
             ->whereBetween('tavozas', [Carbon::create(2020, 1, 1), Carbon::create(2024, 12, 31)]);
 
@@ -51,15 +51,13 @@ class FoglalasController extends Controller
                 $q->where('cim', 'like', '%' . $request->akcio . '%');
             });
         }
-
+        //ITT 
         $foglalasok = $query->get();
 
-        $Foglalas = Foglalas::all();
-        $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
         $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
         $akciok = Akcio::pluck('cim', 'akcio_id');
 
-        return view('AdminFelulet.Foglalasok', compact('Foglalas', 'foglalas', 'foglalasok', 'akciok', 'csomagok'));
+        return view('AdminFelulet.Foglalasok', compact(  'foglalasok', 'akciok', 'csomagok'));
     }
 
     public function adminIndex()

@@ -193,7 +193,7 @@
                     <label for="yearFilter" class="form-label">Év</label>
                     <select class="form-select" name="year" id="yearFilter">
                         <option value="">Minden év</option>
-                        @for($i = 2020; $i <= now()->year ; $i++)
+                        @for($i = 2020; $i <= now()->year-1 ; $i++)
                             <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
                         @endfor
                     </select>
@@ -271,7 +271,7 @@
         <br>
 
         <div class="accordion" id="accordionExample">
-            @foreach ($Foglalas as $foglalas)
+            @foreach ($foglalasok as $foglalas)
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{ $foglalas->foglalas_id }}">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"

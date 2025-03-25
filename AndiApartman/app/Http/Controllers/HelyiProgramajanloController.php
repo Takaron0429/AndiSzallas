@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ErkezesiCsomag;
 use App\Models\HelyiProgramajanlo;
 use Illuminate\Http\Request;
 
@@ -14,9 +15,13 @@ class HelyiProgramajanloController extends Controller
     {
         return view('admin.modositasok'); 
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function Pindex()
+    {
+      
+        $programok = HelyiProgramajanlo::orderBy('helyszin')->get()->groupBy('helyszin');
+
+        return view('Fooldal.Programok', compact('programok'));
+    }
     public function create()
     {
         //

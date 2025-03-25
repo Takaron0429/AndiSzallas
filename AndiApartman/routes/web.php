@@ -25,7 +25,7 @@ Route::get('/foglalas', function () {
 
 // Foglalás adatok fogadása
 Route::post('/foglalas', [FoglalasController::class, 'store'])->name('foglalas.store');
-
+Route::get('Fooldal/Programok', [HelyiProgramajanloController::class, 'Pindex'])->name('programok.Pindex');
 
 
 

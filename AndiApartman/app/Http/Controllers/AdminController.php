@@ -35,14 +35,12 @@ class AdminController extends Controller
         if ($request->filled('payment_status')) {
             $query->where('foglalas_allapot', $request->payment_status);
         }
-
         if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('vendeg->email', 'like', '%' . $request->search . '%')
-                    ->orWhere('vendeg->telefon', 'like', '%' . $request->search . '%');
+            $query->whereHas('vendeg', function ($q) use ($request) {
+                $q->where('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('telefon', 'like', '%' . $request->search . '%');
             });
         }
-
         if ($request->filled('sort_by')) {
             switch ($request->sort_by) {
                 case 'most_days':
@@ -54,8 +52,16 @@ class AdminController extends Controller
                 case 'most_people':
                     $query->orderByRaw('(felnott + gyerek) DESC');
                     break;
+                default:
+                    $query->orderBy('foglalas_id', 'asc'); 
+                    break;
             }
         }
+        
+        if (!$request->filled('sort_by')) {
+            $query->orderBy('foglalas_id', 'asc');
+        }
+        
         $query->orderByRaw("
         CASE 
             WHEN foglalas_allapot = 'elfogadva' THEN 1
@@ -63,27 +69,43 @@ class AdminController extends Controller
             WHEN foglalas_allapot = 'elutasitva' THEN 3
             ELSE 4
         END ");
-
+       
         $foglalasok = $query->get();
-        $foglalasok = Foglalas::orderBy('erkezes', 'asc')->get();
-        //---------------------------- STATISZTIKA
+       // $foglalasok = $query->orderBy('erkezes', 'asc')->get();
+       // $foglalasok = Foglalas::orderBy('erkezes', 'asc')->get();
+        //-------------------------------
+        //STATISZTIKA
         $startDate = '2025-05-01';
         $endDate = '2025-08-31';
 
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
-
+        
+      
         $totalDays = $startDate->diffInDays($endDate);
-
-        $ujFoglalasok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])->count();
-        $lefoglaltNapok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
+        $allDates = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
+            ->orWhereBetween('tavozas', [$startDate, $endDate])
             ->get()
-            ->map(function ($foglalas) {
+            ->flatMap(function ($foglalas) {
+                $dates = [];
                 $erkezes = Carbon::parse($foglalas->erkezes);
                 $tavozas = Carbon::parse($foglalas->tavozas);
-                return $erkezes->diffInDays($tavozas) + 1;
+        
+             
+                while ($erkezes <= $tavozas) {
+                    $dates[] = $erkezes->format('Y-m-d');
+                    $erkezes->addDay();
+                }
+        
+                return $dates;
             })
-            ->sum();
+            ->unique() // Eltávolítja a duplikált napokat mert nem voltunk képesek megcsinálni
+            ->values(); // Átalakítja az egyedi napokat listává
+
+        $lefoglaltNapok = $allDates->count()-1;
+        
+        $ujFoglalasok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])->count();
+        
 
 
         $osszeg = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
@@ -99,7 +121,7 @@ class AdminController extends Controller
         $vendegek2020to2024 = Foglalas::select('vendeg_id', DB::raw('count(*) as foglalasok_szama'))
             ->whereBetween('erkezes', ['2020-01-01', '2024-12-31'])
             ->groupBy('vendeg_id')
-            ->havingRaw('COUNT(*) > 1') 
+            ->havingRaw('COUNT(*) > 1')
             ->get()
             ->pluck('vendeg_id');
         $visszajaroVendegSzam = $vendegek2025->filter(function ($vendeg_id) use ($vendegek2020to2024) {
@@ -127,7 +149,7 @@ class AdminController extends Controller
         if ($legnepszerubbCsomag) {
             $legnepszerubbCsomagNeve = ErkezesiCsomag::where('csomag_id', $legnepszerubbCsomag->csomag_id)->value('nev');
         }
-
+        //RETURN 
         $velemenyek = Velemeny::all();
         $Admin = Admin::all();
         // $Foglalas = Foglalas::all();

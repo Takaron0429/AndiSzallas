@@ -809,7 +809,7 @@
         html += "</tr></tbody>";
         table.innerHTML = html;
     }
-});
+    });
 
     </script>
 </body>
