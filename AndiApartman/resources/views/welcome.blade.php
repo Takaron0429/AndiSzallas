@@ -23,34 +23,28 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
         <div class="container-fluid">
-            <!-- Toggler gomb mobil nézethez -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Bal oldali linkek -->
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link" href="welcome">Kezdőlap</a>
-                    <a class="nav-link" href="#meglevo-velemenyek">Vélemények</a>
-                    <a class="nav-link" href="foglalas">Foglalás</a>
+                    <a class="nav-link" href=""><i class="fa fa-home" style="font-size: 20px"></i> Kezdőlap</a>
+                    <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments" style="font-size: 20px"></i> Vélemények</a>
+                    <a class="nav-link" href="foglalas"><i class="fa fa-calendar" style="font-size: 20px"></i> Foglalás</a>
                 </div>
-            </div>
 
-            <!-- Jobb oldali elérhetőségek -->
-            <div class="navbar-contact-info">
-                <span class="contact-item"><i class="fa fa-phone" style="font-size: 24px;"></i> +06-30/560-1999</span>
-                <span class="separator">|</span>
-                <span class="contact-item"><i class="fa fa-envelope" style="font-size: 24px;"></i>
-                    andi68andi@gmail.com</span>
-                <span class="separator">|</span>
-                <span class="contact-item"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Balatonszemes,
-                    Vörösmarty u. 42</span>
-                <span class="separator">|</span>
-                <a href="https://facebook.com" class="contact-item" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
+                <div class="navbar-contact-info">
+                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px"></i> +06-30/560-1999</span>
+                    <span class="separator">|</span>
+                    <span class="contact-item"><i class="fa fa-envelope" style="font-size: 20px"></i> andi68andi@gmail.com</span>
+                    <span class="separator">|</span>
+                    <span class="contact-item"><i class="fa fa-map-marker" style="font-size: 20px"></i> Balatonszemes, Vörösmarty u. 42</span>
+                    <span class="separator">|</span>
+                    <a href="https://facebook.com" class="contact-item">
+                        <i class="fab fa-facebook-f" style="font-size: 20px"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
