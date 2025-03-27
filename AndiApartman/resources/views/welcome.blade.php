@@ -30,16 +30,21 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href=""><i class="fa fa-home" style="font-size: 20px"></i> Kezdőlap</a>
-                    <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments" style="font-size: 20px"></i> Vélemények</a>
-                    <a class="nav-link" href="foglalas"><i class="fa fa-calendar" style="font-size: 20px"></i> Foglalás</a>
+                    <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments"
+                            style="font-size: 20px"></i> Vélemények</a>
+                    <a class="nav-link" href="foglalas"><i class="fa fa-calendar" style="font-size: 20px"></i>
+                        Foglalás</a>
                 </div>
 
                 <div class="navbar-contact-info">
-                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px"></i> +06-30/560-1999</span>
+                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px"></i>
+                        +06-30/560-1999</span>
                     <span class="separator">|</span>
-                    <span class="contact-item"><i class="fa fa-envelope" style="font-size: 20px"></i> andi68andi@gmail.com</span>
+                    <span class="contact-item"><i class="fa fa-envelope" style="font-size: 20px"></i>
+                        andi68andi@gmail.com</span>
                     <span class="separator">|</span>
-                    <span class="contact-item"><i class="fa fa-map-marker" style="font-size: 20px"></i> Balatonszemes, Vörösmarty u. 42</span>
+                    <span class="contact-item"><i class="fa fa-map-marker" style="font-size: 20px"></i> Balatonszemes,
+                        Vörösmarty u. 42</span>
                     <span class="separator">|</span>
                     <a href="https://facebook.com" class="contact-item">
                         <i class="fab fa-facebook-f" style="font-size: 20px"></i>
@@ -50,49 +55,75 @@
     </nav>
 
     <!-- Carousel -->
-    <div id="carouselExampleIndicators" class="carousel slide custom-carousel" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Indicators -->
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+                aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-        <div class="carousel-inner">
+
+        <!-- Slides -->
+        <div class="carousel-inner rounded-0 overflow-hidden">
             <div class="carousel-item active">
-                <img src="img/szemeswide.jpg" class="d-block w-100 carousel-image" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Szállás</h5>
-                    <p>üdv a szálláson blablabla</p>
+                <img src="img/szemeswide.jpg" class="d-block w-100" alt="Szállás">
+                <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <h1 class="display-3 fw-bold mb-4 text-white">Prémium Szállásélmény</h1>
+                                <p class="lead mb-5">Fedezze fel luxus szállásainkat, ahol minden részlet a kényelemről
+                                    szól</p>
+                                <a href="#booking" class="btn btn-primary btn-lg px-5 py-3">Azonnali Foglalás</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="img/placeholder1.jpg" class="d-block w-100 carousel-image" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Foglalj most!</h5>
-                    <p>rizsa</p>
+                <img src="img/placeholder1.jpg" class="d-block w-100" alt="Akció">
+                <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <h1 class="display-3 fw-bold mb-4 text-white">Korlátozott Ajánlat</h1>
+                                <p class="lead mb-5">Foglaljon most és kapjon 15% kedvezményt 3 éjszakánál hosszabb
+                                    tartózkodásra</p>
+                                <a href="#offer" class="btn btn-danger btn-lg px-5 py-3">Felhasználom</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="img/placeholder2.jpg" class="d-block w-100 carousel-image" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Valami akció, legfrisebb article-re redirectel (jelenleg nincs))))))</h5>
-                    <p>WIP </p>
+                <img src="img/placeholder2.jpg" class="d-block w-100" alt="Hírek">
+                <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 text-center">
+                                <h1 class="display-3 fw-bold mb-4 text-white">Friss Hírek</h1>
+                                <p class="lead mb-5">Ismerje meg legújabb szolgáltatásainkat és fejlesztéseinket</p>
+                                <a href="#news" class="btn btn-success btn-lg px-5 py-3">Hírek Megtekintése</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev">
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">Előző</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">Következő</span>
         </button>
     </div>
+
+
     <section class="apartmentStats">
         <div class="container text-center" style="padding-top: 1%;">
             <div class="row">

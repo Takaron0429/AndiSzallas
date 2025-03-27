@@ -207,10 +207,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 const selectedDateObj = new Date(selectedDate);
                 
                 // Ellenőrizzük, hogy a kiválasztott dátum az aktuális évben van-e
-                if (selectedDateObj.getFullYear() !== currentYear) {
-                    showError("Csak az aktuális év május-augusztus időszakából választhat!");
-                    return;
-                }
+                //if (selectedDateObj.getFullYear() !== currentYear) {
+                //    showError("Csak az aktuális év május-augusztus időszakából választhat!");
+                //    return;
+                //}
                 
                 if (!kivalasztottCheckin || (kivalasztottCheckin && kivalasztottCheckout)) {
                     kivalasztottCheckin = selectedDate;
@@ -271,16 +271,16 @@ document.addEventListener("DOMContentLoaded", function() {
         today.setHours(0, 0, 0, 0);
 
         // Ellenőrizzük, hogy a dátumok az aktuális évben vannak-e
-        if (checkinDate.getFullYear() !== currentYear || checkoutDate.getFullYear() !== currentYear) {
-            showError("Hiba: Csak az aktuális év május-augusztus időszakából választhat!");
-            return false;
-        }
+        //if (checkinDate.getFullYear() !== currentYear || checkoutDate.getFullYear() !== currentYear) {
+        //    showError("Hiba: Csak az aktuális év május-augusztus időszakából választhat!");
+        //    return false;
+        //}
 
         // Ellenőrizzük, hogy a hónapok engedélyezettek-e
-        if (!allowedMonths.includes(checkinDate.getMonth()) || !allowedMonths.includes(checkoutDate.getMonth())) {
-            showError("Hiba: Csak május-augusztus közötti dátumokat lehet választani!");
-            return false;
-        }
+        //if (!allowedMonths.includes(checkinDate.getMonth()) || !allowedMonths.includes(checkoutDate.//getMonth())) {
+        //    showError("Hiba: Csak május-augusztus közötti dátumokat lehet választani!");
+        //    return false;
+        //}
 
         if (felnottCount < 1) {
             showError("Hiba: Legalább 1 felnőttet kell kiválasztani!");
