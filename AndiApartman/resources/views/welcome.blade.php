@@ -55,74 +55,73 @@
     </nav>
 
     <!-- Carousel -->
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="responsiveCarousel" class="carousel slide" data-bs-ride="carousel">
         <!-- Indicators -->
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-                aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#responsiveCarousel" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#responsiveCarousel" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#responsiveCarousel" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
         </div>
 
         <!-- Slides -->
-        <div class="carousel-inner rounded-0 overflow-hidden">
+        <div class="carousel-inner rounded-3 overflow-hidden shadow-sm">
+            <!-- First Slide -->
             <div class="carousel-item active">
                 <img src="img/szemeswide.jpg" class="d-block w-100" alt="Szállás">
-                <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8 text-center">
-                                <h1 class="display-3 fw-bold mb-4 text-white">Prémium Szállásélmény</h1>
-                                <p class="lead mb-5">Fedezze fel luxus szállásainkat, ahol minden részlet a kényelemről
-                                    szól</p>
-                                <a href="#booking" class="btn btn-primary btn-lg px-5 py-3">Azonnali Foglalás</a>
-                            </div>
-                        </div>
+                <div class="carousel-caption">
+                    <div class="caption-content p-3 p-md-4 rounded-3">
+                        <h3 class="fw-bold mb-2 mb-md-3">Andi Apartman Balatonszemes</h3>
+                        <p class="mb-3 mb-md-4 d-none d-sm-block">Fedezze fel családias, vendégfavorit apartmanunkat a
+                            Balaton szívében!</p>
+                        <a href="#meglevo-velemenyek" class="btn btn-primary btn-sm btn-md">Vélemények</a>
                     </div>
                 </div>
             </div>
+
+            <!-- Second Slide -->
             <div class="carousel-item">
                 <img src="img/placeholder1.jpg" class="d-block w-100" alt="Akció">
-                <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8 text-center">
-                                <h1 class="display-3 fw-bold mb-4 text-white">Korlátozott Ajánlat</h1>
-                                <p class="lead mb-5">Foglaljon most és kapjon 15% kedvezményt 3 éjszakánál hosszabb
-                                    tartózkodásra</p>
-                                <a href="#offer" class="btn btn-danger btn-lg px-5 py-3">Felhasználom</a>
-                            </div>
-                        </div>
+                <div class="carousel-caption">
+                    <div class="caption-content p-3 p-md-4 rounded-3">
+                        <h3 class="fw-bold mb-2 mb-md-3">Nyaraljon nálunk!</h3>
+                        <p class="mb-3 mb-md-4 d-none d-sm-block">Szakadjon ki a szürke hétköznapokból és foglaljon
+                            nálunk online, egyszerűen!</p>
+                        <a href="foglalas" target="_blank" class="btn btn-danger btn-sm btn-md">Foglalok!</a>
                     </div>
                 </div>
             </div>
+
+            <!-- Third Slide -->
             <div class="carousel-item">
-                <img src="img/placeholder2.jpg" class="d-block w-100" alt="Hírek">
-                <div class="carousel-caption d-flex flex-column justify-content-center h-100" style="top: 0">
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8 text-center">
-                                <h1 class="display-3 fw-bold mb-4 text-white">Friss Hírek</h1>
-                                <p class="lead mb-5">Ismerje meg legújabb szolgáltatásainkat és fejlesztéseinket</p>
-                                <a href="#news" class="btn btn-success btn-lg px-5 py-3">Hírek Megtekintése</a>
-                            </div>
-                        </div>
+                <img src="img/placeholder2.jpg" class="d-block w-100" alt="Környék">
+                <div class="carousel-caption">
+                    <div class="caption-content p-3 p-md-4 rounded-3">
+                        <h3 class="fw-bold mb-2 mb-md-3">Ismerje meg a környéket, mint egy helyi lakos!</h3>
+                        <p class="mb-3 mb-md-4 d-none d-sm-block">Fedezze fel a környék csodáit és programjainkat.</p>
+                        <a href="#programajanlo" class="btn btn-success btn-sm btn-md">Programok</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#responsiveCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Előző</span>
+            <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#responsiveCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Következő</span>
+            <span class="visually-hidden">Next</span>
         </button>
     </div>
 
+
+
+
+    <!-- APARTMAN STATS -->
 
     <section class="apartmentStats">
         <div class="container text-center" style="padding-top: 1%;">
@@ -144,23 +143,32 @@
                         <p class="strongerp"><i class="fa-solid fa-language"></i> Beszélt nyelvek: Magyar, Német </p>
                     </ul>
                 </div>
+                <!-- kép carousel -->
+
+
+
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                        <!-- Fullscreen button -->
+                        <button class="btn btn-sm btn-dark fullscreen-toggle" title="Fullscreen">
+                            <i class="fas fa-expand"></i>
+                        </button>
+
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="img/medencehaz.webp" class="d-block w-100" alt="...">
+                                <img src="img/medencehaz.webp" class="d-block w-100" alt="Medenceház">
                             </div>
                             <div class="carousel-item">
-                                <img src="img/homokozo.jpg" class="d-block w-100" alt="...">
+                                <img src="img/homokozo.jpg" class="d-block w-100" alt="Homokozó">
                             </div>
                             <div class="carousel-item">
-                                <img src="img/konyha.jpg" class="d-block w-100" alt="...">
+                                <img src="img/konyha.jpg" class="d-block w-100" alt="Konyha">
                             </div>
                             <div class="carousel-item">
-                                <img src="img/furdo.jpg" class="d-block w-100" alt="...">
+                                <img src="img/furdo.jpg" class="d-block w-100" alt="Fürdő">
                             </div>
                             <div class="carousel-item">
-                                <img src="img/nappali.jpg" class="d-block w-100" alt="...">
+                                <img src="img/nappali.jpg" class="d-block w-100" alt="Nappali">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
@@ -175,6 +183,35 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Fullscreen overlay -->
+                <div class="fullscreen-overlay">
+                    <div id="fullscreenCarousel" class="carousel slide" data-bs-interval="false">
+                        <button class="btn btn-lg btn-dark close-fullscreen" title="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+
+                        <div class="carousel-inner">
+                            <!-- Items will be copied here by JavaScript -->
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#fullscreenCarousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#fullscreenCarousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+
+
+
+
+
             </div>
         </div>
     </section>
@@ -353,7 +390,8 @@
 
             <!-- Értékelések átlaga -->
             <div class="text-center mb-4">
-                <h4>Átlagos értékelés: {{ isset($atlagErtekeles) ? number_format($atlagErtekeles, 1) : 'N/A' }}/5</h4>
+                <h4>Átlagos értékelés: {{ isset($atlagErtekeles) ? number_format($atlagErtekeles, 1) : 'N/A' }}/5 <i
+                        class="fas fa-star"></i></h4>
             </div>
 
             <!-- Vélemények listája -->
@@ -363,7 +401,12 @@
                         <div class="col-md-4 mb-3">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ $velemeny->nev }}</h5>
+                                    <h5 class="card-title">
+                                        {{ $velemeny->nev }}
+                                        <span class="verified-badge" data-bs-toggle="tooltip" title="Hitelesített vélemény">
+                                            <i class="fas fa-check-circle text-primary"></i>
+                                        </span>
+                                    </h5>
                                     <p class="card-text"><strong>Email:</strong> {{ $velemeny->email }}</p>
                                     <p class="card-text">
                                         <strong>Értékelés:</strong>

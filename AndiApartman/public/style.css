@@ -6,6 +6,195 @@ body {
     font-size: 20px;
 }
 
+/* Responsive Centered Carousel Styles */
+#responsiveCarousel {
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+}
+
+#responsiveCarousel .carousel-inner {
+    height: 100%;
+    border-radius: 0.5rem;
+}
+
+#responsiveCarousel .carousel-item {
+    height: 100%;
+}
+
+#responsiveCarousel .carousel-item img {
+    object-fit: cover;
+    height: 100%;
+    filter: brightness(0.8);
+}
+
+/* Centered caption styles - always visible */
+#responsiveCarousel .carousel-caption {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    padding: 0 15px;
+}
+
+#responsiveCarousel .caption-content {
+    background-color: rgba(0, 0, 0, 0.6);
+    display: inline-block;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 500px;
+}
+
+#responsiveCarousel .carousel-caption h3 {
+    font-size: 32px;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+#responsiveCarousel .carousel-caption p {
+    font-size: 21px;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#responsiveCarousel .btn {
+    padding: 0.5rem 1.5rem;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+#responsiveCarousel .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Indicators */
+#responsiveCarousel .carousel-indicators {
+    bottom: 15px;
+}
+
+#responsiveCarousel .carousel-indicators button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 0 6px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#responsiveCarousel .carousel-indicators .active {
+    background-color: white;
+    width: 25px;
+    border-radius: 5px;
+}
+
+/* Controls */
+#responsiveCarousel .carousel-control-prev,
+#responsiveCarousel .carousel-control-next {
+    width: 5%;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+#responsiveCarousel .carousel-control-prev:hover,
+#responsiveCarousel .carousel-control-next:hover {
+    opacity: 1;
+}
+
+#responsiveCarousel .carousel-control-prev-icon,
+#responsiveCarousel .carousel-control-next-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    background-size: 100% 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+}
+
+/* Responsive adjustments - now text stays visible on all devices */
+@media (max-width: 992px) {
+    #responsiveCarousel {
+        height: 50vh;
+        min-height: 350px;
+    }
+    
+    #responsiveCarousel .caption-content {
+        padding: 1.2rem;
+    }
+    
+    #responsiveCarousel .carousel-caption h3 {
+        font-size: 1.3rem;
+    }
+    
+    #responsiveCarousel .carousel-caption p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #responsiveCarousel {
+        height: 40vh;
+        min-height: 300px;
+    }
+    
+    #responsiveCarousel .caption-content {
+        padding: 1rem;
+        width: 95%;
+    }
+    
+    #responsiveCarousel .carousel-caption h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    #responsiveCarousel .carousel-caption p {
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    #responsiveCarousel .btn {
+        padding: 0.4rem 1.2rem;
+        font-size: 0.8rem;
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    #responsiveCarousel .carousel-caption h3 {
+        font-size: 1rem;
+    }
+    
+    #responsiveCarousel .carousel-caption p {
+        font-size: 0.75rem;
+    }
+    
+    #responsiveCarousel .btn {
+        padding: 0.3rem 1rem;
+        font-size: 0.75rem;
+    }
+    
+    #responsiveCarousel .carousel-indicators {
+        bottom: 10px;
+    }
+    
+    #responsiveCarousel .carousel-indicators button {
+        width: 6px;
+        height: 6px;
+        margin: 0 4px;
+    }
+    
+    #responsiveCarousel .carousel-indicators .active {
+        width: 20px;
+    }
+}
 /* Alapstílusok */
 .apartmentStats {
     background-color: #3d7abc;
@@ -43,6 +232,117 @@ body {
         transform: translateY(0);
     }
 }
+
+
+
+
+/* Carousel fullscreen styles */
+.fullscreen-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+#carouselExample:hover .fullscreen-toggle {
+    opacity: 1;
+}
+
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 1050;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fullscreen-overlay.show {
+    display: flex;
+}
+
+#fullscreenCarousel {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#fullscreenCarousel .carousel-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#fullscreenCarousel .carousel-item {
+    text-align: center;
+    height: auto;
+}
+
+#fullscreenCarousel img {
+    max-height: 90vh;
+    max-width: 90vw;
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.close-fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 11;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Make controls more visible in fullscreen */
+#fullscreenCarousel .carousel-control-prev,
+#fullscreenCarousel .carousel-control-next {
+    width: 50px;
+    opacity: 0.8;
+}
+
+#fullscreenCarousel .carousel-control-prev {
+    left: 20px;
+}
+
+#fullscreenCarousel .carousel-control-next {
+    right: 20px;
+}
+
+#fullscreenCarousel .carousel-control-prev-icon,
+#fullscreenCarousel .carousel-control-next-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-size: 100% 100%;
+}
+#fullscreenCarousel img {
+    transition: none !important;
+    transform: none !important;
+}
+
+
+
+
 #meglevo-velemenyek {
     position: relative; /* Pozicionáláshoz szükséges */
     overflow: hidden; /* A csillag ne lógjon ki */
@@ -145,12 +445,25 @@ body {
         color: #ffc107;
     }
 }
+.verified-badge {
+    margin-left: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.verified-badge i {
+    transition: transform 0.2s;
+}
+
+.verified-badge:hover i {
+    transform: scale(1.1);
+}
 
 #velemenyek {
     padding-bottom: 2%;
 
     .card {
-        border: 2px solid #3d7abc;
+        border: 2px solid #ffc107;
         border-radius: 10px;
         transition: transform 0.3s ease-in-out;
 
