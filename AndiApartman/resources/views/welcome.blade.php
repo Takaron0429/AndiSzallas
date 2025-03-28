@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foglalás</title>
+    <title>Andi Apartman</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('style.css') }}">
@@ -129,8 +129,8 @@
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <h2>Amit nyújtunk:</h2>
                     <ul>
-                        <p class="strongerp"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Balatoni strand
-                            600 m
+                        <p class="strongerp"><i class="fa fa-comments"
+                            style="font-size: 24px"></i> Online foglalás, fizetés
                         </p>
                         <p class="strongerp"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Betonos strand
                             700 m
