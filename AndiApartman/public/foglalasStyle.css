@@ -2,180 +2,7 @@ body {
     font-family: "Raleway";
 }
 
-/* Hero Carousel Styles */
-#heroCarousel {
-    height: 100vh;
-    max-height: 900px;
-    min-height: 600px;
-    overflow: hidden;
-    margin-bottom: 3rem;
-}
 
-#heroCarousel .carousel-inner {
-    height: 100%;
-}
-
-#heroCarousel .carousel-item {
-    height: 100%;
-    position: relative;
-}
-
-#heroCarousel .carousel-item img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    filter: brightness(0.7);
-    transition: transform 8s ease-out;
-}
-
-#heroCarousel .carousel-item.active img {
-    transform: scale(1.05);
-}
-
-#heroCarousel .carousel-caption {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-#heroCarousel h1 {
-    font-size: calc(2rem + 3vw);
-    line-height: 1.2;
-    letter-spacing: -0.5px;
-    margin-bottom: 1.5rem !important;
-}
-
-#heroCarousel .lead {
-    font-size: calc(1rem + 0.5vw);
-    max-width: 700px;
-    margin: 0 auto 2.5rem;
-}
-
-#heroCarousel .btn {
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-#heroCarousel .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-#heroCarousel .carousel-indicators {
-    bottom: 50px;
-    margin: 0;
-}
-
-#heroCarousel .carousel-indicators button {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin: 0 10px;
-    background-color: rgba(255, 255, 255, 0.5);
-    border: none;
-    transition: all 0.3s ease;
-}
-
-#heroCarousel .carousel-indicators .active {
-    background-color: white;
-    width: 40px;
-    border-radius: 10px;
-}
-
-#heroCarousel .carousel-control-prev,
-#heroCarousel .carousel-control-next {
-    width: 8%;
-    opacity: 0.9;
-    transition: opacity 0.3s;
-}
-
-#heroCarousel .carousel-control-prev-icon,
-#heroCarousel .carousel-control-next-icon {
-    width: 3.5rem;
-    height: 3.5rem;
-    background-size: 100% 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 50%;
-    padding: 2rem;
-    transition: all 0.3s ease;
-}
-
-#heroCarousel .carousel-control-prev:hover .carousel-control-prev-icon,
-#heroCarousel .carousel-control-next:hover .carousel-control-next-icon {
-    background-color: rgba(0, 0, 0, 0.6);
-    transform: scale(1.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-    #heroCarousel {
-        min-height: 500px;
-    }
-
-    #heroCarousel .lead {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    #heroCarousel {
-        min-height: 400px;
-    }
-
-    #heroCarousel h1 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem !important;
-    }
-
-    #heroCarousel .lead {
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-    }
-
-    #heroCarousel .btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-    }
-
-    #heroCarousel .carousel-indicators {
-        bottom: 20px;
-    }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    #modernCarousel .carousel-item {
-        height: 50vh;
-        min-height: 300px;
-    }
-
-    #modernCarousel .carousel-caption {
-        left: 5%;
-        right: 5%;
-    }
-
-    #modernCarousel .carousel-caption h2 {
-        font-size: 1.8rem;
-    }
-
-    #modernCarousel .carousel-caption p {
-        font-size: 1rem;
-    }
-
-    #modernCarousel .btn {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-    }
-}
 
 .bg-danger {
     background-color: #dc3545 !important;
@@ -358,6 +185,64 @@ body {
     background-color: #2c5a8a;
     border-color: #2c5a8a;
 }
+
+
+
+/* Payment Options */
+.payment-options {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.payment-option {
+    flex: 1;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.payment-option:hover {
+    border-color: #0d6efd;
+    background-color: #e7f1ff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.payment-option.selected {
+    border-color: #0d6efd;
+    background-color: #e7f1ff;
+}
+
+.payment-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #0d6efd;
+}
+
+.payment-label {
+    font-weight: bold;
+}
+
+.payment-details {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Credit card form styling */
+#card-number {
+    letter-spacing: 2px;
+}
+
+
 
 /* Footer stílusa */
 footer {

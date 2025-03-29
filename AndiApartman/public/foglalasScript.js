@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Elemek kiválasztása
     const calendarEl = document.getElementById('booking-calendar');
     const checkinInput = document.getElementById('checkin');
@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const calculatedPrice = document.getElementById('calculatedPrice');
     const messagesContainer = document.getElementById('messages-container');
     const form = document.querySelector("form");
-    
+
     // Állapot változók
     let foglaltNapok = [];
     let kivalasztottCheckin = null;
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Csak május-augusztus (4-7) hónapok engedélyezése az aktuális évben
     const allowedMonths = [4, 5, 6, 7]; // május, június, július, augusztus
-    
+
     // Ha épp nem ezek között van, állítsuk májusra
     if (!allowedMonths.includes(currentMonth)) {
         currentMonth = 4; // május
@@ -34,12 +34,21 @@ document.addEventListener("DOMContentLoaded", function() {
     function setupResetButton() {
         const resetButton = document.createElement('button');
         resetButton.className = 'resetButton btn btn-secondary mt-3';
-        resetButton.textContent = 'Választás törlése';
-        resetButton.addEventListener('click', function(e) {
+
+        // Create icon element
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-rotate-right';
+        icon.style.marginRight = '8px'; // Add some spacing between icon and text
+
+        // Add icon and text to button
+        resetButton.appendChild(icon);
+        resetButton.appendChild(document.createTextNode('Választás törlése'));
+
+        resetButton.addEventListener('click', function (e) {
             e.preventDefault();
             resetSelection();
         });
-        
+
         const calendarContainer = document.querySelector('.booking-calendar');
         if (calendarContainer) {
             calendarContainer.parentNode.insertBefore(resetButton, calendarContainer.nextSibling);
@@ -49,14 +58,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // Hónap navigáció ellenőrzése
     function navigateMonth(direction) {
         let newMonth = direction === 'next' ? currentMonth + 1 : currentMonth - 1;
-        
+
         // Korlátozzuk a hónapokat
         if (newMonth < Math.min(...allowedMonths)) {
             return; // Ne menjünk május előtti hónapra
         } else if (newMonth > Math.max(...allowedMonths)) {
             return; // Ne menjünk augusztus utáni hónapra
         }
-        
+
         currentMonth = newMonth;
         renderCalendar();
     }
@@ -82,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
         alertDiv.className = `alert alert-${isSuccess ? 'success' : 'danger'} mt-3`;
         alertDiv.textContent = message;
         messagesContainer.appendChild(alertDiv);
-        
+
         setTimeout(() => {
             alertDiv.classList.add('fade');
             setTimeout(() => {
@@ -111,8 +120,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Csak az aktuális év május-augusztus dátumait tartjuk meg
                 foglaltNapok = data.filter(dateStr => {
                     const date = new Date(dateStr);
-                    return date.getFullYear() === currentYear && 
-                           allowedMonths.includes(date.getMonth());
+                    return date.getFullYear() === currentYear &&
+                        allowedMonths.includes(date.getMonth());
                 });
                 renderCalendar();
             })
@@ -126,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const startDate = new Date(startDateStr);
         const endDate = new Date(endDateStr);
         let currentDate = new Date(startDate);
-        
+
         while (currentDate < endDate) {
             currentDate.setDate(currentDate.getDate() + 1);
             const dateStr = currentDate.toISOString().split('T')[0];
@@ -179,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const isCheckin = dateStr === kivalasztottCheckin;
             const isCheckout = dateStr === kivalasztottCheckout;
             const isBetween = kivalasztottCheckin && kivalasztottCheckout &&
-                dateObj > new Date(kivalasztottCheckin) && 
+                dateObj > new Date(kivalasztottCheckin) &&
                 dateObj < new Date(kivalasztottCheckout);
 
             let dayClass = 'calendar-day';
@@ -205,13 +214,13 @@ document.addEventListener("DOMContentLoaded", function() {
             day.addEventListener('click', () => {
                 const selectedDate = day.dataset.date;
                 const selectedDateObj = new Date(selectedDate);
-                
+
                 // Ellenőrizzük, hogy a kiválasztott dátum az aktuális évben van-e
                 //if (selectedDateObj.getFullYear() !== currentYear) {
                 //    showError("Csak az aktuális év május-augusztus időszakából választhat!");
                 //    return;
                 //}
-                
+
                 if (!kivalasztottCheckin || (kivalasztottCheckin && kivalasztottCheckout)) {
                     kivalasztottCheckin = selectedDate;
                     kivalasztottCheckout = null;
@@ -252,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("felnott").addEventListener("change", validateForm);
         document.getElementById("gyerek").addEventListener("change", validateForm);
 
-        form.addEventListener("submit", function(event) {
+        form.addEventListener("submit", function (event) {
             if (!validateForm()) {
                 event.preventDefault();
             } else {
@@ -330,10 +339,188 @@ document.addEventListener("DOMContentLoaded", function() {
     // Segédfüggvények
     function getMonthName(month) {
         const months = ['Január', 'Február', 'Március', 'Április', 'Május', 'Június',
-                       'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'];
+            'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'];
         return months[month];
     }
 
     // Indítás
     initialize();
+
+    // Payment method selection
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.addEventListener('click', function () {
+            // Remove selected class from all options
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+            // Add selected class to clicked option
+            this.classList.add('selected');
+
+            // Set payment method value
+            const paymentMethod = this.id;
+            document.getElementById('payment-method').value = paymentMethod;
+
+            // Show appropriate payment details
+            document.getElementById('bank-transfer-details').classList.add('d-none');
+            document.getElementById('credit-card-form').classList.add('d-none');
+
+            if (paymentMethod === 'bank-transfer') {
+                document.getElementById('bank-transfer-details').classList.remove('d-none');
+                updateDepositAmount();
+            } else if (paymentMethod === 'credit-card') {
+                document.getElementById('credit-card-form').classList.remove('d-none');
+            }
+        });
+    });
+
+    // Format card number input
+    document.getElementById('card-number')?.addEventListener('input', function (e) {
+        let value = this.value.replace(/\s+/g, ''); // Remove all spaces
+        if (value.length > 0) {
+            value = value.match(new RegExp('.{1,4}', 'g')).join(' '); // Add space every 4 chars
+        }
+        this.value = value;
+    });
+
+    // Format expiry date input
+    document.getElementById('card-expiry')?.addEventListener('input', function (e) {
+        let value = this.value.replace(/\D/g, ''); // Remove non-digits
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        this.value = value;
+    });
+
+    // Update deposit amount when price changes
+    function updateDepositAmount() {
+        const priceText = document.getElementById('calculatedPrice').textContent;
+        const priceMatch = priceText.match(/(\d[\d\s]*) Ft/);
+
+        if (priceMatch) {
+            const price = parseInt(priceMatch[1].replace(/\s+/g, ''), 10);
+            const deposit = Math.floor(price / 2);
+            document.getElementById('deposit-amount').textContent = deposit.toLocaleString('hu-HU');
+        }
+    }
+    (function () {
+        // 1. Változók inicializálása
+        let clickCount = 0;
+        let lastClickTime = 0;
+        const icon = document.getElementById('secretTrigger');
+
+        // 2. Stílus hozzáadása dinamikusan
+        const style = document.createElement('style');
+        style.innerHTML = `
+          #secretTrigger {
+            transition: all 0.3s ease;
+          }
+          @keyframes spin {
+            from { transform: rotate(0deg) scale(1.5); }
+            to { transform: rotate(360deg) scale(1.5); }
+          }
+        `;
+        document.head.appendChild(style);
+
+        // 3. Kattintáskezelő
+        icon.onclick = function () {
+            const now = Date.now();
+
+            // Ha több mint 1 másodperc telt el, reseteljük
+            if (now - lastClickTime > 1000) {
+                clickCount = 0;
+            }
+
+            clickCount++;
+            lastClickTime = now;
+
+            // Vizuális visszajelzés
+            this.style.transform = `scale(${1 + clickCount * 0.1})`;
+
+            // Üzenetek
+            if (clickCount === 3) {
+                showError('halkitsd le a bongeszod');
+            }
+            if (clickCount === 5) {
+                showError('en szoltam :D');
+            }
+
+            // 5. kattintásnál átirányítás
+            if (clickCount >= 5) {
+                this.style.color = 'red';
+                this.style.animation = 'spin 0.5s linear infinite';
+
+                // Létrehozunk egy felugró üzenetet
+                const popup = document.createElement('div');
+                popup.innerHTML = `
+  <div style="text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 10px;">
+    COLD VISIONSSSSSSSSS
+  </div>
+  <img src="img/gloriousking.jpg" alt="" 
+       style="max-width: 200px; border-radius: 5px; display: block; margin: 0 auto;">
+`;
+                popup.style.position = 'fixed';
+                popup.style.top = '20px';
+                popup.style.left = '50%';
+                popup.style.transform = 'translateX(-50%)';
+                popup.style.background = 'white';
+                popup.style.padding = '20px';
+                popup.style.borderRadius = '5px';
+                popup.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
+                popup.style.zIndex = '9999';
+                popup.style.textAlign = 'center';
+
+                // Add animation
+                popup.style.animation = 'fadeIn 0.5s ease-in-out';
+
+                // Add fade-in animation
+                const style = document.createElement('style');
+                style.textContent = `
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+`;
+                document.head.appendChild(style);
+
+                document.body.appendChild(popup);
+
+                // Remove popup after 3 seconds
+                setTimeout(() => {
+                    popup.style.animation = 'fadeOut 0.5s ease-in-out';
+
+                    // Add fade-out animation
+                    const fadeOutStyle = document.createElement('style');
+                    fadeOutStyle.textContent = `
+                    @keyframes fadeOut {
+                    from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                    to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+                    }
+                    `;
+                    document.head.appendChild(fadeOutStyle);
+
+                    setTimeout(() => {
+                        popup.remove();
+                    }, 500);
+                }, 3000);
+                // 1.5 másodperc múlva átirányítás
+                setTimeout(() => {
+                    window.location.href = 'https://youtu.be/-5SkU7ALjwQ?si=LJGlDLWWG7QzBXj0';
+                }, 1500);
+
+                clickCount = 0;
+            }
+
+            // 1 másodperc után visszaállítás
+            setTimeout(() => {
+                if (Date.now() - lastClickTime >= 1000) {
+                    clickCount = 0;
+                    icon.style.transform = 'scale(1)';
+                }
+            }, 1000);
+        };
+    })();
+    // Call updateDepositAmount when price changes
+    // Add this line to the end of your validateForm function, right before "return true;"
+    updateDepositAmount();
 });
