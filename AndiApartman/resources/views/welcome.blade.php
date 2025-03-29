@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="navbar-contact-info">
-                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px"></i>
+                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px" onclick="playPhoneSound()"></i>
                         +06-30/560-1999</span>
                     <span class="separator">|</span>
                     <span class="contact-item"><i class="fa fa-envelope" style="font-size: 20px"></i>
@@ -129,8 +129,8 @@
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <h2>Amit nyújtunk:</h2>
                     <ul>
-                        <p class="strongerp"><i class="fa fa-comments"
-                            style="font-size: 24px"></i> Online foglalás, fizetés
+                        <p class="strongerp"><i class="fa fa-comments" style="font-size: 24px"></i> Online foglalás,
+                            fizetés
                         </p>
                         <p class="strongerp"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Betonos strand
                             700 m
@@ -490,7 +490,9 @@
                     </p>
                     <p class="strongerp"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Balatonszemes,
                         Vörösmarty u. 42</p>
-                    <p class="strongerp"><i class="fa fa-phone" style="font-size: 24px;"></i> +06-30/560-1999</p>
+                    <p class="strongerp">
+                        <i class="fa fa-phone" style="font-size: 24px;" onclick="playPhoneSound()"></i> +06-30/560-1999
+                    </p>
                     <p class="strongerp"><i class="fa fa-envelope" style="font-size: 24px;"></i> andi68andi@gmail.com
                     </p>
                 </div>
