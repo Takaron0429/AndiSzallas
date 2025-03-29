@@ -12,7 +12,7 @@ use App\Http\Controllers\FoglalasController;
 use App\Http\Controllers\VelemenyController;
 
 // Főoldal útvonala
-Route::get('/', [VelemenyController::class, 'index']);
+Route::get('/', [VelemenyController::class, 'index'])->name('/');
 
 
 // Vélemény beküldése
