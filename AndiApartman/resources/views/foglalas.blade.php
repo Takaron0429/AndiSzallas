@@ -27,7 +27,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link" href=""><i class="fa fa-home"></i> Kezdőlap</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fa fa-home"></i> Kezdőlap</a>
                     <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments"></i> Vélemények</a>
                     <a class="nav-link active" href="foglalas"><i class="fa fa-calendar"></i> Foglalás</a>
                 </div>
@@ -266,6 +266,8 @@
                     <p class="strongerp"><i class="fa fa-map-marker"></i> Balatonszemes, Vörösmarty u. 42</p>
                     <p class="strongerp"><i class="fa fa-phone"></i> +06-30/560-1999</p>
                     <p class="strongerp"><i class="fa fa-envelope"></i> andi68andi@gmail.com</p>
+                    <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok" onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
+                    </p>
                 </div>
             </div>
         </div>

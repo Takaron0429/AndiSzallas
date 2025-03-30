@@ -125,15 +125,15 @@ body {
         height: 50vh;
         min-height: 350px;
     }
-    
+
     #responsiveCarousel .caption-content {
         padding: 1.2rem;
     }
-    
+
     #responsiveCarousel .carousel-caption h3 {
         font-size: 1.3rem;
     }
-    
+
     #responsiveCarousel .carousel-caption p {
         font-size: 0.85rem;
     }
@@ -144,22 +144,22 @@ body {
         height: 40vh;
         min-height: 300px;
     }
-    
+
     #responsiveCarousel .caption-content {
         padding: 1rem;
         width: 95%;
     }
-    
+
     #responsiveCarousel .carousel-caption h3 {
         font-size: 1.1rem;
         margin-bottom: 0.8rem;
     }
-    
+
     #responsiveCarousel .carousel-caption p {
         font-size: 0.8rem;
         margin-bottom: 1rem;
     }
-    
+
     #responsiveCarousel .btn {
         padding: 0.4rem 1.2rem;
         font-size: 0.8rem;
@@ -171,54 +171,61 @@ body {
     #responsiveCarousel .carousel-caption h3 {
         font-size: 1rem;
     }
-    
+
     #responsiveCarousel .carousel-caption p {
         font-size: 0.75rem;
     }
-    
+
     #responsiveCarousel .btn {
         padding: 0.3rem 1rem;
         font-size: 0.75rem;
     }
-    
+
     #responsiveCarousel .carousel-indicators {
         bottom: 10px;
     }
-    
+
     #responsiveCarousel .carousel-indicators button {
         width: 6px;
         height: 6px;
         margin: 0 4px;
     }
-    
+
     #responsiveCarousel .carousel-indicators .active {
         width: 20px;
     }
 }
+
 /* Alapstílusok */
 .apartmentStats {
     background-color: #3d7abc;
     color: aliceblue;
     padding: 0;
-    overflow: hidden; /* Az animáció során ne lógjon ki tartalom */
+    overflow: hidden;
+    /* Az animáció során ne lógjon ki tartalom */
 }
 
 /* Animáció a szöveghez és a felsoroláshoz */
 .apartmentStats .col-lg-6.col-md-12.col-sm-12 {
-    opacity: 0; /* Kezdetben láthatatlan */
-    transform: translateY(50px); /* Kezdetben lent */
+    opacity: 0;
+    /* Kezdetben láthatatlan */
+    transform: translateY(50px);
+    /* Kezdetben lent */
     transition: opacity 1s ease-out, transform 1s ease-out;
 }
 
 /* Animáció aktiválása, ha az elem láthatóvá válik */
 .apartmentStats .col-lg-6.col-md-12.col-sm-12.visible {
-    opacity: 1; /* Láthatóvá válik */
-    transform: translateY(0); /* Feljön */
+    opacity: 1;
+    /* Láthatóvá válik */
+    transform: translateY(0);
+    /* Feljön */
 }
 
 /* Animáció aktiválása késleltetéssel (ha nem használsz JavaScript-et) */
 .apartmentStats .col-lg-6.col-md-12.col-sm-12 {
-    animation: fadeInUp 1s ease-out 0.5s forwards; /* 0.5 másodperc késleltetés */
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+    /* 0.5 másodperc késleltetés */
 }
 
 /* Animáció definíciója */
@@ -227,6 +234,7 @@ body {
         opacity: 0;
         transform: translateY(50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -335,6 +343,7 @@ body {
     height: 2.5rem;
     background-size: 100% 100%;
 }
+
 #fullscreenCarousel img {
     transition: none !important;
     transform: none !important;
@@ -344,22 +353,29 @@ body {
 
 
 #meglevo-velemenyek {
-    position: relative; /* Pozicionáláshoz szükséges */
-    overflow: hidden; /* A csillag ne lógjon ki */
+    position: relative;
+    /* Pozicionáláshoz szükséges */
+    overflow: hidden;
+    /* A csillag ne lógjon ki */
 
     /* Csillag hozzáadása a bal oldali sarokban */
     &::before {
         content: "";
         position: absolute;
-        top: -25px; /* Pozíció a sarokban */
+        top: -25px;
+        /* Pozíció a sarokban */
         left: -50px;
-        width: 400px; /* Csillag mérete */
+        width: 400px;
+        /* Csillag mérete */
         height: 400px;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFD700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'); /* Sárga csillag SVG */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFD700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>');
+        /* Sárga csillag SVG */
         background-repeat: no-repeat;
         background-size: contain;
-        opacity: 0.2; /* Átlátszóság */
-        z-index: -1; /* Háttérben marad */
+        opacity: 0.2;
+        /* Átlátszóság */
+        z-index: -1;
+        /* Háttérben marad */
     }
 
     .row {
@@ -445,6 +461,7 @@ body {
         color: #ffc107;
     }
 }
+
 .verified-badge {
     margin-left: 5px;
     font-size: 0.9em;
@@ -472,39 +489,50 @@ body {
         }
     }
 }
+
 /* Footer stílusa */
 footer {
     background-color: #3d7abc;
-    position: relative; /* A footer relatív pozícióban legyen */
-    overflow: hidden; /* A hullámok ne lógjanak ki */
+    position: relative;
+    /* A footer relatív pozícióban legyen */
+    overflow: hidden;
+    /* A hullámok ne lógjanak ki */
 }
 
 /* Hullámok konténer stílusa */
 .wave-container {
     position: absolute;
-    top: -5%; /* A hullámok a footer tetején */
+    top: -5%;
+    /* A hullámok a footer tetején */
     left: 0;
     width: 100%;
-    height: 100%; /* A hullámok magassága */
-    z-index: 0; /* A hullámok az iframe és az írások mögött legyenek */
+    height: 100%;
+    /* A hullámok magassága */
+    z-index: 0;
+    /* A hullámok az iframe és az írások mögött legyenek */
     overflow: hidden;
 }
 
 /* Hullámok stílusa */
 .wave {
     position: absolute;
-    top: 0; /* A hullámok a footer tetején */
+    top: 0;
+    /* A hullámok a footer tetején */
     left: 0;
     width: 100%;
     height: 100%;
-    fill: #0099ff; /* Hullámok színe (kék) */
-    fill-opacity: 1; /* Teljesen látható */
+    fill: #0099ff;
+    /* Hullámok színe (kék) */
+    fill-opacity: 1;
+    /* Teljesen látható */
 }
 
 /* Az iframe és az írások stílusa */
-iframe, #contact {
+iframe,
+#contact {
     position: relative;
-    z-index: 1; /* Az iframe és az írások a hullámok felett legyenek */
+    z-index: 1;
+    /* Az iframe és az írások a hullámok felett legyenek */
 }
 
 iframe {
@@ -526,7 +554,7 @@ iframe {
 
     h5 {
         color: aliceblue;
-        padding-top: 3% ;
+        padding-top: 3%;
     }
 
     h3 {
@@ -551,6 +579,343 @@ iframe {
         transform: scale(1.05);
     }
 }
+
+/* Általános stílusok */
+#programajanlo2 {
+    font-family: "Raleway";
+    background-color: #3d7abc;
+}
+
+.section-title {
+    color: aliceblue;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #2b2b2b;
+}
+
+/* Program konténer stílusok */
+.programs-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #3d7abc #f1f1f1;
+    gap: 20px;
+    margin-bottom: 30px;
+    -webkit-overflow-scrolling: touch; /* Gördülékeny scroll iOS-en */
+}
+
+.programs-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.programs-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+    margin: 0 10px;
+}
+
+.programs-container::-webkit-scrollbar-thumb {
+    background-color: #3d7abc;
+    border-radius: 10px;
+}
+
+/* Program kártyák */
+.program-card {
+    flex: 0 0 auto;
+    width: 280px;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    border: 1px solid #a6a6a6;
+
+}
+
+.program-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+}
+
+.program-meta {
+    color: #282828;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.program-meta i {
+    color: #363636;
+    margin-right: 5px;
+    width: 16px;
+    text-align: center;
+}
+
+/* Kép hover effekt */
+.img-hover-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.img-hover-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.program-img {
+    width: 100%;
+    height: 220px; /* Ezt növeltem 180px-ról 220px-re */
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.img-hover-container:hover .program-img {
+    transform: scale(1.05);
+}
+
+.hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #3d7abc9c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.img-hover-container:hover .hover-overlay {
+    opacity: 1;
+}
+
+.hover-text {
+    color: white;
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    padding: 10px 15px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+    font-size: 0.95rem;
+}
+
+/* Modal ablak stílusok */
+.modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+    background-color: #3d7abc;
+    color: white;
+}
+
+.modal-title {
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.program-details {
+    padding: 1rem 0;
+}
+
+.program-details p {
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.program-details strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.program-details i {
+    color: #363636;
+    width: 24px;
+    font-size: 21px;
+    text-align: center;
+}
+
+.modal-footer {
+    border-top: 1px solid #eee;
+    padding: 1rem 1.5rem;
+    background: #f9f9f9;
+}
+
+/* További látnivalók */
+.more-attractions-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.more-attractions-title {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.btn-outline-primary {
+    border-color: #3d7abc;
+    color: #3d7abc;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3d7abc;
+    color: white;
+}
+
+.btn-outline-primary i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.btn-outline-primary:hover i {
+    transform: translateX(3px);
+}
+
+/* Üzenetek */
+.no-programs, 
+.error-message {
+    padding: 2rem;
+    text-align: center;
+}
+
+.no-programs p, 
+.error-message p {
+    padding: 1.5rem;
+    background: #ecf0f1;
+    border-radius: 8px;
+    color: #7f8c8d;
+    display: inline-block;
+}
+
+/* Reszponzív design */
+@media (max-width: 992px) {
+    .program-card {
+        width: 240px;
+    }
+    
+    .program-title {
+        font-size: 1rem;
+    }
+    
+    .program-img {
+        height: 200px; /* Növeltem a kép magasságot reszponzív nézetben is */
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.6rem;
+        padding-bottom: 10px;
+    }
+    
+    .section-title::after {
+        width: 60px;
+        height: 2px;
+    }
+    
+    .programs-container {
+        gap: 15px;
+        padding: 15px 5px;
+    }
+    
+    .program-card {
+        width: 220px;
+        padding: 12px;
+    }
+    
+    .program-img {
+        height: 180px; /* Növeltem a kép magasságot reszponzív nézetben is */
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #programajanlo2 {
+        padding: 2rem 0;
+    }
+    
+    .program-card {
+        width: 200px;
+    }
+    
+    .program-img {
+        height: 160px; /* Növeltem a kép magasságot reszponzív nézetben is */
+    }
+    
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-title {
+        font-size: 1.2rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 .blurred {
     filter: blur(5px);
@@ -581,8 +946,10 @@ i:hover {
 .navbar-contact-info {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Jobbra tolja az elemet */
-    margin-right: 20px; /* Távolság a jobb széltől */
+    margin-left: auto;
+    /* Jobbra tolja az elemet */
+    margin-right: 20px;
+    /* Távolság a jobb széltől */
 }
 
 .contact-item {
@@ -598,7 +965,7 @@ i:hover {
 .separator {
     margin: 5px;
     color: #3d7abc;
-    
+
 }
 
 .nav-link {
@@ -658,59 +1025,84 @@ i:hover {
 
 /* GPS pinpoint SVG háttérkép a jobb felső sarokban */
 .distances {
-    position: relative; /* Pozicionáláshoz szükséges */
-    overflow: hidden; /* A háttérkép ne lógjon ki */
+    position: relative;
+    /* Pozicionáláshoz szükséges */
+    overflow: hidden;
+    /* A háttérkép ne lógjon ki */
 }
 
 .distances::before {
     content: "";
     position: absolute;
-    top: 0px; /* Pozíció a jobb felső sarokban */
+    top: 0px;
+    /* Pozíció a jobb felső sarokban */
     right: -50px;
-    width: 400px; /* Méret */
+    width: 400px;
+    /* Méret */
     height: 400px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233d7abc"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'); /* GPS pinpoint SVG */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233d7abc"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>');
+    /* GPS pinpoint SVG */
     background-repeat: no-repeat;
     background-size: contain;
-    opacity: 0.2; /* Átlátszóság */
-    z-index: -1; /* Háttérben marad */
+    opacity: 0.2;
+    /* Átlátszóság */
+    z-index: -1;
+    /* Háttérben marad */
 }
 
 /* Progress bar alapstílusok */
 .progress {
-    background-color: #e9ecef; /* Háttérszín a progress barhoz */
-    border-radius: 4px; /* Kerekített sarkok */
-    overflow: hidden; /* A progress bar ne lógjon ki */
-    height: 25px; /* Progress bar magassága */
-    width: 60%; /* Progress bar hosszúsága (rövidebb) */
-    margin: 0 auto 10px; /* Középre igazítás és távolság a következő elemig */
+    background-color: #e9ecef;
+    /* Háttérszín a progress barhoz */
+    border-radius: 4px;
+    /* Kerekített sarkok */
+    overflow: hidden;
+    /* A progress bar ne lógjon ki */
+    height: 25px;
+    /* Progress bar magassága */
+    width: 60%;
+    /* Progress bar hosszúsága (rövidebb) */
+    margin: 0 auto 10px;
+    /* Középre igazítás és távolság a következő elemig */
 }
-.progress:hover
-{
+
+.progress:hover {
     transform: scale(1.25);
-    border: 1px solid black; /* Fekete keret hozzáadva */
+    border: 1px solid black;
+    /* Fekete keret hozzáadva */
 
 }
+
 .progress-bar {
-    background-color: #3d7abc; /* Progress bar színe */
-    height: 100%; /* Teljes magasság */
-    width: 0; /* Kezdetben 0% */
-    border-radius: 4px; /* Kerekített sarkok */
-    animation: fillProgress 2s ease-in-out forwards; /* Animáció */
-    animation-play-state: paused; /* Animáció kezdetben szünetel */
+    background-color: #3d7abc;
+    /* Progress bar színe */
+    height: 100%;
+    /* Teljes magasság */
+    width: 0;
+    /* Kezdetben 0% */
+    border-radius: 4px;
+    /* Kerekített sarkok */
+    animation: fillProgress 2s ease-in-out forwards;
+    /* Animáció */
+    animation-play-state: paused;
+    /* Animáció kezdetben szünetel */
 }
 
 /* Animáció definíciója */
 @keyframes fillProgress {
     from {
-        width: 0; /* Kezdetben 0% */
+        width: 0;
+        /* Kezdetben 0% */
     }
+
     to {
-        width: var(--progress-width); /* A megadott értékre animál */
+        width: var(--progress-width);
+        /* A megadott értékre animál */
     }
 }
 
 /* Ha a progress bar látható, akkor animáljuk */
 .progress-bar.animate {
-    animation-play-state: running; /* Animáció indítása */
+    animation-play-state: running;
+    /* Animáció indítása */
 }

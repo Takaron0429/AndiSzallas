@@ -17,12 +17,12 @@ class HelyiProgramajanloController extends Controller
     }
     public function Pindex()
     {
-        $kozelgoProgram = HelyiProgramajanlo::where('kezdet', '>=', \Carbon\Carbon::now())
+        $nextEvent = HelyiProgramajanlo::where('kezdet', '>=', \Carbon\Carbon::now())
         ->orderBy('kezdet', 'asc')
         ->first();
         $programok = HelyiProgramajanlo::orderBy('helyszin')->get()->groupBy('helyszin');
 
-        return view('Fooldal.Programok', compact('programok','kozelgoProgram'));
+        return view('Fooldal.Programok', compact('programok','nextEvent'));
     }
     public function create()
     {

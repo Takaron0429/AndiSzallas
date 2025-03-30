@@ -439,10 +439,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Üzenetek
             if (clickCount === 3) {
-                showError('halkitsd le a bongeszod');
+                showError('ok is the hardest istg');
             }
             if (clickCount === 5) {
-                showError('en szoltam :D');
+                showError('we gon be ok💔💔💔');
             }
 
             // 5. kattintásnál átirányítás
@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const popup = document.createElement('div');
                 popup.innerHTML = `
   <div style="text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 10px;">
-    COLD VISIONSSSSSSSSS
+    COLD VISIONSSSSSS
   </div>
   <img src="img/gloriousking.jpg" alt="" 
        style="max-width: 200px; border-radius: 5px; display: block; margin: 0 auto;">
@@ -503,10 +503,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         popup.remove();
                     }, 500);
                 }, 3000);
-                // 1.5 másodperc múlva átirányítás
+                //2 sec utan redirect
                 setTimeout(() => {
-                    window.location.href = 'https://youtu.be/-5SkU7ALjwQ?si=LJGlDLWWG7QzBXj0';
-                }, 1500);
+                    window.location.href = 'https://youtu.be/-5SkU7ALjwQ?si=yG-jBBUz3hWikcFm';
+                }, 2000);
 
                 clickCount = 0;
             }
