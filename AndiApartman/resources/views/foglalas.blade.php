@@ -146,6 +146,31 @@
                                     <input type="text" class="form-control" id="lakcim" name="lakcim">
                                 </div>
                             </div>
+                            <div class="mb-4">
+                                <label class="form-label"><i class="fa fa-gift"></i> Érkezési csomagok
+                                    (opcionális)</label>
+                                <div class="csomagok-container">
+                                    @foreach(App\Models\ErkezesiCsomag::where('elerheto', '>', 0)->get() as $csomag)
+                                        <div class="form-check csomag-card">
+                                            <input class="form-check-input" type="checkbox" name="csomagok[]"
+                                                value="{{ $csomag->csomag_id }}" id="csomag-{{ $csomag->csomag_id }}">
+                                            <label class="form-check-label" for="csomag-{{ $csomag->csomag_id }}">
+                                                <div class="csomag-info">
+                                                    <div class="d-flex justify-content-between">
+                                                        <span class="csomag-name">{{ $csomag->nev }}</span>
+                                                        <span
+                                                            class="csomag-price">{{ number_format($csomag->ar, 0, ',', ' ') }}
+                                                            Ft</span>
+                                                    </div>
+                                                    @if($csomag->leiras)
+                                                        <div class="csomag-desc">{{ $csomag->leiras }}</div>
+                                                    @endif
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                             <!-- Payment Section -->
                             <div class="row mb-3">
                                 <div class="col-12">
@@ -198,7 +223,8 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="card-name" class="form-label">Név a kártyán*</label>
                                                 <div class="input-group">
-                                                    <span class="input-group-text"><i class="far fa-user" id="secretTrigger"></i></span>
+                                                    <span class="input-group-text"><i class="far fa-user"
+                                                            id="secretTrigger"></i></span>
                                                     <input type="text" class="form-control" id="card-name"
                                                         placeholder="Benjamin Reichwald">
                                                 </div>
@@ -222,8 +248,8 @@
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <img src="img/simplepay.png"
-                                                alt="Secure payment" class="img-fluid" style="max-height: 150px;">
+                                            <img src="img/simplepay.png" alt="Secure payment" class="img-fluid"
+                                                style="max-height: 150px;">
                                             <p class="small text-muted mt-2"><i class="fas fa-lock"></i> Az adatai
                                                 biztonságban vannak</p>
                                         </div>
@@ -266,7 +292,8 @@
                     <p class="strongerp"><i class="fa fa-map-marker"></i> Balatonszemes, Vörösmarty u. 42</p>
                     <p class="strongerp"><i class="fa fa-phone"></i> +06-30/560-1999</p>
                     <p class="strongerp"><i class="fa fa-envelope"></i> andi68andi@gmail.com</p>
-                    <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok" onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
+                    <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok"
+                            onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
                     </p>
                 </div>
             </div>

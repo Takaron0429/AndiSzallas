@@ -32,6 +32,11 @@ Route::get('/', function() {
     ]);
 })->name('home');
 
+// Csomagok kezelése
+Route::post('/csomag-foglalas', [CsomagFoglalasController::class, 'store'])->name('csomag-foglalas.store');
+Route::delete('/csomag-foglalas/{foglalas_id}/{csomag_id}', [CsomagFoglalasController::class, 'destroy'])->name('csomag-foglalas.destroy');
+
+
 // Vélemény útvonalak
 Route::post('/velemeny', [VelemenyController::class, 'store'])->name('velemeny.store');
 Route::get('/velemenyek', [VelemenyController::class, 'approvedVelemenyek'])->name('velemenyek.list');
@@ -76,13 +81,6 @@ Route::get('/admin', [AdminController::class, 'index'])->name('AdminFelulet.Admi
 Route::put('/AdminFelulet/Admin/{id}/update', [FoglalasController::class, 'update'])->name('AdminFelulet.FoglalasUpdate');
 Route::delete('/AdminFelulet/Admin/{id}/delete', [FoglalasController::class, 'destroy'])->name('AdminFelulet.FoglalasDelete');
 
-<<<<<<< HEAD
-//Statisztika
-Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
-Route::get('/admin/statisztika', [AdminController::class, 'index']);
-
-
-=======
 // Vélemények kezelése admin felületen
 Route::get('/AdminFelulet/Admin/velemenyek', [VelemenyController::class, 'velemenyek'])->name('AdminFelulet.Velemenyek');
 Route::get('/AdminFelulet/Admin/{id}/approve', [VelemenyController::class, 'approveVelemeny'])->name('velemeny.approve');
@@ -91,4 +89,3 @@ Route::get('/AdminFelulet/Admin/delete/{email}', [VelemenyController::class, 'de
 // API végpontok
 Route::get('/admin/foglalt-napok', [FoglalasController::class, 'getFoglaltNapok']);
 Route::get('/getBookedDates', [FoglalasController::class, 'getBookedDates'])->name('getBookedDates');
->>>>>>> 9e1e8675192543215681092253af70368b3bc822

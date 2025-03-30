@@ -111,6 +111,8 @@ class FoglalasController extends Controller
             'iranyitoszam' => 'nullable|string',
             'lakcim' => 'nullable|string',
             'specialis_keresek' => 'nullable|string',
+            'csomagok' => 'nullable|array',
+            'csomagok.*' => 'exists:erkezesi_csomagok,csomag_id'
         ]);
 
         DB::beginTransaction();
@@ -134,7 +136,7 @@ class FoglalasController extends Controller
             $checkout = new \DateTime($validated['checkout']);
             $ejszakak = $checkin->diff($checkout)->days;
 
-            // Ár kiszámítása
+            // Ár kiszámítása (csak a szállás alapárát számoljuk)
             $felnottAr = 10000;
             $gyerekAr = 5000;
             $osszeg = ($validated['felnott'] * $felnottAr + $validated['gyerek'] * $gyerekAr) * $ejszakak;
@@ -149,6 +151,16 @@ class FoglalasController extends Controller
                 'osszeg' => $osszeg,
                 'specialis_keresek' => $validated['specialis_keresek'] ?? null,
             ]);
+
+            // Csomagok hozzárendelése (ha vannak)
+            if (!empty($validated['csomagok'])) {
+                foreach ($validated['csomagok'] as $csomag_id) {
+                    CsomagFoglalas::create([
+                        'foglalas_id' => $foglalas->foglalas_id,
+                        'csomag_id' => $csomag_id
+                    ]);
+                }
+            }
 
             DB::commit();
             return redirect()->route('foglalas')->with('success', 'Foglalás sikeresen rögzítve!');
@@ -182,14 +194,10 @@ class FoglalasController extends Controller
         $tavozas = Carbon::parse($foglalas->tavozas);
         $days = $erkezes->diffInDays($tavozas);
 
-        $total = 0;
-        foreach ($foglalas->csomagok as $csomag) {
-            $total += ($foglalas->felnott * $csomag->ar + $foglalas->gyerek * $csomag->ar) * $days;
-        }
-
-        foreach ($foglalas->akciok as $akcio) {
-            $total -= ($total * ($akcio->kedvezmeny / 100));
-        }
+        // Csak a szállás alapárát számoljuk
+        $felnottAr = 10000;
+        $gyerekAr = 5000;
+        $total = ($foglalas->felnott * $felnottAr + $foglalas->gyerek * $gyerekAr) * $days;
 
         if ($request->filled('foglalas_allapot')) {
             $foglalas->foglalas_allapot = $request->input('foglalas_allapot');
@@ -249,7 +257,7 @@ class FoglalasController extends Controller
             'checkout' => 'required|date|after:checkin',
             'felnott' => 'required|integer|min:1',
             'gyerek' => 'required|integer|min:0',
-            'csomag_id' => 'required|exists:csomagok,id',
+            'csomag_id' => 'nullable|exists:erkezesi_csomagok,csomag_id',
             'akcio_id' => 'nullable|exists:akciok,id',
             'nev' => 'required|string|max:255',
             'email' => 'required|email',
