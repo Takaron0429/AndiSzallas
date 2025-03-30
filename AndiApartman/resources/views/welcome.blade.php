@@ -29,7 +29,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link" href=""><i class="fa fa-home" style="font-size: 20px"></i> Kezdőlap</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fa fa-home" style="font-size: 20px"></i> Kezdőlap</a>
                     <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments"
                             style="font-size: 20px"></i> Vélemények</a>
                     <a class="nav-link" href="foglalas"><i class="fa fa-calendar" style="font-size: 20px"></i>
@@ -37,7 +37,8 @@
                 </div>
 
                 <div class="navbar-contact-info">
-                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px" onclick="playPhoneSound()"></i>
+                    <span class="contact-item"><i class="fa fa-phone" style="font-size: 20px"
+                            onclick="playPhoneSound()"></i>
                         +06-30/560-1999</span>
                     <span class="separator">|</span>
                     <span class="contact-item"><i class="fa fa-envelope" style="font-size: 20px"></i>
@@ -101,7 +102,7 @@
                     <div class="caption-content p-3 p-md-4 rounded-3">
                         <h3 class="fw-bold mb-2 mb-md-3">Ismerje meg a környéket, mint egy helyi lakos!</h3>
                         <p class="mb-3 mb-md-4 d-none d-sm-block">Fedezze fel a környék csodáit és programjainkat.</p>
-                        <a href="#programajanlo" class="btn btn-success btn-sm btn-md">Programok</a>
+                        <a href="#programajanlo2" class="btn btn-success btn-sm btn-md">Programok</a>
                     </div>
                 </div>
             </div>
@@ -280,7 +281,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12">
 
-                    <h2>Helyi távolságok az apartmantól:</h2>
+                    <h2>Közeli távolságok az apartmantól:</h2>
                     <p class="strongerp">Kistücsök Étterem</p>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="30"
@@ -343,45 +344,110 @@
     </section>
 
 
-    <section id="programajanlo" class="mt-5">
+    <section id="programajanlo2" class="mt-5">
         <div class="container">
             <div class="container">
-                <div class="row">
-                    <h3 style="margin-top: 10px;" class="text-center">Közeli látványosságok</h3>
-                    <div class="col-lg-3 col-sm-4 col-6">
-                        <a href="https://szallas.hu/programok/zier-bisztro-balatonszemes-p19512" target="_blank">
-                            <img src="img/prog/bisztro.jpg" class="img-fluid" alt="">
-                        </a>
-                        <h5>Zier Bisztró</h5>
-                        <p class="strongerp">300 m</p>
+                <h3 class="section-title text-center">Közeli Programajánlónk</h3>
+
+                @isset($programok)
+                    <div class="programs-container">
+                        @forelse($programok as $location => $locationPrograms)
+                            @foreach($locationPrograms as $program)
+                                <div class="program-card">
+                                    <!-- Kattintható div a modal triggerhez -->
+                                    <div class="img-hover-container" data-bs-toggle="modal"
+                                        data-bs-target="#programModal{{ $program->program_id }}">
+                                        <img src="{{ $program->kep ? Storage::url($program->kep) : asset('img/default-program.jpg') }}"
+                                            class="program-img" alt="{{ $program->cim }}">
+                                        <div class="hover-overlay">
+                                            <div class="hover-text">Kattints a részletekért!</div>
+                                        </div>
+                                    </div>
+                                    <h5 class="program-title mt-2">{{ $program->cim }}</h5>
+                                    <p class="program-meta">
+                                        <i class="fas fa-map-marker-alt"></i> {{ $program->helyszin }}<br>
+                                        <i class="far fa-calendar-alt"></i>
+                                        @if($program->kezdet && $program->vege)
+                                            {{ \Carbon\Carbon::parse($program->kezdet)->format('Y.m.d') }} -
+                                            {{ \Carbon\Carbon::parse($program->vege)->format('Y.m.d') }}
+                                        @else
+                                            {{ \Carbon\Carbon::parse($program->kezdet)->format('Y.m.d') }}
+                                        @endif
+                                    </p>
+                                </div>
+
+                                <!-- Modal ablak -->
+                                <div class="modal fade" id="programModal{{ $program->program_id }}" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">{{ $program->cim }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <!-- Bal oldal - Kép -->
+                                                    <div class="col-md-6">
+                                                        <img src="{{ $program->kep ? Storage::url($program->kep) : asset('img/default-program.jpg') }}"
+                                                            class="img-fluid rounded" alt="{{ $program->cim }}">
+                                                    </div>
+                                                    <!-- Jobb oldal - Szöveges tartalom -->
+                                                    <div class="col-md-6">
+                                                        <div class="program-details">
+                                                            <p><i class="fas fa-map-marker-alt"></i> <strong>Helyszín:</strong>
+                                                                {{ $program->helyszin }}</p>
+                                                            <p><i class="far fa-calendar-alt"></i> <strong>Időpont:</strong>
+                                                                {{ \Carbon\Carbon::parse($program->kezdet)->format('Y.m.d') }} -
+                                                                {{ \Carbon\Carbon::parse($program->vege)->format('Y.m.d') }}
+                                                            </p>
+                                                            @if($program->leiras)
+                                                                <p><i class="fas fa-info-circle"></i> <strong>Leírás:</strong><br>
+                                                                    {{ $program->leiras }}</p>
+                                                            @endif
+                                                            @if($program->link)
+                                                                <p><i class="fas fa-link"></i> <strong>Weboldal:</strong><br>
+                                                                    <a href="{{ $program->link }}"
+                                                                        target="_blank">{{ $program->link }}</a>
+                                                                </p>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Bezárás</button>
+                                                @if($program->link)
+                                                    <a href="{{ $program->link }}" target="_blank" class="btn btn-primary">
+                                                        <i class="fas fa-external-link-alt me-2"></i>Weboldal megnyitása
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @empty
+                            <div class="col-12 text-center no-programs">
+                                <p>Jelenleg nincsenek aktuális programok</p>
+                            </div>
+                        @endforelse
                     </div>
-                    <div class="col-lg-3 col-sm-4 col-6">
-                        <a href="https://szallas.hu/programok/balatonszemesi-elmenyfurdo-balatonszemes-p123"
-                            target="_blank">
-                            <img src="img/prog/furdo.jpg" class="img-fluid" alt="">
-                        </a>
-                        <h5>Balatonszemesi élményfürdő</h5>
-                        <p class="strongerp">700 m</p>
+                @else
+                    <div class="col-12 text-center error-message">
+                        <p>Hiba történt az adatok betöltésekor</p>
                     </div>
-                    <div class="col-lg-3 col-sm-4 col-6">
-                        <a href="https://szallas.hu/programok/berzsenyi-utcai-szabadstrand-balatonszemes-p3836"
-                            target="_blank">
-                            <img src="img/prog/part.jpg" class="img-fluid" alt="">
-                        </a>
-                        <h5>Berzsenyi utcai szabadstrand</h5>
-                        <p class="strongerp">600 m</p>
-                    </div>
-                    <div class="col-lg-3 col-sm-4 col-6">
-                        <a href="https://szallas.hu/programok/balatonszemes" target="_blank">
-                            <img src="img/szemes.webp" class="img-fluid blurred" alt="">
-                        </a>
-                        <h5>További látnivalók</h5>
-                        <p class="strongerp">Katt</p>
-                    </div>
-                </div>
+                @endisset
             </div>
         </div>
     </section>
+
+
+
+
+
 
     <!-- Meglévő vélemények megjelenítése -->
     <section id="meglevo-velemenyek" class="mt-5">
@@ -494,6 +560,8 @@
                         <i class="fa fa-phone" style="font-size: 24px;" onclick="playPhoneSound()"></i> +06-30/560-1999
                     </p>
                     <p class="strongerp"><i class="fa fa-envelope" style="font-size: 24px;"></i> andi68andi@gmail.com
+                    </p>
+                    <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok" onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
                     </p>
                 </div>
             </div>

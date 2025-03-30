@@ -75,4 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
 function playPhoneSound() {
     const audio = new Audio('img/pluh.wav');
     audio.play().catch(e => console.log("Hang lejátszási hiba:", e));
-  }
+}
+function Wegonbeok() {
+    const audio = new Audio('img/wegonbeok.mp3');
+    audio.play().catch(e => console.log("Hang lejátszási hiba:", e));
+}
