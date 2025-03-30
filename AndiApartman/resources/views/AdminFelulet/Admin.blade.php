@@ -16,6 +16,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ asset('AdminLogin.css') }}">
 
 
@@ -579,7 +580,7 @@
                                                     <p><strong>Foglalás Dátuma:</strong> {{ $foglalas->created_at ?? 'Nincs megadva (teszt)'}}</p>
                                                     <p><strong>Név:</strong> {{ $foglalas->vendeg->nev ?? 'Nincs név' }}</p>
                                                     <p><strong>Email:</strong> {{ $foglalas->vendeg->email ?? 'Nincs email' }}</p>
-                                                    <p><strong>Telefonszám:</strong> {{ $foglalas->vendeg->telefon ?? 'Nincs telefonszám' }}</p>
+                                                    <p><strong>Telefonszám:</strong> {{ $foglalas->vendeg->telefon ?? 'Nincs telefonszám' }} </p>
                                                     <p><strong>Érkezés:</strong> {{ $foglalas->erkezes }}</p>
                                                     <p><strong>Távozás:</strong> {{ $foglalas->tavozas }}</p>
                                                     <p><strong>Felnőttek:</strong> {{ $foglalas->felnott }}</p>
@@ -607,8 +608,6 @@
                                                         <span id="osszegMegjelenit{{ $foglalas->foglalas_id }}">{{ $foglalas->osszeg }}</span>
                                                         Ft
                                                     </p>
-            
-                                                   
                                                     <p><strong>Foglalás állapota:</strong> {{ $foglalas->foglalas_allapot }}</p>
                                                     <p><strong>Fizetés állapota:</strong> {{ $foglalas->fizetes_allapot }}</p>
                                                     <p><strong>Speciális kérések:</strong> {{ $foglalas->speciális_keresek ?? 'Nincsenek' }}</p>
@@ -622,8 +621,6 @@
                                                     <form action="{{ route('AdminFelulet.FoglalasUpdate', $foglalas->foglalas_id) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
-                                                    
-                                                        
                                                         <div class="mb-3">
                                                             <label class="form-label">Foglalás állapota</label>
                                                             <select name="foglalas_allapot" class="form-control">
@@ -632,8 +629,6 @@
                                                                 <option value="elutasitva" {{ $foglalas->foglalas_allapot == 'elutasitva' ? 'selected' : '' }}>Elutasitva</option>
                                                             </select>
                                                         </div>
-                                                    
-                                                        <!-- Fizetés állapota -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Fizetés állapota</label>
                                                             <select name="fizetes_allapot" class="form-control">
@@ -641,49 +636,34 @@
                                                                 <option value="kifizetett" {{ $foglalas->fizetes_allapot == 'kifizetett' ? 'selected' : '' }}>Kifizetett</option>
                                                             </select>
                                                         </div>
-                                                    
-                                                        <!-- Speciális kérések -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Speciális kérések</label>
                                                             <textarea class="form-control" name="speciális_keresek" rows="3">{{ $foglalas->speciális_keresek }}</textarea>
                                                         </div>
-                                                    
-                                                        <!-- Érkezés dátuma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Érkezés dátuma</label>
                                                             <input type="date" class="form-control foglalas-input" name="erkezes"
                                                                 id="erkezes{{ $foglalas->foglalas_id }}" value="{{ $foglalas->erkezes }}" required>
                                                         </div>
-                                                    
-                                                        <!-- Távozás dátuma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Távozás dátuma</label>
                                                             <input type="date" class="form-control foglalas-input" name="tavozas"
                                                                 id="tavozas{{ $foglalas->foglalas_id }}" value="{{ $foglalas->tavozas }}" required>
                                                         </div>
-                                                    
-                                                        <!-- Felnőttek száma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Felnőttek száma</label>
                                                             <input type="number" class="form-control foglalas-input" name="felnott"
                                                                 id="felnott{{ $foglalas->foglalas_id }}" value="{{ $foglalas->felnott }}" required>
                                                         </div>
-                                                    
-                                                        <!-- Gyerekek száma -->
                                                         <div class="mb-3">
                                                             <label class="form-label">Gyerekek száma</label>
-                                                            <input type="number" class="form-control foglalas-input" name="gyerek"
-                                                                id="gyerek{{ $foglalas->foglalas_id }}" value="{{ $foglalas->gyerek }}" required>
-                                                        </div>
-                                                    
-                                                        <!-- Csomagok -->
+                                                            <input type="number" class="form-control foglalas-input" name="gyerek" id="gyerek{{ $foglalas->foglalas_id }}" value="{{ $foglalas->gyerek }}" required></div>
                                                         <div class="mb-3">
                                                             <label class="form-label">Csomag</label>
                                                             <select name="csomag_id" class="form-control">
                                                                 @foreach ($csomagok as $csomag)
-                                                                    <option value="{{ $csomag->csomag_id }}" {{ $csomag->csomag_id == $foglalas->csomag_id ? 'selected' : '' }}> 
-                                                                        {{ $csomag->nev }} ({{ $csomag->ar }} Ft)
-                                                                    </option>
+                                                                <option value="{{ $csomag->csomag_id }}" {{ $csomag->csomag_id == $foglalas->csomag_id ? 'selected' : '' }}> {{ $csomag->nev }} ({{ $csomag->ar }} Ft)
+                                                                </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -694,9 +674,7 @@
                                                             <select name="akcio_id" class="form-control">
                                                                 <option value="">Nincs akció</option>
                                                                 @foreach ($akciok as $akcio)
-                                                                    <option value="{{ $akcio->akcio_id }}" {{ $akcio->akcio_id == $foglalas->akcio_id ? 'selected' : '' }}>
-                                                                        {{ $akcio->cim }} ({{ $akcio->kedvezmeny_szazalek }}% kedvezmény)
-                                                                    </option>
+                                                                    <option value="{{ $akcio->akcio_id }}" {{ $akcio->akcio_id == $foglalas->akcio_id ? 'selected' : '' }}>{{ $akcio->cim }} ({{ $akcio->kedvezmeny_szazalek }}% kedvezmény)  </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -724,9 +702,329 @@
             @endforeach
             <br>
             <hr>
-            <h2 class="text-center">Statisztika</h2>
+            <h2 class="text-center">Statisztika </h2>
             <hr>
             <br>
+            <div class="container mt-4">
+                
+                <div class="row">
+                  
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <h4 class="text-center">Foglalások - Havi bontásban </h4>
+                        <canvas id="foglalasokChart"></canvas>
+                        <br>
+                        <h4 class="text-center">Összesen: {{ $ujFoglalasok ?? 'Nincs adat' }}</h4>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <h4 class="text-center">Foglalások Összeg Havi bontásban</h4>
+                        <canvas id="foglalasokOsszegChart"></canvas>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-sm-12">
+                        <h4 class="text-center">Vendégek száma (Havi bontásban)</h4>
+                        <canvas id="vendegSzamChart"></canvas>
+                    </div>
+                    @php
+   
+                          $legjobbFoglalas = null;
+                        $maxOsszeg = 0;
+                      foreach ($foglalasok as $foglalas) {
+                      if ($foglalas->osszeg > $maxOsszeg) {
+                          $maxOsszeg = $foglalas->osszeg;
+                         $legjobbFoglalas = $foglalas;
+                         }
+                      }
+                    @endphp
+                 <div class="col-md-4 col-lg-4 col-sm-12">
+                    <h4 class="text-center">Legjövedelmezőbb Foglalás a Szezonban (2025)</h4>
+                    
+                    @if($legjobbFoglalas)
+                        <div>
+                            <!-- Vendég neve -->
+                            <h5 class="text-center">{{ $legjobbFoglalas->vendeg->nev ?? 'Nincs adat' }}</h5>
+                            
+                            <!-- Hónap konvertálása számról hónap névre -->
+                            <h6 class="text-center">
+                                Hónap: 
+                                {{ 
+                                    \Carbon\Carbon::parse($legjobbFoglalas->erkezes)->format('F') 
+                                }}
+                            </h6>
+                
+                            <!-- Érkezés és Távozás dátumok -->
+                            <p class="text-center">
+                                Érkezés: {{ \Carbon\Carbon::parse($legjobbFoglalas->erkezes)->format('Y-m-d') ?? 'Nincs adat' }}
+                            </p>
+                            <p class="text-center">
+                                Távozás: {{ \Carbon\Carbon::parse($legjobbFoglalas->tavozas)->format('Y-m-d') ?? 'Nincs adat' }}
+                            </p>
+                
+                            <!-- Tartózkodás ideje (számítva a dátumok között) -->
+                            @php
+                                $erkezes = \Carbon\Carbon::parse($legjobbFoglalas->erkezes);
+                                $tavozas = \Carbon\Carbon::parse($legjobbFoglalas->tavozas);
+                                $tartozkodas = $tavozas->diffInDays($erkezes); // Különbség napokban
+                            @endphp
+                            <p class="text-center">
+                                Tartózkodás ideje: 
+                                {{ isset($tartozkodas) && $tartozkodas > 0 ? $tartozkodas : '7' }} nap
+                            </p>
+                
+                            <!-- Összeg formázása -->
+                            <h3 class="text-center text-success">
+                                {{ number_format($legjobbFoglalas->osszeg, 0, ',', ' ') }} Ft
+                            </h3>
+                        </div>
+                    @else
+                        <p class="text-center">Nincs adat a legjobb foglalásról.</p>
+                    @endif
+                </div>
+                    <div class="col-md-4 col-lg-4 col-sm-12">
+                        <h4 class="text-center">Foglalások Átlagos Hossza (napok)</h4>
+                        <canvas id="foglalasHosszChart"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <h4 class="text-center">Csomagok Összesen</h4>
+                        <canvas id="csomagokChart"></canvas>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <h4 class="text-center">Akciók Összesen</h4>
+                        <canvas id="akciokChart"></canvas>
+                    </div>
+                </div>
+              
+            </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+           
+            <script>
+             var ctxVendegSzam = document.getElementById('vendegSzamChart').getContext('2d');
+             var vendegSzamChart = new Chart(ctxVendegSzam, {
+             type: 'line', 
+             data: {
+            labels: [
+                @foreach($vendegSzam as $data)
+                    '{{ $data->honap }}' @if(!$loop->last), @endif
+                @endforeach
+            ],
+            datasets: [{
+                    label: 'Gyerekek száma',
+                    data: [
+                        @foreach($vendegSzam as $data)
+                            {{ $data->gyerek }} @if(!$loop->last), @endif
+                        @endforeach
+                    ],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Felnőttek száma',
+                    data: [
+                        @foreach($vendegSzam as $data)
+                            {{ $data->felnott }} @if(!$loop->last), @endif
+                        @endforeach
+                    ],
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value; 
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    var ctxFoglalasHossz = document.getElementById('foglalasHosszChart').getContext('2d');
+    var foglalasHosszChart = new Chart(ctxFoglalasHossz, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach($atlagosHossz as $data)
+                    '{{ $data->honap }}' @if(!$loop->last), @endif
+                @endforeach
+            ],
+            datasets: [{
+                label: 'Átlagos Foglalási Hossz (napok)',
+                data: [
+                    @foreach($atlagosHossz as $data)
+                        {{ $data->atlag_hossz }} @if(!$loop->last), @endif
+                    @endforeach
+                ],
+                backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    var ctxFoglalasokOsszeg = document.getElementById('foglalasokOsszegChart').getContext('2d');
+    var foglalasokOsszegChart = new Chart(ctxFoglalasokOsszeg, {
+        type: 'line',
+        data: {
+            labels: [
+                @foreach($foglalasokOsszegHavonta as $adat)
+                    '{{ $adat->honap }}' @if(!$loop->last), @endif
+                @endforeach
+            ],
+            datasets: [{
+                label: 'Foglalások összege (Ft)',
+                data: [
+                    @foreach($foglalasokOsszegHavonta as $adat)
+                        {{ $adat->havi_osszeg }} @if(!$loop->last), @endif
+                    @endforeach
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+                // Foglalások havi bontásban (oszlopdiagram)
+                var ctxFoglalasok = document.getElementById('foglalasokChart').getContext('2d');
+                var foglalasokChart = new Chart(ctxFoglalasok, {
+                    type: 'bar',
+                    data: {
+                        labels: [ 'Május', 'Június', 'Július', 'Augusztus'],
+                        datasets: [{
+                            label: 'Foglalások száma',
+                            data: [
+                                @foreach($foglalasokHavonta as $foglalas)
+                                    {{ $foglalas->foglalasok_szama }}@if(!$loop->last),@endif
+                                @endforeach
+                            ],
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            
+                // Csomagok kördiagram
+                var ctxCsomagok = document.getElementById('csomagokChart').getContext('2d');
+                var csomagokChart = new Chart(ctxCsomagok, {
+                    type: 'pie',
+                    data: {
+                        labels: [
+                            @foreach($csomagokST as $csomag)
+                                '{{ $csomag->nev }}' @if(!$loop->last), @endif
+                            @endforeach
+                        ],
+                        datasets: [{
+                            label: 'Csomagok népszerűsége',
+                            data: [
+                                @foreach($csomagokST as $csomag)
+                                    {{ $csomag->foglalasok_szama }}@if(!$loop->last), @endif
+                                @endforeach
+                            ],
+                            backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 99, 132, 0.5)'],
+                            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return tooltipItem.label + ': ' + tooltipItem.raw + ' foglalás';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            
+                // Akciók kördiagram
+                var ctxAkciok = document.getElementById('akciokChart').getContext('2d');
+                var akciokChart = new Chart(ctxAkciok, {
+                    type: 'pie',
+                    data: {
+                        labels: [
+                            @foreach($akciokST as $akcio)
+                                '{{ $akcio->cim }}' @if(!$loop->last), @endif
+                            @endforeach
+                        ],
+                        datasets: [{
+                            label: 'Akciók népszerűsége',
+                            data: [
+                                @foreach($akciokST as $akcio)
+                                    {{ $akcio->foglalasok_szama }}@if(!$loop->last), @endif
+                                @endforeach
+                            ],
+                            backgroundColor: ['rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 99, 132, 0.5)'],
+                            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return tooltipItem.label + ': ' + tooltipItem.raw + ' foglalás';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+           
+             <br>
             <a href="{{ route('admin.login') }}" class="btn btn-danger w-100">Kijelentkezés</a>
 
             <div class="footer">
@@ -739,79 +1037,7 @@
 
     </div>
 
-    <script>
- document.addEventListener("DOMContentLoaded", function () {
-    var foglaltNapok = [];
-    var erkezesNapok = [
-    "2025-05-01", "2025-05-05", "2025-05-10", "2025-05-15", "2025-05-20", "2025-05-25",
-    "2025-06-01", "2025-06-05", "2025-06-10", "2025-06-15", "2025-06-20", "2025-06-25",
-    "2025-07-01", "2025-07-05", "2025-07-10", "2025-07-15", "2025-07-20", "2025-07-25",
-    "2025-08-01", "2025-08-05", "2025-08-10", "2025-08-15", "2025-08-20"
-];
-
-
-    fetch('/admin/foglalt-napok') 
-        .then(response => response.json())
-        .then(data => {
-            foglaltNapok = data; 
-            generateCalendar("calendar-may", 2025, 4);  
-            generateCalendar("calendar-june", 2025, 5); 
-            generateCalendar("calendar-july", 2025, 6); 
-            generateCalendar("calendar-august", 2025, 7); 
-        });
-
-    function generateCalendar(tableId, year, month) {
-        var table = document.getElementById(tableId);
-        var firstDay = new Date(year, month, 1).getDay();
-        var daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        var html = `
-        <thead>
-            <tr>
-                <th>H</th>
-                <th>K</th>
-                <th>Sze</th>
-                <th>Cs</th>
-                <th>P</th>
-                <th>Szo</th>
-                <th>V</th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr>`;
-
-       
-        for (var i = 0; i < firstDay; i++) {
-            html += "<td></td>";
-        }
-
-        for (var i = 1; i <= daysInMonth; i++) {
-            var currentDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            var isFoglalt = foglaltNapok.includes(currentDate); 
-            var isErkezes = erkezesNapok.includes(currentDate); 
-
-           
-            var cellClass = '';
-            if (isErkezes) {
-                cellClass = 'bg-warning text-white'; 
-            } else if (isFoglalt) {
-                cellClass = 'bg-danger text-white'; 
-            } else {
-                cellClass = 'bg-success text-white'; 
-            }
-
-            html += `<td class="${cellClass}">${i}</td>`;
-            if ((firstDay + i - 1) % 7 === 6) {
-                html += "</tr><tr>";
-            }
-        }
-
-        html += "</tr></tbody>";
-        table.innerHTML = html;
-    }
-    });
-
-    </script>
+    <script src="{{asset('AdminALL.js')}}"> </script>
 </body>
 
 </html>

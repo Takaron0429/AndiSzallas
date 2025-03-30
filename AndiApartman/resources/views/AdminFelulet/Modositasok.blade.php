@@ -602,6 +602,20 @@
                                             <input type="text" class="form-control" name="link"
                                                 value="{{ $program->link }}">
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="kep" class="form-label">Program Képe</label>
+                                            <input type="file" class="form-control" name="kep" value="{{ $program->kep }}">
+                                     
+                                            @if($program->kep)
+                                                <div class="mt-2">
+                                                    <strong>Jelenlegi kép: </strong> {{ $program->kep }}
+                                                </div>
+                                            @endif
+                                        
+                                            @error('kep') 
+                                                <div class="alert alert-danger">{{ $message }}</div> 
+                                            @enderror
+                                        </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Mégse</button>
@@ -703,6 +717,7 @@
                             font-size: 1.1rem;
                         }
                     }
+                    
                 </style>
                 <form class="form-container" action="{{ route('foglalas.Adminstore') }}" method="POST">
                     @csrf

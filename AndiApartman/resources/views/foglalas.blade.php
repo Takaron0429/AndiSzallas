@@ -92,7 +92,7 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label"><i class="fa fa-child"></i> Gyermek (1-12 éves)</label>
+                                    <label class="form-label"><i class="fa fa-child"></i> Gyerek</label>
                                     <select class="form-select" id="gyerek" name="gyerek">
                                         <option selected value="0">0</option>
                                         @for ($i = 1; $i <= 4; $i++)

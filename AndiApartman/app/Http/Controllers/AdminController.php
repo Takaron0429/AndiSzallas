@@ -10,6 +10,7 @@ use App\Models\ErkezesiCsomag;
 use App\Models\Foglalas;
 use App\Models\Velemeny;
 use Carbon\Carbon;
+use DateTime;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -53,15 +54,15 @@ class AdminController extends Controller
                     $query->orderByRaw('(felnott + gyerek) DESC');
                     break;
                 default:
-                    $query->orderBy('foglalas_id', 'asc'); 
+                    $query->orderBy('foglalas_id', 'asc');
                     break;
             }
         }
-        
+
         if (!$request->filled('sort_by')) {
             $query->orderBy('foglalas_id', 'asc');
         }
-        
+
         $query->orderByRaw("
         CASE 
             WHEN foglalas_allapot = 'elfogadva' THEN 1
@@ -69,19 +70,21 @@ class AdminController extends Controller
             WHEN foglalas_allapot = 'elutasitva' THEN 3
             ELSE 4
         END ");
-       
+
         $foglalasok = $query->get();
-       // $foglalasok = $query->orderBy('erkezes', 'asc')->get();
-       // $foglalasok = Foglalas::orderBy('erkezes', 'asc')->get();
+        // $foglalasok = $query->orderBy('erkezes', 'asc')->get();
+        // $foglalasok = Foglalas::orderBy('erkezes', 'asc')->get();
         //-------------------------------
-        //STATISZTIKA
+
+        //STATISZTIKA - MAIN
+
         $startDate = '2025-05-01';
         $endDate = '2025-08-31';
 
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
-        
-      
+
+
         $totalDays = $startDate->diffInDays($endDate);
         $allDates = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
             ->orWhereBetween('tavozas', [$startDate, $endDate])
@@ -90,22 +93,22 @@ class AdminController extends Controller
                 $dates = [];
                 $erkezes = Carbon::parse($foglalas->erkezes);
                 $tavozas = Carbon::parse($foglalas->tavozas);
-        
-             
+
+
                 while ($erkezes <= $tavozas) {
                     $dates[] = $erkezes->format('Y-m-d');
                     $erkezes->addDay();
                 }
-        
+
                 return $dates;
             })
             ->unique() // Eltávolítja a duplikált napokat mert nem voltunk képesek megcsinálni
             ->values(); // Átalakítja az egyedi napokat listává
 
-        $lefoglaltNapok = $allDates->count()-1;
-        
+        $lefoglaltNapok = $allDates->count() - 1;
+
         $ujFoglalasok = Foglalas::whereBetween('erkezes', [$startDate, $endDate])->count();
-        
+
 
 
         $osszeg = Foglalas::whereBetween('erkezes', [$startDate, $endDate])
@@ -149,6 +152,109 @@ class AdminController extends Controller
         if ($legnepszerubbCsomag) {
             $legnepszerubbCsomagNeve = ErkezesiCsomag::where('csomag_id', $legnepszerubbCsomag->csomag_id)->value('nev');
         }
+
+        //STATISZTIKA - DIAGRAMOK
+
+        $foglalasokHavonta = Foglalas::select(DB::raw('MONTH(erkezes) as honap'), DB::raw('count(*) as foglalasok_szama'))
+            ->whereYear('erkezes', '2025')
+            ->groupBy(DB::raw('MONTH(erkezes)'))
+            ->get();
+
+        $foglalasokHavi = DB::table('foglalasok')
+            ->selectRaw('MONTH(erkezes) as honap, SUM(osszeg) as osszes_penz, COUNT(*) as foglalas_szama')
+            ->where('fizetes_allapot', '=', 'kifizetett')
+            ->groupBy('honap')
+            ->orderBy('honap')
+            ->get();
+
+
+        $atlagosErtek = $foglalasokHavi->map(function ($item) {
+            return (object) [
+                'honap' => $item->honap,
+                'atlag' => $item->foglalas_szama > 0 ? $item->osszes_penz / $item->foglalas_szama / 1000 : 0 // Elosztva 1000-rel
+            ];
+        });
+
+        $csomagokST = CsomagFoglalas::select(
+            'erkezesi_csomagok.nev',
+            DB::raw('count(csomag_foglalas.foglalas_id) as foglalasok_szama')
+        )
+            ->join('erkezesi_csomagok', 'csomag_foglalas.csomag_id', '=', 'erkezesi_csomagok.csomag_id')
+            ->join('foglalasok', 'csomag_foglalas.foglalas_id', '=', 'foglalasok.foglalas_id')
+            ->whereBetween('foglalasok.erkezes', ['2025-01-01', '2025-12-31'])
+            ->groupBy('erkezesi_csomagok.nev')
+            ->get();
+
+        $akciokST = AkcioFoglalas::select(
+            'akciok.cim',
+            DB::raw('count(akcio_foglalas.foglalas_id) as foglalasok_szama')
+        )
+            ->join('akciok', 'akcio_foglalas.akcio_id', '=', 'akciok.akcio_id')
+            ->join('foglalasok', 'akcio_foglalas.foglalas_id', '=', 'foglalasok.foglalas_id')
+            ->whereBetween('foglalasok.erkezes', ['2025-01-01', '2025-12-31'])
+            ->groupBy('akciok.cim')
+            ->get();
+
+        $foglalasokOsszegHavonta = DB::table('foglalasok')
+            ->selectRaw("DATE_FORMAT(erkezes, '%Y-%m') as honap, SUM(osszeg) as havi_osszeg")
+            ->groupBy('honap')
+            ->orderBy('honap')
+            ->get();
+
+        $velemenyekHavonta = DB::table('velemenyek')
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as honap, COUNT(*) as velemeny_szam, AVG(ertekeles) as atlag_ertekeles")
+            ->where('approved', 1)
+            ->groupBy('honap')
+            ->orderBy('honap')
+            ->get();
+
+        $legjobbHonap = DB::table('foglalasok')
+            ->selectRaw('MONTH(erkezes) as honap, SUM(osszeg) as osszes_penz')
+            ->where('fizetes_allapot', '=', 'kifizetett')
+            ->groupBy('honap')
+            ->orderByDesc('osszes_penz')
+            ->first();
+        $honapNevek = [
+            1 => 'Január',
+            2 => 'Február',
+            3 => 'Március',
+            4 => 'Április',
+            5 => 'Május',
+            6 => 'Június',
+            7 => 'Július',
+            8 => 'Augusztus',
+            9 => 'Szeptember',
+            10 => 'Október',
+            11 => 'November',
+            12 => 'December'
+        ];
+        $legjobbHonap->honap_nev = $honapNevek[$legjobbHonap->honap] ?? 'Ismeretlen hónap';
+
+        $atlagosHossz = DB::table('foglalasok')
+            ->selectRaw("DATE_FORMAT(erkezes, '%Y-%m') as honap, AVG(DATEDIFF(tavozas, erkezes)) as atlag_hossz")
+            ->whereYear('erkezes', 2025)
+            ->whereMonth('erkezes', '>=', 5)
+            ->whereMonth('erkezes', '<=', 8)
+            ->where('foglalas_allapot', '=', 'elfogadva')
+            ->groupBy('honap')
+            ->orderBy('honap')
+            ->get();
+
+        $vendegSzamHavi = DB::table('foglalasok')
+            ->selectRaw('MONTH(erkezes) as honap, SUM(gyerek) as gyerekek_szama, SUM(felnott) as felnott_szama')
+            ->where('foglalas_allapot', '=', 'elfogadva')
+            ->groupBy('honap')
+            ->orderBy('honap')
+            ->get();
+
+        $vendegSzam = $vendegSzamHavi->map(function ($item) {
+            return (object) [
+                'honap' => $item->honap,
+                'gyerek' => $item->gyerekek_szama,
+                'felnott' => $item->felnott_szama,
+            ];
+        });
+      
         //RETURN 
         $velemenyek = Velemeny::all();
         $Admin = Admin::all();
@@ -158,22 +264,34 @@ class AdminController extends Controller
         $csomagok = ErkezesiCsomag::all();
         $akciok = Akcio::all();
         // $foglalas = Foglalas::with(['csomagok', 'akciok',])->get();
-        return view('AdminFelulet.Admin', compact(
-            'Admin',
-            'akcio_',
-            'csomag_',
-            'foglalasok',
-            'csomagok',
-            'akciok',
-            'ujFoglalasok',
-            'lefoglaltNapok',
-            'osszegKerekitve',
-            'visszajaroVendegSzam',
-            'totalDays',
-            'velemenyek',
-            'legnepszerubbAkcioNeve',
-            'legnepszerubbCsomagNeve'
-        ));
+        return view('AdminFelulet.Admin', [
+            'foglalasokHavonta' => $foglalasokHavonta,
+            'csomagokST' => $csomagokST,
+            'akciokST' => $akciokST,
+            'foglalasokOsszegHavonta' => $foglalasokOsszegHavonta,
+            'velemenyekHavonta' => $velemenyekHavonta,
+            'atlagosErtek' => $atlagosErtek,
+            'legjobbHonap' => $legjobbHonap,
+            'foglalasokOsszegHavonta ' => $foglalasokOsszegHavonta,
+            'atlagosHossz' => $atlagosHossz,
+            'vendegSzam' => $vendegSzam,
+         
+            //TÖBBI ROUTE
+            'Admin' => $Admin,
+            'akcio_' => $akcio_,
+            'csomag_' => $csomag_,
+            'foglalasok' => $foglalasok,
+            'csomagok' => $csomagok,
+            'akciok' => $akciok,
+            'ujFoglalasok' => $ujFoglalasok,
+            'lefoglaltNapok' => $lefoglaltNapok,
+            'osszegKerekitve' => $osszegKerekitve,
+            'visszajaroVendegSzam' => $visszajaroVendegSzam,
+            'totalDays' => $totalDays,
+            'velemenyek' => $velemenyek,
+            'legnepszerubbAkcioNeve' => $legnepszerubbAkcioNeve,
+            'legnepszerubbCsomagNeve' => $legnepszerubbCsomagNeve
+        ]);
     }
     public function showLoginForm()
     {
@@ -245,5 +363,27 @@ class AdminController extends Controller
     public function show(string $id)
     {
         //
+    }
+    public function getStatistics()
+    {
+
+        // Havi foglalások számának lekérése
+        $foglalasok = Foglalas::whereYear('erkezes', 2025)
+            ->selectRaw('MONTH(erkezes) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->get();
+
+        // Csomagok népszerűsége
+        $csomagok = ErkezesiCsomag::select('nev', DB::raw('count(*) as popularity'))
+            ->join('csomag_foglalas', 'csomag_foglalas.csomag_id', '=', 'erkezesi_csomag.csomag_id')
+            ->groupBy('nev')
+            ->orderByDesc('popularity')
+            ->get();
+
+        // Adatok átadása a view-nak
+        return view('statisztika', [
+            'foglalasok' => $foglalasok,
+            'csomagok' => $csomagok
+        ]);
     }
 }

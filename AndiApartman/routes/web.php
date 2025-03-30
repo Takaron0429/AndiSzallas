@@ -66,3 +66,8 @@ Route::get('velemenyek', [VelemenyController::class, 'approvedVelemenyek'])->nam
 Route::get('/admin/foglalt-napok', [FoglalasController::class, 'getFoglaltNapok']);
 Route::get('/getBookedDates', [FoglalasController::class, 'getBookedDates'])->name('getBookedDates');
 
+//Statisztika
+Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
+Route::get('/admin/statisztika', [AdminController::class, 'index']);
+
+
