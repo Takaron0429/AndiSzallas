@@ -157,7 +157,7 @@
 
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="img/medencehaz.webp" class="d-block w-100" alt="Medenceház">
+                                <img src="img/placeholder2.jpg" class="d-block w-100" alt="Medenceház">
                             </div>
                             <div class="carousel-item">
                                 <img src="img/homokozo.jpg" class="d-block w-100" alt="Homokozó">
@@ -170,6 +170,12 @@
                             </div>
                             <div class="carousel-item">
                                 <img src="img/nappali.jpg" class="d-block w-100" alt="Nappali">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="img/tervrajz.webp" class="d-block w-100" alt="Nappali">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="img/bogracs.webp" class="d-block w-100" alt="Nappali">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
@@ -193,7 +199,7 @@
                         </button>
 
                         <div class="carousel-inner">
-                            <!-- Items will be copied here by JavaScript -->
+                            
                         </div>
 
                         <button class="carousel-control-prev" type="button" data-bs-target="#fullscreenCarousel"
@@ -528,7 +534,7 @@
                         <textarea class="form-control" id="komment" name="komment" rows="3"
                             placeholder="Írd le a tapasztalataidat..." required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3">Küldés</button>
+                    <button type="submit" class="btn btn-primary mt-3"><i class="fa-solid fa-paper-plane" style="font-size: 18px"></i> Küldés</button>
                 </form>
             </div>
         </div>

@@ -338,13 +338,13 @@ class FoglalasController extends Controller
         $validated = $request->validate([
             'checkin' => 'required|date',
             'checkout' => 'required|date|after:checkin',
-            'felnott' => 'required|integer',
-            'gyerek' => 'required|integer',
-            'nev' => 'required|string',
+            'felnott' => 'required|integer|min:1',
+            'gyerek' => 'required|integer|min:0',
+            'nev' => 'required|string|max:255',
             'email' => 'required|email',
-            'telefon' => 'nullable|string',
-            'iranyitoszam' => 'nullable|string',
-            'lakcim' => 'nullable|string',
+            'telefon' => 'nullable|string|max:20',
+            'iranyitoszam' => 'nullable|string|max:10',
+            'lakcim' => 'nullable|string|max:255',
             'specialis_keresek' => 'nullable|string',
             'csomagok' => 'nullable|array',
             'csomagok.*' => 'exists:erkezesi_csomagok,csomag_id'
@@ -367,41 +367,66 @@ class FoglalasController extends Controller
             }
 
             // Éjszakák számítása
-            $checkin = new \DateTime($validated['checkin']);
-            $checkout = new \DateTime($validated['checkout']);
-            $ejszakak = $checkin->diff($checkout)->days;
+            $checkin = Carbon::parse($validated['checkin']);
+            $checkout = Carbon::parse($validated['checkout']);
+            $ejszakak = $checkin->diffInDays($checkout);
 
-            // Ár kiszámítása (csak a szállás alapárát számoljuk)
+            // Alapár számítása
             $felnottAr = 10000;
             $gyerekAr = 5000;
-            $osszeg = ($validated['felnott'] * $felnottAr + $validated['gyerek'] * $gyerekAr) * $ejszakak;
+            $szallasOsszeg = ($validated['felnott'] * $felnottAr + $validated['gyerek'] * $gyerekAr) * $ejszakak;
 
-            // Foglalás mentése
+            // Csomagok kezelése
+            $csomagId = null;
+            $csomagOsszeg = 0;
+
+            if (!empty($validated['csomagok'])) {
+                // Csomagok árainak lekérdezése
+                $csomagok = ErkezesiCsomag::whereIn('csomag_id', $validated['csomagok'])->get();
+
+                // Összes csomag ára
+                $csomagOsszeg = $csomagok->sum('ar');
+
+                // Az első csomag ID-ja
+                $csomagId = $validated['csomagok'][0];
+            }
+
+            // Végső összeg
+            $vegosszeg = $szallasOsszeg + $csomagOsszeg;
+
+            // Foglalás létrehozása
             $foglalas = Foglalas::create([
                 'vendeg_id' => $vendeg->vendeg_id,
                 'erkezes' => $validated['checkin'],
                 'tavozas' => $validated['checkout'],
                 'felnott' => $validated['felnott'],
                 'gyerek' => $validated['gyerek'],
-                'osszeg' => $osszeg,
+                'osszeg' => $vegosszeg,
                 'specialis_keresek' => $validated['specialis_keresek'] ?? null,
+                'csomag_id' => $csomagId,
             ]);
 
-            // Csomagok hozzárendelése (ha vannak)
-            if (!empty($validated['csomagok'])) {
-                foreach ($validated['csomagok'] as $csomag_id) {
-                    CsomagFoglalas::create([
-                        'foglalas_id' => $foglalas->foglalas_id,
-                        'csomag_id' => $csomag_id
-                    ]);
-                }
+            // További csomagok hozzárendelése (ha több van)
+            if (!empty($validated['csomagok']) && count($validated['csomagok']) > 1) {
+                $foglalas->csomagok()->attach(array_slice($validated['csomagok'], 1));
             }
 
             DB::commit();
-            return redirect()->route('foglalas')->with('success', 'Foglalás sikeresen rögzítve!');
+
+            // Debug információk
+            \Log::info('Foglalás létrehozva', [
+                'foglalas_id' => $foglalas->foglalas_id,
+                'osszeg' => $vegosszeg,
+                'csomag_osszeg' => $csomagOsszeg,
+                'csomag_id' => $csomagId,
+                'tobb_csomag' => !empty($validated['csomagok']) ? count($validated['csomagok']) : 0
+            ]);
+
+            return redirect()->route('foglalas')->with('success', 'Foglalás sikeresen rögzítve! Összeg: ' . $vegosszeg . ' Ft');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withErrors(['error' => 'Hiba történt a foglalás során: ' . $e->getMessage()]);
+            \Log::error('Foglalási hiba', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Hiba történt: ' . $e->getMessage())->withInput();
         }
     }
 
