@@ -49,6 +49,52 @@ class FoglalasController extends Controller
                 $q->where('cim', 'like', '%' . $request->akcio . '%');
             });
         }
+        if ($request->filled('search')) {
+            $query->whereHas('vendeg', function ($q) use ($request) {
+                $q->where('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('telefon', 'like', '%' . $request->search . '%');
+            });
+        }
+     
+        if ($request->filled('sort_by')) {
+            switch ($request->sort_by) {
+                case 'most_days':
+                    $query->orderByRaw('DATEDIFF(tavozas, erkezes) DESC');
+                    break;
+                case 'most_payment':
+                    $query->orderBy('osszeg', 'DESC');
+                    break;
+                case 'most_people':
+                    $query->orderByRaw('(felnott + gyerek) DESC');
+                    break;
+                default:
+                    $query->orderBy('foglalas_id', 'asc');
+                    break;
+            }
+        } else {
+            $query->orderBy('foglalas_id', 'asc');
+        }
+
+        if ($request->filled('month')) {
+            $query->whereMonth('erkezes', $request->month);
+        }
+
+        if ($request->filled('people')) {
+            $query->whereRaw('(felnott + gyerek) = ?', [$request->people]);
+        }
+
+        if ($request->filled('payment_status')) {
+            $query->where('foglalas_allapot', $request->payment_status);
+        }
+
+        $quantity = $request->get('quantity', 'all');  
+        if ($quantity !== 'all') {
+            $foglalasok = $query->paginate($quantity);  
+        } else {
+            $foglalasok = $query->get(); 
+        }
+
+
         //STATISZTIKÁK
 
         $year = $request->input('year', date('Y'));
@@ -153,22 +199,22 @@ class FoglalasController extends Controller
                 ->groupBy('akciok.cim')
                 ->get();
         }
-        
+
         if ($year) {
-          
+
             $bankkartyasOsszeg = Fizetes::where('fizetesi_mod', 'bankkártya')
                 ->whereYear('tranzakcio_datuma', $year)
                 ->sum('osszeg');
-        
+
             $utalasOsszeg = Fizetes::where('fizetesi_mod', 'utalás')
                 ->whereYear('tranzakcio_datuma', $year)
                 ->sum('osszeg');
         } else {
-          
+
             $bankkartyasOsszeg = Fizetes::where('fizetesi_mod', 'bankkártya')
                 ->whereBetween('created_at', ['2020-01-01', '2025-12-31'])
                 ->sum('osszeg');
-        
+
             $utalasOsszeg = Fizetes::where('fizetesi_mod', 'utalás')
                 ->whereBetween('created_at', ['2020-01-01', '2025-12-31'])
                 ->sum('osszeg');
@@ -377,11 +423,42 @@ class FoglalasController extends Controller
             'fizetes_allapot' => 'nullable|in:függőben,kifizetett',
         ]);
 
-        $foglalas->update($validated);
+        $modositasTipusa = '';
+    $changed = false;
 
-        $erkezes = Carbon::parse($foglalas->erkezes);
-        $tavozas = Carbon::parse($foglalas->tavozas);
-        $days = $erkezes->diffInDays($tavozas);
+    // Ellenőrizzük, hogy mi változott és meghatározzuk a módosítás típusát
+    if ($foglalas->erkezes != $request->input('erkezes')) {
+        $modositasTipusa = 'Érkezés módosítás';
+        $changed = true;
+    } elseif ($foglalas->tavozas != $request->input('tavozas')) {
+        $modositasTipusa = 'Távozás módosítás';
+        $changed = true;
+    } elseif ($foglalas->felnott != $request->input('felnott') || $foglalas->gyerek != $request->input('gyerek')) {
+        $modositasTipusa = 'Felnőttek és gyerekek száma módosítás';
+        $changed = true;
+    } elseif ($foglalas->fizetes_allapot != $request->input('fizetes_allapot')) {
+        $modositasTipusa = 'Fizetés módosítás';
+        $changed = true;
+    } elseif ($foglalas->foglalas_allapot != $request->input('foglalas_allapot')) {
+        $modositasTipusa = 'Foglalás állapot módosítás';
+        $changed = true;
+    }
+
+    if ($changed) {
+        // Ha történt módosítás, új rekordot insertálunk a foglalasi_modositasok táblába
+        DB::table('foglalasi_modositasok')->insert([
+            'foglalas_id' => $foglalas->foglalas_id,
+            'modositas_tipusa' => $modositasTipusa,
+            'kerestet_datuma' => now(),
+            'allapot' => 'függőben', // Ez alapértelmezetten 'függőben', ezt később módosíthatod
+        ]);
+    }
+
+    $foglalas->update($validated);
+
+    $erkezes = Carbon::parse($foglalas->erkezes);
+    $tavozas = Carbon::parse($foglalas->tavozas);
+    $days = $erkezes->diffInDays($tavozas);
 
         // Csak a szállás alapárát számoljuk
         $felnottAr = 10000;

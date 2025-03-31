@@ -6,136 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{{asset('AdminFog.css')}}">
     <title>Foglalások</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdf2e9;
-            padding-top: 80px;
-        }
-
-        header {
-            background: linear-gradient(90deg, rgba(255, 165, 0, 0.8), rgba(255, 99, 71, 0.8));
-            color: white;
-            padding: 30px 0;
-            margin-bottom: 30px;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-        }
-
-        .container {
-            max-width: 1200px;
-        }
-
-        /* Navbar stílusok */
         .navbar {
-            background-color: #ff5722;
-        }
-
-        .navbar-brand {
-            font-size: 1.8rem;
-            color: #ffffff !important;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .navbar-brand:hover {
-            color: #fff176 !important;
-        }
-
-        .nav-link {
-            color: #ffffff !important;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .nav-link:hover {
-            color: #fff176 !important;
-            transform: scale(1.1);
-        }
-
-        .navbar-toggler {
-            border: none;
-        }
-
-        .navbar-toggler-icon {
-
-            border-radius: 5px;
-        }
-
-
-        .footer {
             background-color: rgb(255, 145, 0);
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
-        }
 
-        .table th,
-        .table td {
-            text-align: center;
-            vertical-align: middle;
         }
-
-        .table {
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 100%;
-        }
-
-        .table th {
-            background-color: rgb(255, 145, 0);
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .table tbody tr:nth-child(even) {
-            background-color: #ffe0b2;
-        }
-
-        .table tbody tr:hover {
-            background-color: #ffcc80;
-        }
-
-        .table td {
-            font-size: 1rem;
-            font-weight: 400;
-        }
-
-        .table-responsive {
-            max-height: 450px;
-            overflow-y: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-bordered td,
-        .table-bordered th {
-            border: 1px solid #dee2e6;
-        }
-
-        .accordion-button:not(.collapsed) {
-            background-color: rgb(255, 145, 0);
-            color: white;
-        }
-
-        .accordion-button {
-            background-color: #ffe0b2;
-            color: #ff5722;
-        }
-
-        .accordion-button:focus {
-            box-shadow: none;
-        }
-
-        .btn-warning {
-            background-color: #ff5722;
+        .navbar a:hover{
             color: white;
         }
     </style>
@@ -186,7 +64,9 @@
                     időszakra vonatkozó adatokat, és csak a szükséges információkat jelenítse meg.</p>
             </div>
         </div>
+        <style>
 
+        </style>
         <form method="GET" action="{{ route('AdminFelulet.Foglalasok') }}">
             <div class="filter-section row mb-4 justify-content-center">
                 <div class="col-md-4">
@@ -255,7 +135,28 @@
                     </select>
                 </div>
             </div>
+            <div class="filter-section row mb-4 justify-content-center">
+                <div class="col-md-4">
+                    <label for="searchFilter" class="form-label">Keresés Email / Telefonszám</label>
+                    <input type="text" class="form-control" name="search" id="searchFilter"
+                        placeholder="Email vagy Telefonszám" value="{{ request('search') }}">
+                </div>
 
+
+                <div class="col-md-4">
+                    <label for="sortFilter" class="form-label">Rendezés</label>
+                    <select class="form-select" name="sort_by" id="sortFilter">
+                        <option value="">Nincs rendezés</option>
+                        <option value="most_days" {{ request('sort_by') == 'most_days' ? 'selected' : '' }}>Legtöbb nap
+                        </option>
+                        <option value="most_payment" {{ request('sort_by') == 'most_payment' ? 'selected' : '' }}>Legtöbb
+                            fizetés</option>
+                        <option value="most_people" {{ request('sort_by') == 'most_people' ? 'selected' : '' }}>Legtöbb
+                            ember
+                        </option>
+                    </select>
+                </div>
+            </div>
             <br>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary w-50">Szürés</button>
@@ -268,8 +169,19 @@
             Foglalások
             <hr>
         </h2>
-        <br>
 
+        <div class="filter-section row mb-4 justify-content-left">
+            <div class="col-md-2 col-sm-12">
+                <select class="form-select" name="quantity" id="quantityFilter">
+                    <option value="all" {{ request('quantity') == 'all' ? 'selected' : '' }}>Összes</option>
+                    <option value="5" {{ request('quantity') == '5' ? 'selected' : '' }}>5</option>
+                    <option value="15" {{ request('quantity') == '15' ? 'selected' : '' }}>15</option>
+                    <option value="25" {{ request('quantity') == '25' ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ request('quantity') == '50' ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ request('quantity') == '100' ? 'selected' : '' }}>100</option>
+                </select>
+            </div>
+        </div>
         <div class="accordion" id="accordionExample">
             @foreach ($foglalasok as $foglalas)
                 <div class="accordion-item">
@@ -277,7 +189,8 @@
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapse{{ $foglalas->foglalas_id }}" aria-expanded="true"
                             aria-controls="collapse{{ $foglalas->foglalas_id }}">
-                            {{ $foglalas->vendeg->nev ?? 'Nincs név' }} – {{ $foglalas->erkezes }} →
+                            {{ $foglalas->vendeg->nev ?? 'Nincs név' }} - {{ $foglalas->vendeg->telefon}} -
+                            {{$foglalas->vendeg->email}} – {{ $foglalas->erkezes }} →
                             {{ $foglalas->tavozas }} ({{ $foglalas->osszeg }} Ft)
                         </button>
                     </h2>
@@ -339,6 +252,7 @@
                 </div>
             @endforeach
         </div>
+        <br>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <div class="container">
             <hr>
@@ -360,67 +274,70 @@
                 </div>
                 <br>
                 <!-- Diagram -->
-                <div class="row">
+                <br>
+                <div class="Dia">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-                        <h4 class="text-center">Foglalások Összeg (Éves bontás)</h4>
-                        <div class="chart-container">
-                            <canvas id="foglalasokChart"></canvas>
+                    <div class="row">
+                        <br>
+                        <div class="col-lg-6  col-md-6 col-sm-12 ">
+                            <h4 class="text-center">Foglalások Összeg (Éves bontás)</h4>
+                            <div class="chart-container">
+                                <canvas id="foglalasokChart"></canvas>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6  col-md-6  col-sm-12 ">
+                            <h4 class="text-center">Vendégek Száma (Éves bontás)</h4>
+                            <div class="chart-container">
+                                <canvas id="vendegekChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6  col-md-6  col-sm-12 ">
+                            <h4 class="text-center">Foglalások Átlagos Hossza (Éves bontás)</h4>
+                            <div class="chart-container">
+                                <canvas id="atlagosHosszChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-lg-6  col-md-6 col-sm-12 mb-4">
+                            <h4 class="text-center">Elfogadott Értékelések</h4>
+                            <div class="chart-container">
+                                <canvas id="velemenyekChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 ">
+                            <h4 class="text-center">Csomagok Összesen (Éves Bontásban)</h4>
+                            <div class="chart-container">
+                                <canvas id="csomagokChart" width="600" height="600"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 ">
+                            <h4 class="text-center">Visszajáró Vendégek (Összesen)</h4>
+                            <div class="chart-container">
+                                <canvas id="VIvendegekChart" width="600" height="600"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 ">
+                            <h4 class="text-center">Fizetések Csoportositva</h4>
+                            <div class="chart-container">
+                                <canvas id="fizetesChart" width="600" height="600"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-12 ">
+                            <h4 class="text-center">Akciók Összesen (Éves bontásban)</h4>
+                            <div class="chart-container">
+                                <canvas width="600" height="600" id="akciokChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-                        <h4 class="text-center">Vendégek Száma (Éves bontás)</h4>
-                        <div class="chart-container">
-                            <canvas id="vendegekChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-                        <h4 class="text-center">Foglalások Átlagos Hossza (Éves bontás)</h4>
-                        <div class="chart-container">
-                            <canvas id="atlagosHosszChart"></canvas>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                        <h4 class="text-center">Csomagok Összesen (Éves Bontásban)</h4>
-                        <div class="chart-container">
-                            <canvas id="csomagokChart"></canvas>
-                        </div>
-                    </div>
-
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
-                        <h4 class="text-center">Akciók Összesen (Éves bontásban)</h4>
-                        <div class="chart-container">
-                            <canvas id="akciokChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-                        <h4 class="text-center">Elfogadott Értékelések</h4>
-                        <div class="chart-container">
-                            <canvas id="velemenyekWaterfallChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-                        <h4 class="text-center">Visszajáró Vendégek</h4>
-                        <div class="chart-container">
-                            <canvas id="visszajaroVendegChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-                        <h4 class="text-center">Fizetések Csoportositva</h4>
-                        <div class="chart-container">
-                            <canvas id="paymentChart" width="400" height="400"></canvas>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -618,119 +535,46 @@
             });
         });
 
-        var ctxErtekeles = document.getElementById('velemenyekErtekelesChart').getContext('2d');
-        var ertekelesChart = new Chart(ctxErtekeles, {
-            type: 'bar',
-            data: {
-                labels: ['1 csillag', '2 csillag', '3 csillag', '4 csillag', '5 csillag'],
-                datasets: [{
-                    label: 'Értékelések száma',
-                    data: [
-                        @foreach($velemenyekErtekeles as $index => $adat)
-                            {{ $adat->db }} @if(!$loop->last), @endif
-                        @endforeach
-            ],
-                    backgroundColor: ['#ff4d4d', '#ffa64d', '#ffd633', '#a6d854', '#66cc66'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+        const velemenyekData = {
+            labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+            datasets: [{
+                label: "Vélemények száma",
+                data: [0, 0, 0, 0, 0, 0, 0, 3, 1, 1],  // 8-as: 3 vélemény, 9-es: 1, 10-es: 1
+                backgroundColor: "lightblue"
+            }]
+        };
+
+        new Chart(document.getElementById("velemenyekChart"), {
+            type: "bar",
+            data: velemenyekData
+        });
+
+        // *** 2. Fizetési módok aránya (Kördiagram) ***
+        const fizetesData = {
+            labels: ["Bankkártya", "Utalás"],
+            datasets: [{
+                data: [80, 20],
+                backgroundColor: ["blue", "gray"]
+            }]
+        };
+
+        new Chart(document.getElementById("fizetesChart"), {
+            type: "pie",
+            data: fizetesData
         });
 
 
-        var ctxVisszatero = document.getElementById('visszateroVendegChart').getContext('2d');
-        var visszateroChart = new Chart(ctxVisszatero, {
-            type: 'pie',
-            data: {
-                labels: ['Visszatérő vendégek', 'Új vendégek'],
-                datasets: [{
-                    data: [{{ $visszateroVendegSzama }}, {{ $osszesVendeg - $visszateroVendegSzama }}],
-                    backgroundColor: ['#36A2EB', '#FF6384'],
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }
-        });
+        const vendegekData = {
+            labels: ["Új vendégek", "Visszatérő vendégek"],
+            datasets: [{
+                data: [75, 25],  // 70% új, 30% visszatérő vendég
+                backgroundColor: ["lightgreen", "darkgreen"]
+            }]
+        };
 
-
-        document.getElementById("evValaszto").addEventListener("change", function () {
-            let selectedYear = this.value;
-            let url = selectedYear ? `?year=${selectedYear}` : "?year=";
-            window.location.href = url;
-        });
-
-
-        document.addEventListener("DOMContentLoaded", function () {
-            // Bankkártyás és Utalásos összegek átvétele PHP-ból
-            const bankkartyasOsszeg = parseFloat("{{ $bankkartyasOsszeg }}");  // Számként konvertálás
-            const utalasOsszeg = parseFloat("{{ $utalasOsszeg }}");
-
-            // Ellenőrzés, hogy a PHP változók érvényes számok-e
-            console.log('Bankkártyás összeg:', bankkartyasOsszeg);
-            console.log('Utalásos összeg:', utalasOsszeg);
-
-            if (isNaN(bankkartyasOsszeg) || isNaN(utalasOsszeg)) {
-                console.error("A PHP változók nem tartalmaznak érvényes számokat!");
-            } else {
-                // Diagram adatainak beállítása
-                const data = {
-                    labels: ['Bankkártyás', 'Utalásos'],  // Kategóriák
-                    datasets: [{
-                        label: 'Fizetési módok összege',
-                        data: [bankkartyasOsszeg, utalasOsszeg],  // A PHP-ból átvett adatok
-                        backgroundColor: ['#00C49F', '#FF8042'],  // Színek
-                        borderColor: ['#008C68', '#FF5722'],
-                        borderWidth: 1
-                    }]
-                };
-
-                // Chart.js beállításai
-                const config = {
-                    type: 'pie',  // Kördiagram
-                    data: data,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        const value = context.raw;
-                                        return context.label + ': ' + value.toLocaleString() + ' Ft';  // Pénznem formázás
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-
-                // Az új kördiagram létrehozása
-                const ctx = document.getElementById('paymentChart').getContext('2d');
-                new Chart(ctx, config);
-            }
-
-            // Évválasztó változtatása esetén az oldal újratöltése a kiválasztott évvel
-            document.getElementById("evValaszto").addEventListener("change", function () {
-                let year = this.value;
-                let url = year ? `?year=${year}` : "?year=";
-                window.location.href = url;
-            });
+        new Chart(document.getElementById("VIvendegekChart"), {
+            type: "pie",
+            data: vendegekData
         });
 
     </script>
@@ -738,7 +582,13 @@
     <footer class="footer">
         <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva - Készítette: Takács Áron</p>
     </footer>
-
+    <script>
+        document.getElementById('quantityFilter').addEventListener('change', function () {
+            let params = new URLSearchParams(window.location.search);
+            params.set('quantity', this.value);
+            window.location.search = params.toString();
+        });
+    </script>
 
 
 

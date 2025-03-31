@@ -700,6 +700,62 @@
                     </div>
                 @endif
             @endforeach
+            <style>
+                .Dia {
+    background-color: #fff; /* Fehér háttér */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Címek stílusa */
+.Dia h2, .Dia h4 {
+    text-align: center;
+    color: #007bff; /* Kék szín */
+    font-weight: bold;
+}
+
+/* Kártya stílus a diagramokhoz */
+.Dia canvas {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Távolság az elemek között */
+.Dia .row {
+    margin-top: 20px;
+}
+
+/* Gombok csak a Dia div-en belül */
+.Dia button {
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.Dia button:hover {
+    background: #0056b3;
+}
+
+/* Mobilbarát dizájn */
+@media (max-width: 768px) {
+    .Dia {
+        padding: 10px;
+    }
+
+    .Dia h2, .Dia h4 {
+        font-size: 18px;
+    }
+}
+            </style>
+          <div class="Dia">
             <br>
             <hr>
             <h2 class="text-center">Idei Foglalási Statisztika </h2>
@@ -742,18 +798,15 @@
                     
                     @if($legjobbFoglalas)
                         <div>
-                            <!-- Vendég neve -->
+
                             <h5 class="text-center">{{ $legjobbFoglalas->vendeg->nev ?? 'Nincs adat' }}</h5>
-                            
-                            <!-- Hónap konvertálása számról hónap névre -->
                             <h6 class="text-center">
                                 Hónap: 
                                 {{ 
                                     \Carbon\Carbon::parse($legjobbFoglalas->erkezes)->format('F') 
                                 }}
                             </h6>
-                
-                            <!-- Érkezés és Távozás dátumok -->
+            
                             <p class="text-center">
                                 Érkezés: {{ \Carbon\Carbon::parse($legjobbFoglalas->erkezes)->format('Y-m-d') ?? 'Nincs adat' }}
                             </p>
@@ -761,7 +814,6 @@
                                 Távozás: {{ \Carbon\Carbon::parse($legjobbFoglalas->tavozas)->format('Y-m-d') ?? 'Nincs adat' }}
                             </p>
                 
-                            <!-- Tartózkodás ideje (számítva a dátumok között) -->
                             @php
                                 $erkezes = \Carbon\Carbon::parse($legjobbFoglalas->erkezes);
                                 $tavozas = \Carbon\Carbon::parse($legjobbFoglalas->tavozas);
@@ -799,6 +851,7 @@
                 </div>
               
             </div>
+          </div>
             
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
            

@@ -1,0 +1,309 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fdf2e9;
+    padding-top: 80px;
+}
+
+header {
+    background: linear-gradient(90deg, rgba(255, 165, 0, 0.8), rgba(255, 99, 71, 0.8));
+    color: white;
+    padding: 30px 0;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Navbar stílusok */
+.navbar {
+    background-color: #ff5722;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    color: #ffffff !important;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.navbar-brand:hover {
+    color: #fdc306 !important;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #f58f0a !important;
+    transform: scale(1.1);
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler-icon {
+
+    border-radius: 5px;
+}
+
+
+.footer {
+    background-color: rgb(255, 145, 0);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.table th {
+    background-color: rgb(255, 145, 0);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #ffe0b2;
+}
+
+.table tbody tr:hover {
+    background-color: #ffcc80;
+}
+
+.table td {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.table-responsive {
+    max-height: 450px;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgb(255, 145, 0);
+    color: white;
+}
+
+.accordion-button {
+    background-color:   rgb(255, 145, 0,0.8);
+    color: #ff5722;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.btn-warning {
+    background-color: #ff5722;
+    color: white;
+}
+
+.container.mt-4 {
+    background: #f5f5f5;
+    /* Világos háttér */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Címek formázása */
+.container.mt-4 h4 {
+    text-align: center;
+   
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* *** Csak a .Dia osztályon belüli elemekre vonatkozik *** */
+.Dia {
+    background-color: #fff;
+    /* Fehér háttér */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Chart-container beállítások */
+.Dia .chart-container {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Canvas alapértelmezett méretezés */
+.Dia canvas {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Év választó dropdown formázás */
+.container.mt-4 select#evValaszto {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    background: #fff;
+}
+
+.container.mt-4 select#evValaszto:hover {
+    border-color: #0056b3;
+}
+
+/* Gombok */
+.container.mt-4 button {
+  
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+
+
+/* Mobilbarát dizájn */
+@media (max-width: 768px) {
+    .container.mt-4 {
+        padding: 20px;
+    }
+
+    .container.mt-4 h4 {
+        font-size: 18px;
+    }
+
+    .Dia {
+        padding: 15px;
+    }
+
+    .Dia .chart-container {
+        padding: 10px;
+    }
+}
+form {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+
+.filter-section .col-md-4 {
+    margin-bottom: 15px;
+}
+
+
+.form-select,
+.form-control {
+    height: 45px;
+    padding: 0.75rem;
+    border-radius: 5px;
+
+    border: 1px solid #ccc;
+
+    font-size: 1rem;
+
+}
+
+.form-select:hover,
+.form-control:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+    
+}
+
+
+.form-label {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* A submit gomb stílusa */
+button[type="submit"] {
+    background-color: #007bff;
+    /* Kék szín */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+
+select.form-select {
+    background-color: #ffffff;
+}
+
+
+@media (max-width: 768px) {
+    .filter-section .col-md-4 {
+        width: 100%;
+     
+        margin-bottom: 10px;
+        /* Kisebb margó */
+    }
+
+   
+    button[type="submit"] {
+        width: 100%;
+        padding: 15px;
+    }
+}
