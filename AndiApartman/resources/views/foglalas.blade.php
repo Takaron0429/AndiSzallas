@@ -269,6 +269,7 @@
     </div>
 
     <footer>
+        <!-- Hullámok SVG -->
         <div class="wave-container">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                 <path fill="#ffffff" fill-opacity="0.2"
@@ -279,18 +280,26 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <iframe width="100%" height="450" style="border:0" loading="lazy" allowfullscreen
-                        src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJcfmOyAexaUcRbfSI-AjnSfA&key=AIzaSyDClC5YHmbvEWO_pWV44Y-yRW9q1Bq0bok"></iframe>
+                <!-- Google Maps - Bootstrap embed-responsive -->
+                <div class="col-lg-6 col-md-12 col-sm-12 mb-4 mb-lg-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe class="rounded" style="border:0" loading="lazy" allowfullscreen
+                            src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJcfmOyAexaUcRbfSI-AjnSfA&key=AIzaSyDClC5YHmbvEWO_pWV44Y-yRW9q1Bq0bok"></iframe>
+                    </div>
                 </div>
-                <div class="col-lg-6 col-md-12" id="contact">
+
+                <div class="col-lg-6 col-md-12 col-sm-12" id="contact">
                     <h3>Elérhetősegeink:</h3>
-                    <p class="strongerp"><i class="fab fa-facebook-f"></i><a class="linktag"
+                    <p class="strongerp"><i class="fa-brands fa-facebook"></i><a class="linktag"
                             href="https://www.facebook.com/profile.php?id=100057090354050"> Facebook - Andi Apartman</a>
                     </p>
-                    <p class="strongerp"><i class="fa fa-map-marker"></i> Balatonszemes, Vörösmarty u. 42</p>
-                    <p class="strongerp"><i class="fa fa-phone"></i> +06-30/560-1999</p>
-                    <p class="strongerp"><i class="fa fa-envelope"></i> andi68andi@gmail.com</p>
+                    <p class="strongerp"><i class="fa fa-map-marker" style="font-size: 24px;"></i> Balatonszemes,
+                        Vörösmarty u. 42</p>
+                    <p class="strongerp">
+                        <i class="fa fa-phone" style="font-size: 24px;" onclick="playPhoneSound()"></i> +06-30/560-1999
+                    </p>
+                    <p class="strongerp"><i class="fa fa-envelope" style="font-size: 24px;"></i> andi68andi@gmail.com
+                    </p>
                     <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok"
                             onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
                     </p>

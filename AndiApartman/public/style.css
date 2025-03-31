@@ -607,6 +607,27 @@ iframe {
     height: 3px;
     background: #2b2b2b;
 }
+.section-titledark {
+    color: rgb(42, 42, 42);
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.section-titledark::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #3b3b3b;
+}
 
 /* Program konténer stílusok */
 .programs-container {
@@ -617,7 +638,8 @@ iframe {
     scrollbar-color: #3d7abc #f1f1f1;
     gap: 20px;
     margin-bottom: 30px;
-    -webkit-overflow-scrolling: touch; /* Gördülékeny scroll iOS-en */
+    -webkit-overflow-scrolling: touch;
+    /* Gördülékeny scroll iOS-en */
 }
 
 .programs-container::-webkit-scrollbar {
@@ -644,7 +666,7 @@ iframe {
     background: white;
     border-radius: 10px;
     padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     border: 1px solid #a6a6a6;
 
 }
@@ -675,19 +697,20 @@ iframe {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .img-hover-container:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .program-img {
     width: 100%;
-    height: 220px; /* Ezt növeltem 180px-ról 220px-re */
+    height: 220px;
+    /* Ezt növeltem 180px-ról 220px-re */
     object-fit: cover;
     transition: transform 0.5s ease;
     display: block;
@@ -718,9 +741,9 @@ iframe {
 .hover-text {
     color: white;
     font-weight: 600;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     padding: 10px 15px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 20px;
     font-size: 0.95rem;
 }
@@ -729,7 +752,7 @@ iframe {
 .modal-content {
     border-radius: 10px;
     border: none;
-    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
 
@@ -817,13 +840,13 @@ iframe {
 }
 
 /* Üzenetek */
-.no-programs, 
+.no-programs,
 .error-message {
     padding: 2rem;
     text-align: center;
 }
 
-.no-programs p, 
+.no-programs p,
 .error-message p {
     padding: 1.5rem;
     background: #ecf0f1;
@@ -837,13 +860,14 @@ iframe {
     .program-card {
         width: 240px;
     }
-    
+
     .program-title {
         font-size: 1rem;
     }
-    
+
     .program-img {
-        height: 200px; /* Növeltem a kép magasságot reszponzív nézetben is */
+        height: 200px;
+        /* Növeltem a kép magasságot reszponzív nézetben is */
     }
 }
 
@@ -852,26 +876,27 @@ iframe {
         font-size: 1.6rem;
         padding-bottom: 10px;
     }
-    
+
     .section-title::after {
         width: 60px;
         height: 2px;
     }
-    
+
     .programs-container {
         gap: 15px;
         padding: 15px 5px;
     }
-    
+
     .program-card {
         width: 220px;
         padding: 12px;
     }
-    
+
     .program-img {
-        height: 180px; /* Növeltem a kép magasságot reszponzív nézetben is */
+        height: 180px;
+        /* Növeltem a kép magasságot reszponzív nézetben is */
     }
-    
+
     .modal-body {
         padding: 1.5rem;
     }
@@ -881,27 +906,28 @@ iframe {
     #programajanlo2 {
         padding: 2rem 0;
     }
-    
+
     .program-card {
         width: 200px;
     }
-    
+
     .program-img {
-        height: 160px; /* Növeltem a kép magasságot reszponzív nézetben is */
+        height: 160px;
+        /* Növeltem a kép magasságot reszponzív nézetben is */
     }
-    
+
     .modal-dialog {
         margin: 0.5rem;
     }
-    
+
     .modal-header {
         padding: 1rem;
     }
-    
+
     .modal-title {
         font-size: 1.2rem;
     }
-    
+
     .modal-body {
         padding: 1rem;
     }
@@ -1106,3 +1132,4 @@ i:hover {
     animation-play-state: running;
     /* Animáció indítása */
 }
+

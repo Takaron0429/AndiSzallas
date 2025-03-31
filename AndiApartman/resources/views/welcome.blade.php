@@ -29,7 +29,8 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link" href="{{ route('home') }}"><i class="fa fa-home" style="font-size: 20px"></i> Kezdőlap</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fa fa-home" style="font-size: 20px"></i>
+                        Kezdőlap</a>
                     <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments"
                             style="font-size: 20px"></i> Vélemények</a>
                     <a class="nav-link" href="foglalas"><i class="fa fa-calendar" style="font-size: 20px"></i>
@@ -199,7 +200,7 @@
                         </button>
 
                         <div class="carousel-inner">
-                            
+
                         </div>
 
                         <button class="carousel-control-prev" type="button" data-bs-target="#fullscreenCarousel"
@@ -458,7 +459,8 @@
     <!-- Meglévő vélemények megjelenítése -->
     <section id="meglevo-velemenyek" class="mt-5">
         <div class="container">
-            <h3 class="text-center">Nyaralóink írták:</h3>
+            <h3 class="section-titledark text-center">Nyaralóink írták</h3>
+
 
             <!-- Értékelések átlaga -->
             <div class="text-center mb-4">
@@ -506,7 +508,8 @@
     <!-- Vélemények űrlapja -->
     <section id="velemenyek" class="mt-5">
         <div class="container">
-            <h3 class="text-center">Üdült már nálunk? Írjon véleményt!</h3>
+            <h3 class="section-titledark text-center">Üdült már nálunk? Írjon véleményt!</h3>
+
             <div class="card p-4 shadow"
                 style="border: 2px solid #3d7abc; border-radius: 10px; transition: transform 0.3s ease-in-out;">
                 <form action="{{ route('velemeny.store') }}" method="POST">
@@ -534,7 +537,8 @@
                         <textarea class="form-control" id="komment" name="komment" rows="3"
                             placeholder="Írd le a tapasztalataidat..." required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3"><i class="fa-solid fa-paper-plane" style="font-size: 18px"></i> Küldés</button>
+                    <button type="submit" class="btn btn-primary mt-3"><i class="fa-solid fa-paper-plane"
+                            style="font-size: 18px"></i> Küldés</button>
                 </form>
             </div>
         </div>
@@ -551,10 +555,14 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <iframe width="600" height="450" style="border:0" loading="lazy" allowfullscreen
-                        src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJcfmOyAexaUcRbfSI-AjnSfA&key=AIzaSyDClC5YHmbvEWO_pWV44Y-yRW9q1Bq0bok"></iframe>
+                <!-- Google Maps - Bootstrap embed-responsive -->
+                <div class="col-lg-6 col-md-12 col-sm-12 mb-4 mb-lg-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe class="rounded" style="border:0" loading="lazy" allowfullscreen
+                            src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJcfmOyAexaUcRbfSI-AjnSfA&key=AIzaSyDClC5YHmbvEWO_pWV44Y-yRW9q1Bq0bok"></iframe>
+                    </div>
                 </div>
+
                 <div class="col-lg-6 col-md-12 col-sm-12" id="contact">
                     <h3>Elérhetősegeink:</h3>
                     <p class="strongerp"><i class="fa-brands fa-facebook"></i><a class="linktag"
@@ -567,7 +575,8 @@
                     </p>
                     <p class="strongerp"><i class="fa fa-envelope" style="font-size: 24px;"></i> andi68andi@gmail.com
                     </p>
-                    <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok" onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
+                    <p class="strongerp"><i class="fa-solid fa-headset" style="font-size: 24px;" id="wegonbeok"
+                            onclick="Wegonbeok()"></i> Weboldalt készítette: Lőczi Gergő
                     </p>
                 </div>
             </div>
