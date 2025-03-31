@@ -702,7 +702,7 @@
             @endforeach
             <br>
             <hr>
-            <h2 class="text-center">Statisztika </h2>
+            <h2 class="text-center">Idei Foglalási Statisztika </h2>
             <hr>
             <br>
             <div class="container mt-4">

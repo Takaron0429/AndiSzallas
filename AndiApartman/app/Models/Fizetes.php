@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Fizetes extends Model
 {
+    protected $table = 'fizetesek';
     public function foglalas(): BelongsTo
     {
         return $this->belongsTo(Foglalas::class, 'foglalas_id', 'foglalas_id');

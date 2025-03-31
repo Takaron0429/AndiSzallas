@@ -80,11 +80,15 @@ Route::get('/AdminFelulet/Admin', [FoglalasController::class, 'adminIndex'])->na
 Route::get('/admin', [AdminController::class, 'index'])->name('AdminFelulet.Admin');
 Route::put('/AdminFelulet/Admin/{id}/update', [FoglalasController::class, 'update'])->name('AdminFelulet.FoglalasUpdate');
 Route::delete('/AdminFelulet/Admin/{id}/delete', [FoglalasController::class, 'destroy'])->name('AdminFelulet.FoglalasDelete');
-
-// Vélemények kezelése admin felületen
 Route::get('/AdminFelulet/Admin/velemenyek', [VelemenyController::class, 'velemenyek'])->name('AdminFelulet.Velemenyek');
 Route::get('/AdminFelulet/Admin/{id}/approve', [VelemenyController::class, 'approveVelemeny'])->name('velemeny.approve');
 Route::get('/AdminFelulet/Admin/delete/{email}', [VelemenyController::class, 'deleteVelemeny'])->name('velemeny.delete');
+//Statisztika
+Route::get('/admin/statistics', [AdminController::class, 'getStatistics']);
+Route::get('/admin/statisztika', [AdminController::class, 'index']);
+
+
+
 
 // API végpontok
 Route::get('/admin/foglalt-napok', [FoglalasController::class, 'getFoglaltNapok']);
