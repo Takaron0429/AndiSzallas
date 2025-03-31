@@ -32,6 +32,11 @@ Route::get('/', function() {
     ]);
 })->name('home');
 
+// Csomagok kezelése
+Route::post('/csomag-foglalas', [CsomagFoglalasController::class, 'store'])->name('csomag-foglalas.store');
+Route::delete('/csomag-foglalas/{foglalas_id}/{csomag_id}', [CsomagFoglalasController::class, 'destroy'])->name('csomag-foglalas.destroy');
+
+
 // Vélemény útvonalak
 Route::post('/velemeny', [VelemenyController::class, 'store'])->name('velemeny.store');
 Route::get('/velemenyek', [VelemenyController::class, 'approvedVelemenyek'])->name('velemenyek.list');

@@ -228,7 +228,7 @@ class AdminController extends Controller
             11 => 'November',
             12 => 'December'
         ];
-        $legjobbHonap->honap_nev = $honapNevek[$legjobbHonap->honap] ?? 'Ismeretlen hónap';
+        //$legjobbHonap->honap_nev = $honapNevek[$legjobbHonap->honap] ?? 'Ismeretlen hónap'; EZT MAJD JAVITSD KI MERT ERROROZIK
 
         $atlagosHossz = DB::table('foglalasok')
             ->selectRaw("DATE_FORMAT(erkezes, '%Y-%m') as honap, AVG(DATEDIFF(tavozas, erkezes)) as atlag_hossz")

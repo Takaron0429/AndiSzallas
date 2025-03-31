@@ -327,12 +327,19 @@ document.addEventListener("DOMContentLoaded", function () {
         // Ár kiszámítása
         const felnottAr = 10000;
         const gyerekAr = 5000;
-        const osszeg = (felnottCount * felnottAr + gyerekCount * gyerekAr) * daysDifference;
+        let osszeg = (felnottCount * felnottAr + gyerekCount * gyerekAr) * daysDifference;
+
+        // Csomagok árának hozzáadása
+        document.querySelectorAll('input[name="csomagok[]"]:checked').forEach(checkbox => {
+            const csomagAr = parseInt(checkbox.dataset.ar, 10);
+            osszeg += csomagAr;
+        });
 
         // Összeg megjelenítése
         calculatedPrice.textContent = `Összeg: ${osszeg.toLocaleString('hu-HU')} Ft`;
         calculatedPrice.style.color = "green";
         calculatedPrice.style.fontWeight = "bold";
+        updateDepositAmount();
         return true;
     }
 
@@ -523,4 +530,51 @@ document.addEventListener("DOMContentLoaded", function () {
     // Call updateDepositAmount when price changes
     // Add this line to the end of your validateForm function, right before "return true;"
     updateDepositAmount();
+    // Csomagok árának kezelése
+
+    function updateTotalPrice() {
+        const felnottCount = parseInt(document.getElementById("felnott").value, 10);
+        const gyerekCount = parseInt(document.getElementById("gyerek").value, 10);
+        const checkinDate = new Date(checkinInput.value);
+        const checkoutDate = new Date(checkoutInput.value);
+
+        if (!checkinInput.value || !checkoutInput.value) {
+            return;
+        }
+
+        const timeDifference = checkoutDate - checkinDate;
+        const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+
+        // Alap ár számítás
+        const felnottAr = 10000;
+        const gyerekAr = 5000;
+        let osszeg = (felnottCount * felnottAr + gyerekCount * gyerekAr) * daysDifference;
+
+        // Csomagok árának hozzáadása
+        document.querySelectorAll('input[name="csomagok[]"]:checked').forEach(checkbox => {
+            const csomagAr = parseInt(checkbox.dataset.ar, 10);
+            osszeg += csomagAr;
+        });
+
+        // Összeg megjelenítése
+        calculatedPrice.textContent = `Összeg: ${osszeg.toLocaleString('hu-HU')} Ft`;
+        calculatedPrice.style.color = "green";
+        calculatedPrice.style.fontWeight = "bold";
+
+        // Banki utalás esetén a foglalóösszeg frissítése
+        if (document.getElementById('payment-method').value === 'bank-transfer') {
+            updateDepositAmount();
+        }
+    }
+
+    // Eseményfigyelők hozzáadása a csomagokhoz és egyéb inputokhoz
+    document.querySelectorAll('input[name="csomagok[]"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotalPrice);
+    });
+
+    document.getElementById("felnott").addEventListener("change", updateTotalPrice);
+    document.getElementById("gyerek").addEventListener("change", updateTotalPrice);
+    checkinInput.addEventListener("change", updateTotalPrice);
+    checkoutInput.addEventListener("change", updateTotalPrice);
+
 });
