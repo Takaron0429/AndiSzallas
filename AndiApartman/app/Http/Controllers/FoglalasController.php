@@ -7,6 +7,8 @@ use App\Models\Akcio;
 use App\Models\AkcioFoglalas;
 use App\Models\CsomagFoglalas;
 use App\Models\ErkezesiCsomag;
+use App\Models\Fizetes;
+use App\Models\Velemeny;
 use App\Models\Vendeg;
 use App\Models\Foglalas;
 use Carbon\Carbon;
@@ -17,7 +19,7 @@ class FoglalasController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Foglalas::query()->with('vendeg','csomagok', 'akciok');
+        $query = Foglalas::query()->with('vendeg', 'csomagok', 'akciok');
         $query->whereBetween('erkezes', [Carbon::create(2020, 1, 1), Carbon::create(2024, 12, 31)])
             ->whereBetween('tavozas', [Carbon::create(2020, 1, 1), Carbon::create(2024, 12, 31)]);
 
@@ -47,12 +49,199 @@ class FoglalasController extends Controller
                 $q->where('cim', 'like', '%' . $request->akcio . '%');
             });
         }
+        //STATISZTIKÁK
+
+        $year = $request->input('year', date('Y'));
+        $month = $request->input('month', null);
+        $year = $request->input('year');
+        $nowYear = now()->year;
+        $isYearSelected = $year ? true : false;
+
+        if (!$year) {
+
+            $foglalasokEvonta = Foglalas::select(DB::raw('YEAR(erkezes) as ev'), DB::raw('SUM(osszeg) as osszeg'))
+                ->whereBetween(DB::raw('YEAR(erkezes)'), [2020, $nowYear - 1])
+                ->groupBy(DB::raw('YEAR(erkezes)'))
+                ->orderBy('ev')
+                ->get();
+        } else {
+
+            $foglalasokEvonta = Foglalas::select(DB::raw('MONTH(erkezes) as honap'), DB::raw('SUM(osszeg) as osszeg'))
+                ->whereYear('erkezes', $year)
+                ->groupBy(DB::raw('MONTH(erkezes)'))
+                ->orderBy('honap')
+                ->get();
+        }
+
+
+
+        if (!$year) {
+
+            $vendegSzamEvonta = DB::table('foglalasok')
+                ->selectRaw('YEAR(erkezes) as ev, SUM(gyerek) as gyerekek_szama, SUM(felnott) as felnott_szama')
+                ->whereBetween(DB::raw('YEAR(erkezes)'), [2020, $nowYear - 1])
+                ->groupBy('ev')
+                ->orderBy('ev')
+                ->get();
+        } else {
+            $vendegSzamEvonta = DB::table('foglalasok')
+                ->selectRaw('MONTH(erkezes) as honap, SUM(gyerek) as gyerekek_szama, SUM(felnott) as felnott_szama')
+                ->whereYear('erkezes', $year)
+                ->groupBy('honap')
+                ->orderBy('honap')
+                ->get();
+        }
+
+        if (!$year) {
+            // Éves átlagos foglalási hossz (2020-2024)
+            $atlagosHosszEvonta = DB::table('foglalasok')
+                ->selectRaw('YEAR(erkezes) as ev, AVG(DATEDIFF(tavozas, erkezes)) as atlag_hossz')
+                ->whereBetween(DB::raw('YEAR(erkezes)'), [2020, $nowYear - 1])
+                ->groupBy('ev')
+                ->orderBy('ev')
+                ->get();
+        } else {
+            // Ha van választott év, akkor havi bontás
+            $atlagosHosszEvonta = DB::table('foglalasok')
+                ->selectRaw("MONTH(erkezes) as honap, AVG(DATEDIFF(tavozas, erkezes)) as atlag_hossz")
+                ->whereYear('erkezes', $year)
+                ->groupBy('honap')
+                ->orderBy('honap')
+                ->get();
+        }
+
+        if (!$year) {
+            $csomagokST = CsomagFoglalas::select(
+                'erkezesi_csomagok.nev',
+                DB::raw('count(csomag_foglalas.foglalas_id) as foglalasok_szama')
+            )
+                ->join('erkezesi_csomagok', 'csomag_foglalas.csomag_id', '=', 'erkezesi_csomagok.csomag_id')
+                ->join('foglalasok', 'csomag_foglalas.foglalas_id', '=', 'foglalasok.foglalas_id')
+                ->whereBetween('foglalasok.erkezes', ['2020-01-01', '2024-12-31']) //ITT
+                ->groupBy('erkezesi_csomagok.nev')
+                ->get();
+
+            $akciokST = AkcioFoglalas::select(
+                'akciok.cim',
+                DB::raw('count(akcio_foglalas.foglalas_id) as foglalasok_szama')
+            )
+                ->join('akciok', 'akcio_foglalas.akcio_id', '=', 'akciok.akcio_id')
+                ->join('foglalasok', 'akcio_foglalas.foglalas_id', '=', 'foglalasok.foglalas_id')
+                ->whereBetween('foglalasok.erkezes', ['2020-01-01', '2024-12-31'])
+                ->groupBy('akciok.cim')
+                ->get();
+
+        } else {
+
+            $csomagokST = CsomagFoglalas::select(
+                'erkezesi_csomagok.nev',
+                DB::raw('count(csomag_foglalas.foglalas_id) as foglalasok_szama')
+            )
+                ->join('erkezesi_csomagok', 'csomag_foglalas.csomag_id', '=', 'erkezesi_csomagok.csomag_id')
+                ->join('foglalasok', 'csomag_foglalas.foglalas_id', '=', 'foglalasok.foglalas_id')
+                ->whereYear('foglalasok.erkezes', $year)
+                ->groupBy('erkezesi_csomagok.nev')
+                ->get();
+
+            $akciokST = AkcioFoglalas::select(
+                'akciok.cim',
+                DB::raw('count(akcio_foglalas.foglalas_id) as foglalasok_szama')
+            )
+                ->join('akciok', 'akcio_foglalas.akcio_id', '=', 'akciok.akcio_id')
+                ->join('foglalasok', 'akcio_foglalas.foglalas_id', '=', 'foglalasok.foglalas_id')
+                ->whereYear('foglalasok.erkezes', $year)
+                ->groupBy('akciok.cim')
+                ->get();
+        }
+        
+        if ($year) {
+          
+            $bankkartyasOsszeg = Fizetes::where('fizetesi_mod', 'bankkártya')
+                ->whereYear('tranzakcio_datuma', $year)
+                ->sum('osszeg');
+        
+            $utalasOsszeg = Fizetes::where('fizetesi_mod', 'utalás')
+                ->whereYear('tranzakcio_datuma', $year)
+                ->sum('osszeg');
+        } else {
+          
+            $bankkartyasOsszeg = Fizetes::where('fizetesi_mod', 'bankkártya')
+                ->whereBetween('created_at', ['2020-01-01', '2025-12-31'])
+                ->sum('osszeg');
+        
+            $utalasOsszeg = Fizetes::where('fizetesi_mod', 'utalás')
+                ->whereBetween('created_at', ['2020-01-01', '2025-12-31'])
+                ->sum('osszeg');
+        }
+
+
+        // NOT WORKING
+        $velemenyekErtekeles = DB::table('velemenyek')
+            ->select('ertekeles', DB::raw('COUNT(*) as db'))
+            ->whereBetween('created_at', ['2020-01-01', '2025-12-31'])
+            ->when($year, function ($query) use ($year) {
+                return $query->whereYear('created_at', $year);
+            })
+            ->groupBy('ertekeles')
+            ->orderBy('ertekeles', 'ASC')
+            ->get();
+
+        $osszesVendeg = DB::table('foglalasok')->distinct()->count('vendeg_id');
+
+        $visszateroVendegSzama = DB::table('foglalasok')
+            ->select('vendeg_id')
+            ->groupBy('vendeg_id')
+            ->havingRaw('COUNT(*) > 1')
+            ->whereBetween('erkezes', ['2020-01-01', '2025-12-31'])
+            ->when($year, function ($query) use ($year) {
+                return $query->whereYear('erkezes', $year);
+            })
+            ->count();
+
+        $visszateroVendegSzama = $visszateroVendegSzama ?? 0;
+        $visszateroArany = $osszesVendeg > 0 ? ($visszateroVendegSzama / $osszesVendeg) * 100 : 0;
+
 
         $foglalasok = $query->get();
         $csomagok = ErkezesiCsomag::pluck('nev', 'csomag_id');
         $akciok = Akcio::pluck('cim', 'akcio_id');
+        $velemenyek = Velemeny::all();
+        $foglalas = Foglalas::all();
 
-        return view('AdminFelulet.Foglalasok', compact('foglalasok', 'akciok', 'csomagok'));
+
+        $maxEv = date('Y') - 1;
+        $evek = range(2020, $maxEv);
+
+        return view('AdminFelulet.Foglalasok', [
+
+            'evek' => $evek,
+            'year' => $year,
+            'month' => $month,
+            'isYearSelected' => $isYearSelected,
+            'foglalasokEvonta' => $foglalasokEvonta,
+            //'foglalasokHavonta' => $foglalasokHavonta,
+            //'foglalasokOsszegHavonta' => $foglalasokOsszegHavonta,
+            'vendegSzamEvonta' => $vendegSzamEvonta,
+            'atlagosHosszEvonta' => $atlagosHosszEvonta,
+            'csomagokST' => $csomagokST,
+            'akciokST' => $akciokST,
+            // 'velemenyekHavonta' => $velemenyekHavonta,
+            'visszateroArany' => $visszateroArany,
+            'visszateroVendegSzama' => $visszateroVendegSzama,
+            'velemenyekErtekeles' => $velemenyekErtekeles,
+            'osszesVendeg' => $osszesVendeg,
+            'foglalasok' => $foglalasok,
+            //
+            'bankkartyasOsszeg' => $bankkartyasOsszeg,
+            'utalasOsszeg' => $utalasOsszeg,
+            // 'bankkartyasDb' => $bankkartyasDb,
+            // 'utalasDb' => $utalasDb,
+
+            'akciok' => $akciok,
+            'csomagok' => $csomagok,
+            'velemenyek' => $velemenyek,  // Hozzáadtam
+            'foglalas' => $foglalas  // Hozzáadtam
+        ]);
     }
 
     public function adminIndex()
@@ -269,19 +458,19 @@ class FoglalasController extends Controller
                 'iranyitoszam' => $validated['iranyitoszam'] ?? null,
                 'lakcim' => $validated['lakcim'] ?? null,
             ]);
-        
+
             if (!$vendeg || !$vendeg->vendeg_id) {
                 throw new \Exception("Vendég mentése sikertelen!");
             }
-        
+
             $checkin = new \DateTime($validated['checkin']);
             $checkout = new \DateTime($validated['checkout']);
             $ejszakak = $checkin->diff($checkout)->days;
-        
+
             $felnottAr = 10000;
             $gyerekAr = 5000;
             $osszeg = ($validated['felnott'] * $felnottAr + $validated['gyerek'] * $gyerekAr) * $ejszakak;
-        
+
             $foglalas = Foglalas::create([
                 'vendeg_id' => $vendeg->vendeg_id,
                 'erkezes' => $validated['checkin'],
@@ -293,11 +482,11 @@ class FoglalasController extends Controller
                 'csomag_id' => $request->csomag_id ?? null,
                 'specialis_keresek' => $validated['specialis_keresek'] ?? null,
             ]);
-        
+
             if (!$foglalas || !$foglalas->id) {
                 throw new \Exception("Foglalás mentése sikertelen!");
             }
-        
+
             DB::commit();
             return redirect()->route('foglalas')->with('success', 'Foglalás sikeresen rögzítve!');
         } catch (\Exception $e) {

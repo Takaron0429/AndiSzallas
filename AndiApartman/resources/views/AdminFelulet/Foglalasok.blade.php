@@ -193,7 +193,7 @@
                     <label for="yearFilter" class="form-label">Év</label>
                     <select class="form-select" name="year" id="yearFilter">
                         <option value="">Minden év</option>
-                        @for($i = 2020; $i <= now()->year-1 ; $i++)
+                        @for($i = 2020; $i <= now()->year - 1; $i++)
                             <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
                         @endfor
                     </select>
@@ -339,13 +339,407 @@
                 </div>
             @endforeach
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="container">
+            <hr>
+            <h1 class="text-center">Statisztika</h1>
+            <hr>
+            <br>
+            <div class="container mt-4">
 
-        <footer class="footer">
-            <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva - Készítette: Takács Áron</p>
-        </footer>
-        <script>
+                <div class="row">
+                    <div class="col-md-4 mx-auto">
+                        <label for="evValaszto" class="form-label">Válassz évet:</label>
+                        <select id="evValaszto" class="form-select">
+                            <option value="">Összes év (2020-2024)</option>
+                            @foreach($evek as $ev)
+                                <option value="{{ $ev }}" {{ $ev == $year ? 'selected' : '' }}>{{ $ev }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <!-- Diagram -->
+                <div class="row">
 
-        </script>
+                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                        <h4 class="text-center">Foglalások Összeg (Éves bontás)</h4>
+                        <div class="chart-container">
+                            <canvas id="foglalasokChart"></canvas>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                        <h4 class="text-center">Vendégek Száma (Éves bontás)</h4>
+                        <div class="chart-container">
+                            <canvas id="vendegekChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                        <h4 class="text-center">Foglalások Átlagos Hossza (Éves bontás)</h4>
+                        <div class="chart-container">
+                            <canvas id="atlagosHosszChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+                        <h4 class="text-center">Csomagok Összesen (Éves Bontásban)</h4>
+                        <div class="chart-container">
+                            <canvas id="csomagokChart"></canvas>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+                        <h4 class="text-center">Akciók Összesen (Éves bontásban)</h4>
+                        <div class="chart-container">
+                            <canvas id="akciokChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                        <h4 class="text-center">Elfogadott Értékelések</h4>
+                        <div class="chart-container">
+                            <canvas id="velemenyekWaterfallChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                        <h4 class="text-center">Visszajáró Vendégek</h4>
+                        <div class="chart-container">
+                            <canvas id="visszajaroVendegChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                        <h4 class="text-center">Fizetések Csoportositva</h4>
+                        <div class="chart-container">
+                            <canvas id="paymentChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <canvas id="monthlyBookingsChart"></canvas>
+    </div>
+    </div>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let ctx = document.getElementById("foglalasokChart").getContext("2d");
+
+            let isYearSelected = @json($isYearSelected); // true, ha év lett kiválasztva
+            let labels = isYearSelected ?
+                @json($foglalasokEvonta->pluck('honap')) :
+                @json($foglalasokEvonta->pluck('ev'));
+
+            let foglalasokData = {
+                labels: labels,
+                datasets: [{
+                    label: "Foglalások Összeg",
+                    data: @json($foglalasokEvonta->pluck('osszeg')),
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1
+                }]
+            };
+
+            let foglalasokChart = new Chart(ctx, {
+                type: "bar",
+                data: foglalasokData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            document.getElementById("evValaszto").addEventListener("change", function () {
+                let selectedYear = this.value;
+                let url = selectedYear ? `?year=${selectedYear}` : "?year=";
+                window.location.href = url;
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let ctxVendeg = document.getElementById("vendegekChart").getContext("2d");
+
+            let isYearSelected = @json($isYearSelected);
+            let labelsVendeg = isYearSelected ?
+                @json($vendegSzamEvonta->pluck('honap')) :
+                @json($vendegSzamEvonta->pluck('ev'));
+
+            let vendegSzamData = {
+                labels: labelsVendeg,
+                datasets: [
+                    {
+                        label: "Gyerekek",
+                        data: @json($vendegSzamEvonta->pluck('gyerekek_szama')),
+                        backgroundColor: "rgba(255, 99, 132, 0.2)",
+                        borderColor: "rgba(255, 99, 132, 1)",
+                        borderWidth: 1
+                    },
+                    {
+                        label: "Felnőttek",
+                        data: @json($vendegSzamEvonta->pluck('felnott_szama')),
+                        backgroundColor: "rgba(54, 162, 235, 0.2)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            let vendegekChart = new Chart(ctxVendeg, {
+                type: "bar",
+                data: vendegSzamData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            document.getElementById("evValaszto").addEventListener("change", function () {
+                let selectedYear = this.value;
+                let url = selectedYear ? `?year=${selectedYear}` : "?year=";
+                window.location.href = url;
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            let ctxAtlag = document.getElementById("atlagosHosszChart").getContext("2d");
+
+            let isYearSelected = @json($isYearSelected);
+            let labelsAtlag = isYearSelected ?
+                @json($atlagosHosszEvonta->pluck('honap')) :
+                @json($atlagosHosszEvonta->pluck('ev'));
+
+            let atlagosHosszData = {
+                labels: labelsAtlag,
+                datasets: [
+                    {
+                        label: "Átlagos Foglalási Hossz (napok)",
+                        data: @json($atlagosHosszEvonta->pluck('atlag_hossz')),
+                        backgroundColor: "rgba(153, 102, 255, 0.2)",
+                        borderColor: "rgba(153, 102, 255, 1)",
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            let atlagosHosszChart = new Chart(ctxAtlag, {
+                type: "bar",
+                data: atlagosHosszData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            document.getElementById("evValaszto").addEventListener("change", function () {
+                let selectedYear = this.value;
+                let url = selectedYear ? `?year=${selectedYear}` : "?year=";
+                window.location.href = url;
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            let ctxCsomagok = document.getElementById("csomagokChart").getContext("2d");
+            let ctxAkciok = document.getElementById("akciokChart").getContext("2d");
+
+            // Csomagok adatok
+            let csomagokData = {
+                labels: @json($csomagokST->pluck('nev')),
+                datasets: [{
+                    label: "Foglalások Száma",
+                    data: @json($csomagokST->pluck('foglalasok_szama')),
+                    backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+                    hoverOffset: 10
+                }]
+            };
+
+            // Akciók adatok
+            let akciokData = {
+                labels: @json($akciokST->pluck('cim')),
+                datasets: [{
+                    label: "Foglalások Száma",
+                    data: @json($akciokST->pluck('foglalasok_szama')),
+                    backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"],
+                    hoverOffset: 10
+                }]
+            };
+
+            // Csomagok kördiagram (3D hatással)
+            let csomagokChart = new Chart(ctxCsomagok, {
+                type: "doughnut",
+                data: csomagokData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: "bottom" }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+
+
+            let akciokChart = new Chart(ctxAkciok, {
+                type: "doughnut",
+                data: akciokData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: "bottom" }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+
+
+            document.getElementById("evValaszto").addEventListener("change", function () {
+                let selectedYear = this.value;
+                let url = selectedYear ? `?year=${selectedYear}` : "?year=";
+                window.location.href = url;
+            });
+        });
+
+        var ctxErtekeles = document.getElementById('velemenyekErtekelesChart').getContext('2d');
+        var ertekelesChart = new Chart(ctxErtekeles, {
+            type: 'bar',
+            data: {
+                labels: ['1 csillag', '2 csillag', '3 csillag', '4 csillag', '5 csillag'],
+                datasets: [{
+                    label: 'Értékelések száma',
+                    data: [
+                        @foreach($velemenyekErtekeles as $index => $adat)
+                            {{ $adat->db }} @if(!$loop->last), @endif
+                        @endforeach
+            ],
+                    backgroundColor: ['#ff4d4d', '#ffa64d', '#ffd633', '#a6d854', '#66cc66'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        var ctxVisszatero = document.getElementById('visszateroVendegChart').getContext('2d');
+        var visszateroChart = new Chart(ctxVisszatero, {
+            type: 'pie',
+            data: {
+                labels: ['Visszatérő vendégek', 'Új vendégek'],
+                datasets: [{
+                    data: [{{ $visszateroVendegSzama }}, {{ $osszesVendeg - $visszateroVendegSzama }}],
+                    backgroundColor: ['#36A2EB', '#FF6384'],
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+
+        document.getElementById("evValaszto").addEventListener("change", function () {
+            let selectedYear = this.value;
+            let url = selectedYear ? `?year=${selectedYear}` : "?year=";
+            window.location.href = url;
+        });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Bankkártyás és Utalásos összegek átvétele PHP-ból
+            const bankkartyasOsszeg = parseFloat("{{ $bankkartyasOsszeg }}");  // Számként konvertálás
+            const utalasOsszeg = parseFloat("{{ $utalasOsszeg }}");
+
+            // Ellenőrzés, hogy a PHP változók érvényes számok-e
+            console.log('Bankkártyás összeg:', bankkartyasOsszeg);
+            console.log('Utalásos összeg:', utalasOsszeg);
+
+            if (isNaN(bankkartyasOsszeg) || isNaN(utalasOsszeg)) {
+                console.error("A PHP változók nem tartalmaznak érvényes számokat!");
+            } else {
+                // Diagram adatainak beállítása
+                const data = {
+                    labels: ['Bankkártyás', 'Utalásos'],  // Kategóriák
+                    datasets: [{
+                        label: 'Fizetési módok összege',
+                        data: [bankkartyasOsszeg, utalasOsszeg],  // A PHP-ból átvett adatok
+                        backgroundColor: ['#00C49F', '#FF8042'],  // Színek
+                        borderColor: ['#008C68', '#FF5722'],
+                        borderWidth: 1
+                    }]
+                };
+
+                // Chart.js beállításai
+                const config = {
+                    type: 'pie',  // Kördiagram
+                    data: data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const value = context.raw;
+                                        return context.label + ': ' + value.toLocaleString() + ' Ft';  // Pénznem formázás
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // Az új kördiagram létrehozása
+                const ctx = document.getElementById('paymentChart').getContext('2d');
+                new Chart(ctx, config);
+            }
+
+            // Évválasztó változtatása esetén az oldal újratöltése a kiválasztott évvel
+            document.getElementById("evValaszto").addEventListener("change", function () {
+                let year = this.value;
+                let url = year ? `?year=${year}` : "?year=";
+                window.location.href = url;
+            });
+        });
+
+    </script>
+
+    <footer class="footer">
+        <p>&copy; 2025 Foglalási rendszer. Minden jog fenntartva - Készítette: Takács Áron</p>
+    </footer>
+
+
 
 
 </body>

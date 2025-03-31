@@ -15,6 +15,6 @@ class Velemeny extends Model
         'approved', // Ha szükséges
     ];
 
-    protected $primaryKey = 'velemeny_id'; // Módosítás itt!
+    protected $primaryKey = 'velemeny_id';
     public $timestamps = true;
 }
