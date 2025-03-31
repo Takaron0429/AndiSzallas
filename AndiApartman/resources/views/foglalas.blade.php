@@ -151,24 +151,23 @@
                                     (opcionális)</label>
                                 <div class="csomagok-container">
                                     @foreach(App\Models\ErkezesiCsomag::where('elerheto', '>', 0)->get() as $csomag)
-                                        <div class="form-check csomag-card">
-                                            <input class="form-check-input" type="checkbox" name="csomagok[]"
-                                                value="{{ $csomag->csomag_id }}" id="csomag-{{ $csomag->csomag_id }}">
-                                            <label class="form-check-label" for="csomag-{{ $csomag->csomag_id }}">
-                                                <div class="csomag-info">
-                                                    <div class="d-flex justify-content-between">
-                                                        <span class="csomag-name">{{ $csomag->nev }}</span>
-                                                        <span
-                                                            class="csomag-price">{{ number_format($csomag->ar, 0, ',', ' ') }}
-                                                            Ft</span>
-                                                    </div>
-                                                    @if($csomag->leiras)
-                                                        <div class="csomag-desc">{{ $csomag->leiras }}</div>
-                                                    @endif
+                                    <div class="form-check csomag-card">
+                                        <input class="form-check-input csomag-checkbox" type="checkbox" name="csomagok[]"
+                                            value="{{ $csomag->csomag_id }}" id="csomag-{{ $csomag->csomag_id }}"
+                                            data-ar="{{ $csomag->ar }}">
+                                        <label class="form-check-label" for="csomag-{{ $csomag->csomag_id }}">
+                                            <div class="csomag-info">
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="csomag-name">{{ $csomag->nev }}</span>
+                                                    <span class="csomag-price">{{ number_format($csomag->ar, 0, ',', ' ') }} Ft</span>
                                                 </div>
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                                @if($csomag->leiras)
+                                                    <div class="csomag-desc">{{ $csomag->leiras }}</div>
+                                                @endif
+                                            </div>
+                                        </label>
+                                    </div>
+                                @endforeach
                                 </div>
                             </div>
                             <!-- Payment Section -->
