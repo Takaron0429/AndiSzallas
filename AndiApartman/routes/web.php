@@ -16,17 +16,17 @@ use App\Models\Velemeny;
 
 // Főoldal útvonala - mindkét adatforrást kezeljük
 
-Route::get('/', function() {
+Route::get('/', function () {
     // Programajánlók betöltése
     $programok = HelyiProgramajanlo::where('vege', '>=', now())
         ->orderBy('helyszin')
         ->get()
         ->groupBy('helyszin');
-        
+
     // Vélemények betöltése
     $velemenyek = Velemeny::where('approved', 1)->latest()->get();
     $atlagErtekeles = $velemenyek->avg('ertekeles');
-    
+
     return view('welcome', [
         'programok' => $programok,
         'velemenyek' => $velemenyek,

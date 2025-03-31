@@ -217,10 +217,6 @@
                     </div>
                 </div>
 
-
-
-
-
             </div>
         </div>
     </section>
@@ -365,7 +361,7 @@
                                     <!-- Kattintható div a modal triggerhez -->
                                     <div class="img-hover-container" data-bs-toggle="modal"
                                         data-bs-target="#programModal{{ $program->program_id }}">
-                                        <img src="{{ $program->kep ? Storage::url($program->kep) : asset('img/default-program.jpg') }}"
+                                        <img src="{{  asset('kepek/'.$program->kep) }}"
                                             class="program-img" alt="{{ $program->cim }}">
                                         <div class="hover-overlay">
                                             <div class="hover-text">Kattints a részletekért!</div>
@@ -398,7 +394,7 @@
                                                 <div class="row">
                                                     <!-- Bal oldal - Kép -->
                                                     <div class="col-md-6">
-                                                        <img src="{{ $program->kep ? Storage::url($program->kep) : asset('img/default-program.jpg') }}"
+                                                        <img src="{{asset('kepek/'.$program->kep) }}"
                                                             class="img-fluid rounded" alt="{{ $program->cim }}">
                                                     </div>
                                                     <!-- Jobb oldal - Szöveges tartalom -->
