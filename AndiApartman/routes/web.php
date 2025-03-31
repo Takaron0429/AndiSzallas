@@ -15,6 +15,7 @@ use App\Models\HelyiProgramajanlo;
 use App\Models\Velemeny;
 
 // Főoldal útvonala - mindkét adatforrást kezeljük
+
 Route::get('/', function() {
     // Programajánlók betöltése
     $programok = HelyiProgramajanlo::where('vege', '>=', now())
@@ -49,7 +50,7 @@ Route::get('/foglalas', function () {
 Route::post('/foglalas', [FoglalasController::class, 'store'])->name('foglalas.store');
 
 // Programok oldal
-Route::get('/Fooldal/Programok', [HelyiProgramajanloController::class, 'Pindex'])->name('programok.Pindex');
+Route::get('Fooldal/Programok', [HelyiProgramajanloController::class, 'Pindex'])->name('programok.Pindex');
 
 // ADMIN ROUTES
 Route::get('/AdminFelulet/Login', [AdminController::class, 'showLoginForm'])->name('admin.login');

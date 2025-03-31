@@ -34,6 +34,7 @@
                             style="font-size: 20px"></i> Vélemények</a>
                     <a class="nav-link" href="foglalas"><i class="fa fa-calendar" style="font-size: 20px"></i>
                         Foglalás</a>
+                        <a class="nav-link active" href="{{'Fooldal.Programok'}}"><i class="fa fa-calendar"></i>  Helyi Programok</a>
                 </div>
 
                 <div class="navbar-contact-info">

@@ -474,13 +474,15 @@
             
             
             
-                                        <div class="selected-dates bg-light p-3 rounded mb-4">
-                                            <div class="d-flex justify-content-between">
-                                                <p class="mb-0"><strong><i class="fa fa-sign-in"></i> Bejelentkezés:</strong> <span
-                                                        id="selected-checkin" class="fw-bold text-primary">-</span></p>
-                                                <p class="mb-0"><strong><i class="fa fa-sign-out"></i> Kijelentkezés:</strong> <span
-                                                        id="selected-checkout" class="fw-bold text-primary">-</span></p>
-                                            </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Érkezés dátuma</label>
+                                            <input type="date" class="form-control foglalas-input" name="erkezes">
+                                               
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Távozás dátuma</label>
+                                            <input type="date" class="form-control foglalas-input" name="tavozas">
+                                              
                                         </div>
             
                                         <p class="errorParagraph alert alert-danger d-none"></p>
