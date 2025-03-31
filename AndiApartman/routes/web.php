@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AkcioController;
+use App\Http\Controllers\CsomagFoglalasController;
 use App\Http\Controllers\ErkezesiCsomagController;
 use App\Http\Controllers\HelyiProgramajanloController;
 use App\Http\Controllers\ModositasokController;

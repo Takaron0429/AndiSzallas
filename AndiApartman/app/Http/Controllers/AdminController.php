@@ -102,8 +102,8 @@ class AdminController extends Controller
 
                 return $dates;
             })
-            ->unique() // Eltávolítja a duplikált napokat mert nem voltunk képesek megcsinálni
-            ->values(); // Átalakítja az egyedi napokat listává
+            ->unique() 
+            ->values();
 
         $lefoglaltNapok = $allDates->count() - 1;
 
