@@ -28,7 +28,8 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" href="{{ route('home') }}"><i class="fa fa-home"></i> Kezdőlap</a>
-                    <a class="nav-link" href="#meglevo-velemenyek"><i class="fa fa-comments"></i> Vélemények</a>
+                    <a class="nav-link" href="{{ route('home') }}#meglevo-velemenyek"><i class="fa fa-comments"
+                    ></i> Vélemények</a>
                     <a class="nav-link active" href="foglalas"><i class="fa fa-calendar"></i>  Foglalás</a>
                 </div>
 
