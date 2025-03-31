@@ -39,8 +39,8 @@
                     <span class="separator">|</span>
                     <span class="contact-item"><i class="fa fa-map-marker"></i> Balatonszemes, Vörösmarty u. 42</span>
                     <span class="separator">|</span>
-                    <a href="https://facebook.com" class="contact-item">
-                        <i class="fab fa-facebook-f"></i>
+                    <a href="https://www.facebook.com/profile.php?id=100057090354050" class="contact-item" target="_blank">
+                        <i class="fab fa-facebook-f" style="font-size: 20px"></i>
                     </a>
                 </div>
             </div>
